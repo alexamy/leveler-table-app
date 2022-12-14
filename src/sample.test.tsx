@@ -6,5 +6,6 @@ it('renders welcome message', () => {
   render(<Root />);
 
   const message = 'Hello!';
+  //@ts-ignore
   expect(screen.getByText(message)).toBeVisible();
 });

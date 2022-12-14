@@ -13,7 +13,7 @@ const styles = StyleSheet.create({
 export function Root() {
   return (
     <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
+      <Text>Hello!</Text>
       <StatusBar style="auto" />
     </View>
   );
