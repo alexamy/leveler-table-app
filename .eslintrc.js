@@ -13,5 +13,11 @@ module.exports = {
     'prefer-user-event': 'off',
     'react/react-in-jsx-scope': 'off',
     'jsx-quotes': ['warn', 'prefer-single'],
+    '@typescript-eslint/no-empty-interface': [
+      'error',
+      {
+        allowSingleExtends: true,
+      },
+    ],
   },
 };
