@@ -10,6 +10,7 @@ module.exports = {
   parser: '@typescript-eslint/parser',
   plugins: ['@typescript-eslint', 'jest', 'testing-library'],
   rules: {
+    'prettier/prettier': 0,
     'prefer-user-event': 'off',
     'react/react-in-jsx-scope': 'off',
     'jsx-quotes': ['warn', 'prefer-single'],
