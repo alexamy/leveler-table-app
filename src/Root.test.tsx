@@ -18,31 +18,17 @@ it('allows to enter zero point', async () => {
   expect(input.props.value).toBe('100');
 });
 
-it('restrict from entering letters', () => {
+it.each([
+  { value: 'xyz4xyz', expected: '4', kind: 'letter' },
+  { value: '-42', expected: '42', kind: 'negative' },
+  { value: '10.5', expected: '105', kind: 'float' },
+])('restricts entering $kind value in zero point input', ({ value, expected }) => {
   render(<App />);
 
   const input = screen.getByTestId('input-zero-0') as TextInput;
-  fireEvent.changeText(input, 'xyz4xyz');
+  fireEvent.changeText(input, value);
 
-  expect(input.props.value).toBe('4');
-});
-
-it('restrict from entering negative value', () => {
-  render(<App />);
-
-  const input = screen.getByTestId('input-zero-0') as TextInput;
-  fireEvent.changeText(input, '-42');
-
-  expect(input.props.value).toBe('42');
-});
-
-it('restrict from entering float value', () => {
-  render(<App />);
-
-  const input = screen.getByTestId('input-zero-0') as TextInput;
-  fireEvent.changeText(input, '10.5');
-
-  expect(input.props.value).toBe('105');
+  expect(input.props.value).toBe(expected);
 });
 
 it('shows project sizes label', () => {
