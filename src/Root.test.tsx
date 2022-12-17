@@ -61,6 +61,7 @@ it('adds more project sizes', () => {
 });
 
 it.todo('deletes project size');
+it.todo('dont allow to delete single project size');
 
 it.todo('calculates difference from zero point to project size');
 it.todo('recalculates differences when zero size is changed');
