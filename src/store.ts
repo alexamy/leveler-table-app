@@ -3,14 +3,14 @@ import { createContext } from 'react';
 
 export const Store = types
   .model({
-    sizes: types.optional(types.array(types.number), []),
-    zero: types.optional(types.string, 'hello'),
+    sizes: types.optional(types.array(types.integer), []),
+    zero: types.optional(types.integer, 0),
   })
-  .actions((self) => ({
+  .actions(self => ({
     addSize(size: number) {
       self.sizes.push(size);
     },
-    changeZero(zero: string) {
+    changeZero(zero: number) {
       self.zero = zero;
     },
   }));

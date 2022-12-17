@@ -23,7 +23,11 @@ export const Root = observer(() => {
     <View style={styles.container}>
       <Text>Нулевая точка</Text>
       <Text>Проектные размеры</Text>
-      <TextInput testID='input-zero-0' value={store.zero} onChangeText={store.changeZero} />
+      <TextInput
+        testID='input-zero-0'
+        value={String(store.zero)}
+        onChangeText={text => store.changeZero(parseInt(text, 10) || 0)}
+      />
       <StatusBar style='auto' />
     </View>
   );
