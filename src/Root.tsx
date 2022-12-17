@@ -45,7 +45,7 @@ export const Root = observer(function() {
         testID='input-zero-0'
         style={styles.input}
         keyboardType='numeric'
-        value={store.zero.toString()}
+        value={store.zero?.toString()}
         onChangeText={store.setZero}
       />
       <ScrollView>

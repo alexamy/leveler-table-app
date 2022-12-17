@@ -57,7 +57,7 @@ it('adds more project sizes', () => {
   const input1 = screen.getByTestId('input-size-1') as TextInput;
 
   expect(input1).toBeVisible();
-  expect(input1.props.value).toBe('0');
+  expect(input1.props.value).toBe(undefined);
 });
 
 it.todo('deletes project size');
