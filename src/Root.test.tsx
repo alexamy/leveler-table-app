@@ -37,7 +37,15 @@ it('shows project sizes label', () => {
   expect(screen.getByText('Проектные размеры')).toBeVisible();
 });
 
-it.todo('allows to enter project size');
+it('allows to enter project size', () => {
+  render(<App />);
+
+  const input = screen.getByTestId('input-size-0') as TextInput;
+  fireEvent.changeText(input, '100');
+
+  expect(input.props.value).toBe('100');
+});
+
 it.todo('calculates difference from zero point to project size');
 it.todo('recalculates differences when zero size is changed');
 it.todo('allows to add more project sizes');

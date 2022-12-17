@@ -29,6 +29,12 @@ export const Root = observer(function() {
         value={store.zero.toString()}
         onChangeText={store.setZero}
       />
+      <TextInput
+        testID='input-size-0'
+        keyboardType='numeric'
+        value={store.sizes[0]?.toString()}
+        onChangeText={text => store.setSize(text, 0)}
+      />
       <StatusBar style='auto' />
     </View>
   );
