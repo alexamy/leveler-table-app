@@ -1,4 +1,5 @@
 import { Instance, types } from 'mobx-state-tree';
+import { createContext } from 'react';
 
 export const Store = types
   .model({
@@ -15,3 +16,5 @@ export const Store = types
   }));
 
 export interface IStore extends Instance<typeof Store> {}
+
+export const StoreContext = createContext<IStore>(Store.create());

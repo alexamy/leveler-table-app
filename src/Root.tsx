@@ -1,7 +1,8 @@
 import { StatusBar } from 'expo-status-bar';
 import { observer } from 'mobx-react-lite';
+import { useContext } from 'react';
 import { StyleSheet, Text, TextInput, View } from 'react-native';
-import { Store } from './store';
+import { StoreContext } from './store';
 
 const styles = StyleSheet.create({
   container: {
@@ -15,9 +16,9 @@ const styles = StyleSheet.create({
   },
 });
 
-const store = Store.create();
-
 export const Root = observer(() => {
+  const store = useContext(StoreContext);
+
   return (
     <View style={styles.container}>
       <Text>Нулевая точка</Text>
