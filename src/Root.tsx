@@ -41,7 +41,7 @@ export function Root() {
     <View style={styles.container}>
       <Text>Нулевая точка</Text>
       <Text>Проектные размеры</Text>
-      <TextInput testID='input-zero-point' value={inputText} onChangeText={text => setInputText(text)} />
+      <TextInput testID='input-zero-0' value={inputText} onChangeText={text => setInputText(text)} />
       <Info />
       <StatusBar style='auto' />
     </View>
