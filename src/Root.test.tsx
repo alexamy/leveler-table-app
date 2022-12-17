@@ -49,7 +49,7 @@ it('allows to enter project size', () => {
   expect(input.props.value).toBe('100');
 });
 
-it('allows to add more project sizes', () => {
+it('adds more project sizes', () => {
   render(<App />);
 
   fireEvent.press(screen.getByText('+'));
@@ -59,6 +59,8 @@ it('allows to add more project sizes', () => {
   expect(input1).toBeVisible();
   expect(input1.props.value).toBe('0');
 });
+
+it.todo('deletes project size');
 
 it.todo('calculates difference from zero point to project size');
 it.todo('recalculates differences when zero size is changed');
