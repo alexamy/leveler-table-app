@@ -1,22 +1,22 @@
 import { expect, it } from '@jest/globals';
 import { fireEvent, render, screen } from '@testing-library/react-native';
 import { TextInput } from 'react-native';
-import { Root } from './Root';
+import App from '../App';
 
 it('shows zero point label', () => {
-  render(<Root />);
+  render(<App />);
 
   expect(screen.getByText('Нулевая точка')).toBeVisible();
 });
 
 it('shows project sizes label', () => {
-  render(<Root />);
+  render(<App />);
 
   expect(screen.getByText('Проектные размеры')).toBeVisible();
 });
 
 it('allows to enter zero point', async () => {
-  render(<Root />);
+  render(<App />);
 
   const input = screen.getByTestId('input-zero-0') as TextInput;
   fireEvent.changeText(input, '100');
@@ -25,7 +25,7 @@ it('allows to enter zero point', async () => {
 });
 
 it('restrict from entering letters', () => {
-  render(<Root />);
+  render(<App />);
 
   const input = screen.getByTestId('input-zero-0') as TextInput;
   fireEvent.changeText(input, 'xyz4xyz');
@@ -34,7 +34,7 @@ it('restrict from entering letters', () => {
 });
 
 it('restrict from entering negative value', () => {
-  render(<Root />);
+  render(<App />);
 
   const input = screen.getByTestId('input-zero-0') as TextInput;
   fireEvent.changeText(input, '-42');
@@ -43,7 +43,7 @@ it('restrict from entering negative value', () => {
 });
 
 it('restrict from entering float value', () => {
-  render(<Root />);
+  render(<App />);
 
   const input = screen.getByTestId('input-zero-0') as TextInput;
   fireEvent.changeText(input, '10.5');
