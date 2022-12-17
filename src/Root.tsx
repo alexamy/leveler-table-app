@@ -1,7 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import { observer } from 'mobx-react-lite';
 import { useContext } from 'react';
-import { ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Button, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { StoreContext } from './store';
 
 const styles = StyleSheet.create({
@@ -50,14 +50,11 @@ export const Root = observer(function() {
       />
       <ScrollView>
         {inputs}
-        <TextInput
-          testID={`input-size-${store.sizes.length}`}
-          style={styles.input}
-          keyboardType='numeric'
-          textAlign='right'
-          onChangeText={text => store.setSize(text, store.sizes.length)}
-        />
       </ScrollView>
+      <Button
+        onPress={() => store.addSize()}
+        title='+'
+      />
       <StatusBar style='auto' />
     </View>
   );

@@ -3,6 +3,9 @@ import { fireEvent, render, screen } from '@testing-library/react-native';
 import { TextInput } from 'react-native';
 import App from '../App';
 
+// suppress console warn: `useNativeDriver` is not supported
+jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper');
+
 it('shows zero point label', () => {
   render(<App />);
 
@@ -49,41 +52,13 @@ it('allows to enter project size', () => {
 it('allows to add more project sizes', () => {
   render(<App />);
 
-  const input0 = screen.getByTestId('input-size-0') as TextInput;
-  fireEvent.changeText(input0, '12');
+  fireEvent.press(screen.getByText('+'));
 
   const input1 = screen.getByTestId('input-size-1') as TextInput;
 
   expect(input1).toBeVisible();
-  expect(input1.props.value).toBe(undefined);
+  expect(input1.props.value).toBe('0');
 });
-
-it('render additional project size input only for last input', () => {
-  render(<App />);
-
-  fireEvent.changeText(screen.getByTestId('input-size-0'), '12');
-  fireEvent.changeText(screen.getByTestId('input-size-1'), '24');
-
-  fireEvent.changeText(screen.getByTestId('input-size-0'), '');
-  fireEvent.changeText(screen.getByTestId('input-size-0'), '12');
-
-  expect(screen.queryByTestId('input-size-2')).toBe(null);
-});
-
-it('dont render more than one additional project size input', () => {
-  render(<App />);
-
-  const input0 = screen.getByTestId('input-size-0') as TextInput;
-
-  fireEvent.changeText(input0, '1');
-  fireEvent.changeText(input0, '12');
-
-  expect(screen.queryByTestId('input-size-2')).toBe(null);
-  expect(screen.queryByTestId('input-size-3')).toBe(null);
-});
-
-it.todo('deletes empty input on backspace');
-it.todo('dont delete first empty input on backspace');
 
 it.todo('calculates difference from zero point to project size');
 it.todo('recalculates differences when zero size is changed');

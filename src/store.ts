@@ -7,8 +7,8 @@ export const Store = types
     zero: types.optional(types.integer, 0),
   })
   .actions(self => ({
-    addSize(size: string) {
-      self.sizes.push(toInteger(size));
+    addSize() {
+      self.sizes.push(0);
     },
     setSize(size: string, idx: number) {
       self.sizes[idx] = toInteger(size);
