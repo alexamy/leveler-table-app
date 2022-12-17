@@ -14,6 +14,7 @@ module.exports = {
     'prefer-user-event': 'off',
     'react/react-in-jsx-scope': 'off',
     'jsx-quotes': ['warn', 'prefer-single'],
+    '@typescript-eslint/no-unused-vars': 'warn',
     '@typescript-eslint/no-empty-interface': [
       'error',
       {

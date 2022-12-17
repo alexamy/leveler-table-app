@@ -36,7 +36,8 @@ const Info = observer(() => {
 export function Root() {
   return (
     <View style={styles.container}>
-      <Text>Hello!</Text>
+      <Text>Нулевая точка</Text>
+      <Text>Проектные размеры</Text>
       <Info />
       <StatusBar style='auto' />
     </View>
