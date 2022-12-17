@@ -55,7 +55,6 @@ export const Root = observer(function() {
           style={styles.input}
           keyboardType='numeric'
           textAlign='right'
-          value=''
           onChangeText={text => store.setSize(text, store.sizes.length)}
         />
       </ScrollView>
