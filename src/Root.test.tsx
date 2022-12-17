@@ -24,31 +24,31 @@ it('allows to enter zero point', async () => {
   expect(input.props.value).toBe(100);
 });
 
-it('allows to enter only integers', () => {
-  render(<Root />);
-
-  const input = screen.getByTestId('input-zero-0') as TextInput;
-  fireEvent.changeText(input, '');
-
-  expect(input.props.value).toBe('1');
-});
-
 it('restrict from entering letters', () => {
   render(<Root />);
 
   const input = screen.getByTestId('input-zero-0') as TextInput;
-  fireEvent.changeText(input, '');
+  fireEvent.changeText(input, 'xyz4xyz');
 
-  expect(input.props.value).toBe('1');
+  expect(input.props.value).toBe(4);
 });
 
 it('restrict from entering negative value', () => {
   render(<Root />);
 
   const input = screen.getByTestId('input-zero-0') as TextInput;
-  fireEvent.changeText(input, '');
+  fireEvent.changeText(input, '-42');
 
-  expect(input.props.value).toBe('1');
+  expect(input.props.value).toBe(42);
+});
+
+it('restrict from entering float value', () => {
+  render(<Root />);
+
+  const input = screen.getByTestId('input-zero-0') as TextInput;
+  fireEvent.changeText(input, '10.5');
+
+  expect(input.props.value).toBe(105);
 });
 
 
