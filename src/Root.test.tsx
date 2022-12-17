@@ -67,6 +67,10 @@ it('dont render more than one additional project size input', () => {
   expect(screen.queryByTestId('input-size-3')).toBe(null);
 });
 
+it.todo('dont move focus after showing new input');
+it.todo('deletes empty input on backspace and moves focus to previous one');
+it.todo('dont delete first empty input on backspace');
+
 it.todo('calculates difference from zero point to project size');
 it.todo('recalculates differences when zero size is changed');
 
