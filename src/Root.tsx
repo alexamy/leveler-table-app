@@ -1,7 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import { observer } from 'mobx-react-lite';
 import { useContext } from 'react';
-import { StyleSheet, Text, TextInput, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { StoreContext } from './store';
 
 const styles = StyleSheet.create({
@@ -11,13 +11,28 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  text: {
+  input: {
     fontSize: 48,
+    borderWidth: 2,
   },
 });
 
 export const Root = observer(function() {
   const store = useContext(StoreContext);
+
+  const nextIdx = store.sizes.length;
+  const inputs = store.sizes.map((size, idx) => {
+    return (
+      <TextInput
+        key={`input-size-${idx}`}
+        testID={`input-size-${idx}`}
+        style={styles.input}
+        keyboardType='numeric'
+        value={size?.toString()}
+        onChangeText={text => store.setSize(text, idx)}
+      />
+    );
+  });
 
   return (
     <View style={styles.container}>
@@ -25,16 +40,21 @@ export const Root = observer(function() {
       <Text>Проектные размеры</Text>
       <TextInput
         testID='input-zero-0'
+        style={styles.input}
         keyboardType='numeric'
         value={store.zero.toString()}
         onChangeText={store.setZero}
       />
-      <TextInput
-        testID='input-size-0'
-        keyboardType='numeric'
-        value={store.sizes[0]?.toString()}
-        onChangeText={text => store.setSize(text, 0)}
-      />
+      <ScrollView>
+        {inputs}
+        <TextInput
+          testID={`input-size-${nextIdx}`}
+          style={styles.input}
+          keyboardType='numeric'
+          value={store.sizes[nextIdx]?.toString()}
+          onChangeText={text => store.setSize(text, nextIdx)}
+        />
+      </ScrollView>
       <StatusBar style='auto' />
     </View>
   );
