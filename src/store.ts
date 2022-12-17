@@ -3,7 +3,7 @@ import { Instance, types } from 'mobx-state-tree';
 export const Store = types
   .model({
     sizes: types.optional(types.array(types.number), []),
-    zero: types.optional(types.string, ''),
+    zero: types.optional(types.string, 'hello'),
   })
   .actions((self) => ({
     addSize(size: number) {

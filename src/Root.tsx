@@ -15,9 +15,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const store = Store.create({
-  sizes: [],
-});
+const store = Store.create();
 
 export const Root = observer(() => {
   return (
