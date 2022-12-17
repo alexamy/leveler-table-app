@@ -17,4 +17,4 @@ export const Store = types
 
 export interface IStore extends Instance<typeof Store> {}
 
-export const StoreContext = createContext<IStore>(Store.create());
+export const StoreContext = createContext<IStore>({} as IStore);
