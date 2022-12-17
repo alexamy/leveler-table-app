@@ -25,8 +25,8 @@ export const Root = observer(function() {
       <Text>Проектные размеры</Text>
       <TextInput
         testID='input-zero-0'
-        value={String(store.zero)}
-        onChangeText={text => store.changeZero(parseInt(text, 10) || 0)}
+        value={store.zero.toString()}
+        onChangeText={store.setZero}
       />
       <StatusBar style='auto' />
     </View>

@@ -10,8 +10,8 @@ export const Store = types
     addSize(size: number) {
       self.sizes.push(size);
     },
-    changeZero(zero: number) {
-      self.zero = zero;
+    setZero(value: string) {
+      self.zero = parseInt(value, 10) || 0;
     },
   }));
 
