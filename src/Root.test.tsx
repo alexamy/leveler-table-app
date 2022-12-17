@@ -19,9 +19,9 @@ it('allows to enter zero point', async () => {
   render(<Root />);
 
   const input = screen.getByTestId('input-zero-0') as TextInput;
-  fireEvent.changeText(input, 100);
+  fireEvent.changeText(input, '100');
 
-  expect(input.props.value).toBe(100);
+  expect(input.props.value).toBe('100');
 });
 
 it('restrict from entering letters', () => {
@@ -30,7 +30,7 @@ it('restrict from entering letters', () => {
   const input = screen.getByTestId('input-zero-0') as TextInput;
   fireEvent.changeText(input, 'xyz4xyz');
 
-  expect(input.props.value).toBe(4);
+  expect(input.props.value).toBe('4');
 });
 
 it('restrict from entering negative value', () => {
@@ -39,7 +39,7 @@ it('restrict from entering negative value', () => {
   const input = screen.getByTestId('input-zero-0') as TextInput;
   fireEvent.changeText(input, '-42');
 
-  expect(input.props.value).toBe(42);
+  expect(input.props.value).toBe('42');
 });
 
 it('restrict from entering float value', () => {
@@ -48,7 +48,7 @@ it('restrict from entering float value', () => {
   const input = screen.getByTestId('input-zero-0') as TextInput;
   fireEvent.changeText(input, '10.5');
 
-  expect(input.props.value).toBe(105);
+  expect(input.props.value).toBe('105');
 });
 
 

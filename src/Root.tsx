@@ -1,6 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
 import { observer } from 'mobx-react-lite';
-import { useState } from 'react';
 import { StyleSheet, Text, TextInput, View } from 'react-native';
 import { Store } from './store';
 
@@ -17,33 +16,16 @@ const styles = StyleSheet.create({
 });
 
 const store = Store.create({
-  measurments: [
-    {
-      sizes: [],
-      zero: 100,
-    },
-  ],
+  sizes: [],
 });
 
-const Info = observer(() => {
-  const { zero, changeZero } = store.measurments[0];
-  return (
-    <Text onPress={() => changeZero(zero - 1)} style={styles.text}>
-      {zero}
-    </Text>
-  );
-});
-
-export function Root() {
-  const [inputText, setInputText] = useState('');
-
+export const Root = observer(() => {
   return (
     <View style={styles.container}>
       <Text>Нулевая точка</Text>
       <Text>Проектные размеры</Text>
-      <TextInput testID='input-zero-0' value={inputText} onChangeText={text => setInputText(text)} />
-      <Info />
+      <TextInput testID='input-zero-0' value={store.zero} onChangeText={store.changeZero} />
       <StatusBar style='auto' />
     </View>
   );
-}
+});
