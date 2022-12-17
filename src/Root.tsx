@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export const Root = observer(() => {
+export const Root = observer(function() {
   const store = useContext(StoreContext);
 
   return (
