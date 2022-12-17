@@ -58,6 +58,18 @@ it('allows to add more project sizes', () => {
   expect(screen.getByTestId('input-size-1')).toBeVisible();
 });
 
+it('dont render more than one additional project size input', () => {
+  render(<App />);
+
+  const input0 = screen.getByTestId('input-size-0') as TextInput;
+
+  fireEvent.changeText(input0, '1');
+  fireEvent.changeText(input0, '12');
+
+  expect(screen.queryByTestId('input-size-2')).toBe(null);
+  expect(screen.queryByTestId('input-size-3')).toBe(null);
+});
+
 it.todo('calculates difference from zero point to project size');
 it.todo('recalculates differences when zero size is changed');
 
