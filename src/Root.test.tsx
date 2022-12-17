@@ -1,4 +1,4 @@
-import { expect, it } from '@jest/globals';
+import { expect, it, jest } from '@jest/globals';
 import { fireEvent, render, screen } from '@testing-library/react-native';
 import { TextInput } from 'react-native';
 import App from '../App';
@@ -49,10 +49,25 @@ it('allows to enter project size', () => {
 it('allows to add more project sizes', () => {
   render(<App />);
 
+  const input0 = screen.getByTestId('input-size-0') as TextInput;
+  fireEvent.changeText(input0, '12');
+
   const input1 = screen.getByTestId('input-size-1') as TextInput;
 
   expect(input1).toBeVisible();
-  expect(input1.props.value).toBe('');
+  expect(input1.props.value).toBe(undefined);
+});
+
+it('render additional project size input only for last input', () => {
+  render(<App />);
+
+  fireEvent.changeText(screen.getByTestId('input-size-0'), '12');
+  fireEvent.changeText(screen.getByTestId('input-size-1'), '24');
+
+  fireEvent.changeText(screen.getByTestId('input-size-0'), '');
+  fireEvent.changeText(screen.getByTestId('input-size-0'), '12');
+
+  expect(screen.queryByTestId('input-size-2')).toBe(null);
 });
 
 it('dont render more than one additional project size input', () => {
