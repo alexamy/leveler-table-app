@@ -22,7 +22,6 @@ const styles = StyleSheet.create({
 export const Root = observer(function() {
   const store = useContext(StoreContext);
 
-  const nextIdx = store.sizes.length;
   const inputs = store.sizes.map((size, idx) => {
     return (
       <TextInput
@@ -52,12 +51,12 @@ export const Root = observer(function() {
       <ScrollView>
         {inputs}
         <TextInput
-          testID={`input-size-${nextIdx}`}
+          testID={`input-size-${store.sizes.length}`}
           style={styles.input}
           keyboardType='numeric'
           textAlign='right'
-          value={store.sizes[nextIdx]?.toString()}
-          onChangeText={text => store.setSize(text, nextIdx)}
+          value=''
+          onChangeText={text => store.setSize(text, store.sizes.length)}
         />
       </ScrollView>
       <StatusBar style='auto' />

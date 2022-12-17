@@ -3,7 +3,7 @@ import { createContext } from 'react';
 
 export const Store = types
   .model({
-    sizes: types.optional(types.array(types.maybe(types.integer)), []),
+    sizes: types.optional(types.array(types.maybe(types.integer)), [0]),
     zero: types.optional(types.integer, 0),
   })
   .actions(self => ({
