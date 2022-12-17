@@ -12,8 +12,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   input: {
-    fontSize: 48,
-    borderWidth: 2,
+    fontSize: 20,
+    borderWidth: 1,
+    paddingHorizontal: 5,
+    paddingVertical: 2,
   },
 });
 
@@ -28,6 +30,8 @@ export const Root = observer(function() {
         testID={`input-size-${idx}`}
         style={styles.input}
         keyboardType='numeric'
+        textAlign='right'
+        maxLength={6}
         value={size?.toString()}
         onChangeText={text => store.setSize(text, idx)}
       />
@@ -51,6 +55,7 @@ export const Root = observer(function() {
           testID={`input-size-${nextIdx}`}
           style={styles.input}
           keyboardType='numeric'
+          textAlign='right'
           value={store.sizes[nextIdx]?.toString()}
           onChangeText={text => store.setSize(text, nextIdx)}
         />
