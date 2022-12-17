@@ -25,6 +25,7 @@ export const Root = observer(function() {
       <Text>Проектные размеры</Text>
       <TextInput
         testID='input-zero-0'
+        keyboardType='numeric'
         value={store.zero.toString()}
         onChangeText={store.setZero}
       />
