@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
 export const Root = observer(function() {
   const store = useContext(StoreContext);
 
-  const inputs = store.sizes.map((size, idx) => {
+  const inputs = [...store.sizes.map.values()].map((size) => {
     return (
       <TextInput
         key={`input-size-${size.id}`}
@@ -32,7 +32,7 @@ export const Root = observer(function() {
         textAlign='right'
         maxLength={6}
         value={size.value?.toString()}
-        onChangeText={text => store.setSize(text, idx)}
+        onChangeText={text => store.setSize(text, size.id)}
       />
     );
   });

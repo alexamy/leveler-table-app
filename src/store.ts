@@ -6,23 +6,34 @@ const Integer = types.model({
   value: types.maybeNull(types.integer),
 });
 
+const Zero = types.optional(Integer, { id: '1' });
+
+const SizeMap = types.model({
+  lastId: types.optional(types.integer, 1),
+  map: types.optional(types.map(Integer), { '1': { id: '1' } }),
+});
+
 export const Store = types
   .model({
-    sizes: types.optional(types.array(Integer), [{ id: '1' }]),
-    zero: types.optional(Integer, { id: '1' }),
+    sizes: types.optional(SizeMap, {}),
+    zero: types.optional(Zero, { id: '1' }),
   })
   .actions(self => ({
     addSize() {
-      const id = Math.max(...self.sizes.map(s => Number(s.id))) + 1;
-      self.sizes.push({ id: id.toString() });
+      self.sizes.lastId += 1;
+      self.sizes.map.put({ id: self.sizes.lastId.toString() });
     },
-    removeSize(idx: number) {
-      self.sizes.splice(idx, 1);
+    removeSize(id: string) {
+      self.sizes.map.delete(id);
     },
-    setSize(value: string, idx: number) {
-      const target = self.sizes[idx];
+    setSize(value: string, id: string) {
+      const target = self.sizes.map.get(id);
+      if(!target) return;
+
       const size = toInteger(value);
-      const needNew = idx === self.sizes.length - 1 && target.value === null && size !== null;
+      const isLast = target.id === self.sizes.lastId.toString();
+      const needNew = isLast && target.value === null && size !== null;
+
       target.value = size;
       if(needNew) { this.addSize(); }
     },
