@@ -49,7 +49,18 @@ it('allows to enter project size', () => {
   expect(input.props.value).toBe('100');
 });
 
-it.todo('restricts entering $kind value in project size input');
+it.each([
+  { value: 'xyz4xyz', expected: '4', kind: 'letter' },
+  { value: '-42', expected: '42', kind: 'negative' },
+  { value: '10.5', expected: '105', kind: 'float' },
+])('restricts entering $kind value in project size input', ({ value, expected }) => {
+  render(<App />);
+
+  const input = screen.getByTestId('input-size-1') as TextInput;
+  fireEvent.changeText(input, value);
+
+  expect(input.props.value).toBe(expected);
+});
 
 it('allows to add more project sizes', () => {
   render(<App />);
