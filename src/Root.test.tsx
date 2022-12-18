@@ -15,7 +15,7 @@ it('shows zero point label', () => {
 it('allows to enter zero point', async () => {
   render(<App />);
 
-  const input = screen.getByTestId('input-zero-0') as TextInput;
+  const input = screen.getByTestId('input-zero-1') as TextInput;
   fireEvent.changeText(input, '100');
 
   expect(input.props.value).toBe('100');
@@ -28,7 +28,7 @@ it.each([
 ])('restricts entering $kind value in zero point input', ({ value, expected }) => {
   render(<App />);
 
-  const input = screen.getByTestId('input-zero-0') as TextInput;
+  const input = screen.getByTestId('input-zero-1') as TextInput;
   fireEvent.changeText(input, value);
 
   expect(input.props.value).toBe(expected);
@@ -58,7 +58,7 @@ it('allows to add more project sizes', () => {
   const input2 = screen.getByTestId('input-size-2') as TextInput;
 
   expect(input2).toBeVisible();
-  expect(input2.props.value).toBe(undefined);
+  expect(input2.props.value).toBe('');
 });
 
 it('render additional project size input only for last input', () => {

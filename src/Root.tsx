@@ -31,7 +31,7 @@ export const Root = observer(function() {
         keyboardType='numeric'
         textAlign='right'
         maxLength={6}
-        value={size.value?.toString()}
+        value={size.value !== null ? size.value.toString() : ''}
         onChangeText={text => store.setSize(text, size.id)}
       />
     );
@@ -42,10 +42,10 @@ export const Root = observer(function() {
       <Text>Нулевая точка</Text>
       <Text>Проектные размеры</Text>
       <TextInput
-        testID='input-zero-0'
+        testID='input-zero-1'
         style={styles.input}
         keyboardType='numeric'
-        value={store.zero.value?.toString()}
+        value={store.zero.value !== null ? store.zero.value.toString() : ''}
         onChangeText={store.setZero}
       />
       <ScrollView>
