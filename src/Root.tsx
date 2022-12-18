@@ -15,13 +15,25 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   scrollView: {
-    alignSelf: 'stretch',
+  },
+  rowView: {
+    flexDirection: 'row',
   },
 });
 
 export const Root = observer(function() {
   const store = useContext(StoreContext);
   const sizes = [...store.sizes.map.values()];
+
+  const positions = store.results.map(result => {
+    return (
+      <Text
+        key={`position-${result.sizeId}`}
+      >
+        {result.index}
+      </Text>
+    );
+  });
 
   const inputs = sizes.map((size) => {
     return (
@@ -47,16 +59,15 @@ export const Root = observer(function() {
     );
   });
 
-  const positions = store.results.map(result => {
+  const groups = sizes.map((size, i) => {
     return (
-      <Text
-        key={`result-${result.sizeId}`}
-      >
-        {result.index}
-      </Text>
+      <View key={size.id} style={styles.rowView}>
+        {positions[i]}
+        {inputs[i]}
+        {results[i]}
+      </View>
     );
   });
-
 
   return (
     <View style={styles.container}>
@@ -65,17 +76,12 @@ export const Root = observer(function() {
       <Input
         testID='input-zero-1'
         keyboardType='numeric'
+        textAlign='right'
         value={store.zero.value?.toString() || ''}
         onChangeText={store.setZero}
       />
-      <ScrollView style={styles.scrollView}>
-        {inputs}
-      </ScrollView>
-      <ScrollView style={styles.scrollView}>
-        {positions}
-      </ScrollView>
-      <ScrollView style={styles.scrollView}>
-        {results}
+      <ScrollView>
+        {groups}
       </ScrollView>
       <StatusBar style='auto' />
     </View>
