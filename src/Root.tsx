@@ -51,10 +51,6 @@ export const Root = observer(function() {
       <ScrollView>
         {inputs}
       </ScrollView>
-      <Button
-        onPress={() => store.addSize()}
-        title='+'
-      />
       <StatusBar style='auto' />
     </View>
   );
