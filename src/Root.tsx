@@ -1,21 +1,16 @@
 import { StatusBar } from 'expo-status-bar';
 import { observer } from 'mobx-react-lite';
 import { useContext } from 'react';
-import { ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
+import { ScrollView, StyleSheet, View } from 'react-native';
+import { Input, Text } from '@rneui/themed';
 import { StoreContext } from './store';
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#cccccc',
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  input: {
-    fontSize: 20,
-    borderWidth: 1,
-    paddingHorizontal: 5,
-    paddingVertical: 2,
   },
 });
 
@@ -25,10 +20,9 @@ export const Root = observer(function() {
 
   const inputs = sizes.map((size) => {
     return (
-      <TextInput
+      <Input
         key={`input-size-${size.id}`}
         testID={`input-size-${size.id}`}
-        style={styles.input}
         keyboardType='numeric'
         textAlign='right'
         maxLength={6}
@@ -63,9 +57,8 @@ export const Root = observer(function() {
     <View style={styles.container}>
       <Text>Нулевая точка</Text>
       <Text>Проектные размеры</Text>
-      <TextInput
+      <Input
         testID='input-zero-1'
-        style={styles.input}
         keyboardType='numeric'
         value={store.zero.value?.toString() || ''}
         onChangeText={store.setZero}
