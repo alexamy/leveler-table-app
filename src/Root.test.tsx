@@ -87,6 +87,12 @@ it('dont render more than one additional project size input', () => {
   expect(screen.queryByTestId('input-size-4')).toBe(null);
 });
 
+it('shows delete button', () => {
+  render(<App />);
+
+  expect(screen.getByText('−')).toBeVisible();
+});
+
 it.todo('deletes project size');
 
 it.todo('dont allow to delete single project size');

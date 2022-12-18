@@ -1,8 +1,8 @@
 import { StatusBar } from 'expo-status-bar';
 import { observer } from 'mobx-react-lite';
 import { useContext } from 'react';
-import { ScrollView, StyleSheet, View, TextInput } from 'react-native';
-import { Input, Text } from '@rneui/themed';
+import { ScrollView, StyleSheet, View } from 'react-native';
+import { Chip, Input, Text } from '@rneui/themed';
 import { StoreContext } from './store';
 
 const styles = StyleSheet.create({
@@ -24,6 +24,7 @@ const styles = StyleSheet.create({
   position: {
     width: '5%',
     fontSize: 18,
+    textAlign: 'center',
     paddingTop: 7,
   },
   result: {
@@ -31,6 +32,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     textAlign: 'right',
     paddingTop: 7,
+    marginRight: 10,
   },
   input: {
     padding: 0,
@@ -65,6 +67,9 @@ export const Root = observer(function() {
         <Text style={styles.result}>
           {store.results[i].value}
         </Text>
+        <Chip>
+          −
+        </Chip>
       </View>
     );
   });
