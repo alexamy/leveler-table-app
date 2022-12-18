@@ -67,7 +67,10 @@ export const Root = observer(function() {
         <Text style={styles.result}>
           {store.results[i].value}
         </Text>
-        <Chip>
+        <Chip
+          testID={`delete-size-${size.id}`}
+          onPress={() => store.sizes.remove(size.id)}
+        >
           −
         </Chip>
       </View>

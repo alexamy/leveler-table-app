@@ -93,7 +93,17 @@ it('shows delete button', () => {
   expect(screen.getByText('−')).toBeVisible();
 });
 
-it.todo('deletes project size');
+it('deletes project size', () => {
+  render(<App />);
+
+  const input1 = screen.getByTestId('input-size-1') as TextInput;
+  fireEvent.changeText(input1, '12');
+
+  const delete2 = screen.getByTestId('delete-size-2');
+  fireEvent.press(delete2);
+
+  expect(screen.queryByTestId('input-size-2')).toBe(null);
+});
 
 it.todo('dont allow to delete single project size');
 
