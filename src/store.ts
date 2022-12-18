@@ -19,14 +19,14 @@ const SizeMap = types.model({
   map: types.optional(types.map(Integer), { '1': { id: '1' } }),
 })
 .actions(self => ({
-  addSize() {
+  add() {
     self.lastId += 1;
     self.map.put({ id: self.lastId.toString() });
   },
-  removeSize(id: string) {
+  remove(id: string) {
     self.map.delete(id);
   },
-  setSize(value: string, id: string) {
+  set(value: string, id: string) {
     const target = self.map.get(id);
     if(!target) return;
 
@@ -35,7 +35,7 @@ const SizeMap = types.model({
     const needNew = isLast && target.value === null && size !== null;
 
     target.value = size;
-    if(needNew) { this.addSize(); }
+    if(needNew) { this.add(); }
   },
 }));
 
