@@ -33,7 +33,7 @@ export const Root = observer(function() {
         textAlign='right'
         maxLength={6}
         value={size.value?.toString() || ''}
-        onChangeText={text => store.setSize(text, size.id)}
+        onChangeText={text => store.sizes.setSize(text, size.id)}
       />
     );
   });

@@ -17,7 +17,27 @@ const Zero = types.optional(Integer, { id: '1' });
 const SizeMap = types.model({
   lastId: types.optional(types.integer, 1),
   map: types.optional(types.map(Integer), { '1': { id: '1' } }),
-});
+})
+.actions(self => ({
+  addSize() {
+    self.lastId += 1;
+    self.map.put({ id: self.lastId.toString() });
+  },
+  removeSize(id: string) {
+    self.map.delete(id);
+  },
+  setSize(value: string, id: string) {
+    const target = self.map.get(id);
+    if(!target) return;
+
+    const size = toInteger(value);
+    const isLast = target.id === self.lastId.toString();
+    const needNew = isLast && target.value === null && size !== null;
+
+    target.value = size;
+    if(needNew) { this.addSize(); }
+  },
+}));
 
 export const Store = types
   .model({
@@ -36,24 +56,6 @@ export const Store = types
     },
   }))
   .actions(self => ({
-    addSize() {
-      self.sizes.lastId += 1;
-      self.sizes.map.put({ id: self.sizes.lastId.toString() });
-    },
-    removeSize(id: string) {
-      self.sizes.map.delete(id);
-    },
-    setSize(value: string, id: string) {
-      const target = self.sizes.map.get(id);
-      if(!target) return;
-
-      const size = toInteger(value);
-      const isLast = target.id === self.sizes.lastId.toString();
-      const needNew = isLast && target.value === null && size !== null;
-
-      target.value = size;
-      if(needNew) { this.addSize(); }
-    },
     setZero(value: string) {
       self.zero.value = toInteger(value);
     },
