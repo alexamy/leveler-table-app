@@ -8,9 +8,14 @@ import { StoreContext } from './store';
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#cccccc',
+    marginHorizontal: 20,
+    marginTop: 40,
+    alignSelf: 'stretch',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  scrollView: {
+    alignSelf: 'stretch',
   },
 });
 
@@ -63,13 +68,13 @@ export const Root = observer(function() {
         value={store.zero.value?.toString() || ''}
         onChangeText={store.setZero}
       />
-      <ScrollView>
+      <ScrollView style={styles.scrollView}>
         {inputs}
       </ScrollView>
-      <ScrollView>
+      <ScrollView style={styles.scrollView}>
         {positions}
       </ScrollView>
-      <ScrollView>
+      <ScrollView style={styles.scrollView}>
         {results}
       </ScrollView>
       <StatusBar style='auto' />
