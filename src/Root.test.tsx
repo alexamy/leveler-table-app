@@ -80,7 +80,8 @@ it('dont render more than one additional project size input', () => {
   const input1 = screen.getByTestId('input-size-1') as TextInput;
 
   fireEvent.changeText(input1, '1');
-  fireEvent.changeText(input1, '12');
+  fireEvent.changeText(input1, '');
+  fireEvent.changeText(input1, '2');
 
   expect(screen.queryByTestId('input-size-3')).toBe(null);
   expect(screen.queryByTestId('input-size-4')).toBe(null);
