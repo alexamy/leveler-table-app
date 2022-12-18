@@ -117,7 +117,19 @@ it('calculates difference from zero point to project size as negative number', (
   expect(target1).toHaveTextContent('-100');
 });
 
-it.todo('recalculates differences when zero size is changed');
+it('recalculates differences when zero size is changed', () => {
+  render(<App />);
+
+  const inputZero = screen.getByTestId('input-zero-1') as TextInput;
+  const input1 = screen.getByTestId('input-size-1') as TextInput;
+
+  fireEvent.changeText(inputZero, '500');
+  fireEvent.changeText(input1, '150');
+  fireEvent.changeText(inputZero, '200');
+
+  const target1 = screen.getByTestId('result-1');
+  expect(target1).toHaveTextContent('50');
+});
 
 it.todo('shows first size position as 0');
 it.todo('shows next sizes positions as consecutive integers');
