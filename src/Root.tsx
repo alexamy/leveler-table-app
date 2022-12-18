@@ -14,11 +14,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  tableView: {
+  table: {
     alignSelf: 'stretch',
     width: '100%',
   },
-  rowView: {
+  row: {
     flexDirection: 'row',
   },
   position: {
@@ -83,7 +83,7 @@ export const Root = observer(function() {
 
   const groups = sizes.map((size, i) => {
     return (
-      <View key={size.id} style={styles.rowView}>
+      <View key={size.id} style={styles.row}>
         {positions[i]}
         {inputs[i]}
         {results[i]}
@@ -102,12 +102,12 @@ export const Root = observer(function() {
         value={store.zero.value?.toString() || ''}
         onChangeText={store.setZero}
       />
-      <ScrollView style={styles.tableView}>
+      <ScrollView style={styles.table}>
         {groups}
       </ScrollView>
 
-      <ScrollView style={styles.tableView}>
-        <View style={styles.rowView}>
+      <ScrollView style={styles.table}>
+        <View style={styles.row}>
           <Text style={styles.position}>99</Text>
           <Input style={styles.input} containerStyle={styles.input} defaultValue='123' />
           <Text style={styles.result}>123</Text>
