@@ -91,7 +91,21 @@ it.todo('deletes project size');
 
 it.todo('dont allow to delete single project size');
 
-it.todo('calculates difference from zero point to project size');
+it('calculates difference from zero point to project size', () => {
+  render(<App />);
+
+  const inputZero = screen.getByTestId('input-zero-1') as TextInput;
+  const input1 = screen.getByTestId('input-size-1') as TextInput;
+
+  fireEvent.changeText(inputZero, '500');
+  fireEvent.changeText(input1, '150');
+
+  const target1 = screen.getByTestId('text-computed-1-1');
+  expect(target1).toHaveTextContent('350');
+});
+
+it.todo('calculates difference from zero point to project size as negative number');
+
 it.todo('recalculates differences when zero size is changed');
 
 it.todo('shows first size position as 0');
