@@ -14,10 +14,28 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  scrollView: {
+  tableView: {
+    alignSelf: 'stretch',
+    width: '100%',
   },
   rowView: {
     flexDirection: 'row',
+  },
+  position: {
+    width: '10%',
+    fontSize: 18,
+    paddingTop: 7,
+  },
+  result: {
+    fontSize: 18,
+    paddingTop: 7,
+  },
+  input: {
+    padding: 0,
+    margin: 0,
+    flex: 0,
+    flexGrow: 0,
+    flexShrink: 1,
   },
 });
 
@@ -29,6 +47,7 @@ export const Root = observer(function() {
     return (
       <Text
         key={`position-${result.sizeId}`}
+        style={styles.position}
       >
         {result.index}
       </Text>
@@ -45,6 +64,8 @@ export const Root = observer(function() {
         maxLength={6}
         value={size.value?.toString() || ''}
         onChangeText={text => store.sizes.set(text, size.id)}
+        containerStyle={styles.input}
+        style={styles.input}
       />
     );
   });
@@ -53,6 +74,7 @@ export const Root = observer(function() {
     return (
       <Text
         key={`result-${result.sizeId}`}
+        style={styles.result}
       >
         {result.value}
       </Text>
@@ -80,8 +102,16 @@ export const Root = observer(function() {
         value={store.zero.value?.toString() || ''}
         onChangeText={store.setZero}
       />
-      <ScrollView>
+      <ScrollView style={styles.tableView}>
         {groups}
+      </ScrollView>
+
+      <ScrollView style={styles.tableView}>
+        <View style={styles.rowView}>
+          <Text style={styles.position}>99</Text>
+          <Input style={styles.input} containerStyle={styles.input} defaultValue='123' />
+          <Text style={styles.result}>123</Text>
+        </View>
       </ScrollView>
       <StatusBar style='auto' />
     </View>
