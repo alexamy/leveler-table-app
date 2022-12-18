@@ -158,4 +158,11 @@ it('shows first size position as 0', () => {
   expect(screen.getByText('0')).toBeVisible();
 });
 
-it.todo('shows next sizes positions as consecutive integers');
+it('shows next sizes positions as consecutive integers', () => {
+  render(<App />);
+
+  const input1 = screen.getByTestId('input-size-1') as TextInput;
+  fireEvent.changeText(input1, '150');
+
+  expect(screen.getByText('1')).toBeVisible();
+});
