@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   position: {
-    width: '10%',
+    width: '5%',
     fontSize: 18,
     paddingTop: 7,
   },
@@ -43,17 +43,6 @@ export const Root = observer(function() {
   const store = useContext(StoreContext);
   const sizes = [...store.sizes.map.values()];
 
-  const positions = store.results.map(result => {
-    return (
-      <Text
-        key={`position-${result.sizeId}`}
-        style={styles.position}
-      >
-        {result.index}
-      </Text>
-    );
-  });
-
   const inputs = sizes.map((size) => {
     return (
       <Input
@@ -70,23 +59,26 @@ export const Root = observer(function() {
     );
   });
 
-  const results = store.results.map(result => {
-    return (
-      <Text
-        key={`result-${result.sizeId}`}
-        style={styles.result}
-      >
-        {result.value}
-      </Text>
-    );
-  });
-
-  const groups = sizes.map((size, i) => {
+  const rows = sizes.map((size, i) => {
     return (
       <View key={size.id} style={styles.row}>
-        {positions[i]}
-        {inputs[i]}
-        {results[i]}
+        <Text style={styles.position}>
+          {store.results[i].index}
+        </Text>
+        <Input
+          testID={`input-size-${size.id}`}
+          placeholder='Проектный размер'
+          keyboardType='numeric'
+          textAlign='right'
+          maxLength={6}
+          value={size.value?.toString() || ''}
+          onChangeText={text => store.sizes.set(text, size.id)}
+          containerStyle={styles.input}
+          style={styles.input}
+        />
+        <Text style={styles.result}>
+          {store.results[i].value}
+        </Text>
       </View>
     );
   });
@@ -103,16 +95,9 @@ export const Root = observer(function() {
         onChangeText={store.setZero}
       />
       <ScrollView style={styles.table}>
-        {groups}
+        {rows}
       </ScrollView>
 
-      <ScrollView style={styles.table}>
-        <View style={styles.row}>
-          <Text style={styles.position}>99</Text>
-          <Input style={styles.input} containerStyle={styles.input} defaultValue='123' />
-          <Text style={styles.result}>123</Text>
-        </View>
-      </ScrollView>
       <StatusBar style='auto' />
     </View>
   );
