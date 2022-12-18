@@ -9,7 +9,7 @@ jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper');
 it('shows zero point label', () => {
   render(<App />);
 
-  expect(screen.getByText('Нулевая точка')).toBeVisible();
+  expect(screen.getByPlaceholderText('Нулевая точка')).toBeVisible();
 });
 
 it('allows to enter zero point', async () => {
@@ -37,7 +37,7 @@ it.each([
 it('shows project sizes label', () => {
   render(<App />);
 
-  expect(screen.getByText('Проектные размеры')).toBeVisible();
+  expect(screen.getByPlaceholderText('Проектный размер')).toBeVisible();
 });
 
 it('allows to enter project size', () => {

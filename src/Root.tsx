@@ -85,12 +85,11 @@ export const Root = observer(function() {
 
   return (
     <View style={styles.container}>
-      <Text>Нулевая точка</Text>
-      <Text>Проектные размеры</Text>
       <Input
         testID='input-zero-1'
         keyboardType='numeric'
         textAlign='right'
+        placeholder='Нулевая точка'
         value={store.zero.value?.toString() || ''}
         onChangeText={store.setZero}
       />
