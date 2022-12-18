@@ -52,13 +52,13 @@ it('allows to enter project size', () => {
 it('allows to add more project sizes', () => {
   render(<App />);
 
-  const input0 = screen.getByTestId('input-size-1') as TextInput;
-  fireEvent.changeText(input0, '12');
+  const input1 = screen.getByTestId('input-size-1') as TextInput;
+  fireEvent.changeText(input1, '12');
 
-  const input1 = screen.getByTestId('input-size-2') as TextInput;
+  const input2 = screen.getByTestId('input-size-2') as TextInput;
 
-  expect(input1).toBeVisible();
-  expect(input1.props.value).toBe(undefined);
+  expect(input2).toBeVisible();
+  expect(input2.props.value).toBe(undefined);
 });
 
 it('render additional project size input only for last input', () => {
@@ -77,10 +77,10 @@ it('render additional project size input only for last input', () => {
 it('dont render more than one additional project size input', () => {
   render(<App />);
 
-  const input0 = screen.getByTestId('input-size-1') as TextInput;
+  const input1 = screen.getByTestId('input-size-1') as TextInput;
 
-  fireEvent.changeText(input0, '1');
-  fireEvent.changeText(input0, '12');
+  fireEvent.changeText(input1, '1');
+  fireEvent.changeText(input1, '12');
 
   expect(screen.queryByTestId('input-size-3')).toBe(null);
   expect(screen.queryByTestId('input-size-4')).toBe(null);
