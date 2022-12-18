@@ -16,8 +16,13 @@ export const Store = types
       const id = Math.max(...self.sizes.map(s => Number(s.id))) + 1;
       self.sizes.push({ id: id.toString() });
     },
+    removeSize(idx: number) {
+      self.sizes.splice(idx, 1);
+    },
     setSize(value: string, idx: number) {
-      self.sizes[idx].value = toInteger(value);
+      const target = self.sizes[idx];
+      const size = toInteger(value);
+      target.value = size;
     },
     setZero(value: string) {
       self.zero.value = toInteger(value);
