@@ -1,6 +1,12 @@
 import { Instance, types } from 'mobx-state-tree';
 import { createContext } from 'react';
 
+interface Result {
+  value: number | null;
+  index: number;
+  sizeId: string;
+}
+
 const Integer = types.model({
   id: types.identifier,
   value: types.maybeNull(types.integer),
@@ -19,13 +25,13 @@ export const Store = types
     zero: types.optional(Zero, { id: '1' }),
   })
   .views(self => ({
-    get results(): { value: number | null, sizeId: string }[] {
-      return [...self.sizes.map.values()].map(size => {
+    get results(): Result[] {
+      return [...self.sizes.map.values()].map((size, index) => {
         const value = self.zero.value !== null && size.value !== null
           ? self.zero.value - size.value
           : null;
 
-        return { value, sizeId: size.id };
+        return { value, index, sizeId: size.id };
       });
     },
   }))

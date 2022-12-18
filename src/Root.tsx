@@ -21,8 +21,9 @@ const styles = StyleSheet.create({
 
 export const Root = observer(function() {
   const store = useContext(StoreContext);
+  const sizes = [...store.sizes.map.values()];
 
-  const inputs = [...store.sizes.map.values()].map((size) => {
+  const inputs = sizes.map((size) => {
     return (
       <TextInput
         key={`input-size-${size.id}`}
@@ -47,6 +48,17 @@ export const Root = observer(function() {
     );
   });
 
+  const positions = store.results.map(result => {
+    return (
+      <Text
+        key={`result-${result.sizeId}`}
+      >
+        {result.index}
+      </Text>
+    );
+  });
+
+
   return (
     <View style={styles.container}>
       <Text>Нулевая точка</Text>
@@ -60,6 +72,9 @@ export const Root = observer(function() {
       />
       <ScrollView>
         {inputs}
+      </ScrollView>
+      <ScrollView>
+        {positions}
       </ScrollView>
       <ScrollView>
         {results}
