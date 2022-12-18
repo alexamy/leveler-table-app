@@ -18,6 +18,14 @@ export const Store = types
     sizes: types.optional(SizeMap, {}),
     zero: types.optional(Zero, { id: '1' }),
   })
+  .views(self => ({
+    get results() {
+      return [...self.sizes.map.values()].map(size => {
+        const value = (self.zero.value || 0) - (size.value || 0);
+        return { value, sizeId: size.id };
+      });
+    },
+  }))
   .actions(self => ({
     addSize() {
       self.sizes.lastId += 1;

@@ -37,6 +37,17 @@ export const Root = observer(function() {
     );
   });
 
+  const results = store.results.map(result => {
+    return (
+      <Text
+        key={`result-${result.sizeId}`}
+        testID={`result-${result.sizeId}`}
+      >
+        {result.value}
+      </Text>
+    );
+  });
+
   return (
     <View style={styles.container}>
       <Text>Нулевая точка</Text>
@@ -50,6 +61,9 @@ export const Root = observer(function() {
       />
       <ScrollView>
         {inputs}
+      </ScrollView>
+      <ScrollView>
+        {results}
       </ScrollView>
       <StatusBar style='auto' />
     </View>

@@ -100,7 +100,7 @@ it('calculates difference from zero point to project size', () => {
   fireEvent.changeText(inputZero, '500');
   fireEvent.changeText(input1, '150');
 
-  const target1 = screen.getByTestId('text-computed-1-1');
+  const target1 = screen.getByTestId('result-1');
   expect(target1).toHaveTextContent('350');
 });
 
