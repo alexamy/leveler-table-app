@@ -105,7 +105,23 @@ it('deletes project size', () => {
   expect(screen.queryByTestId('input-size-2')).toBe(null);
 });
 
-it.todo('dont allow to delete single project size');
+it('dont allow to delete single project size', () => {
+  render(<App />);
+
+  expect(screen.getByTestId('delete-size-1')).toBeDisabled();
+});
+
+it('dont allow to delete single project size if its other than first size', () => {
+  render(<App />);
+
+  const input1 = screen.getByTestId('input-size-1') as TextInput;
+  fireEvent.changeText(input1, '12');
+
+  const delete1 = screen.getByTestId('delete-size-1');
+  fireEvent.press(delete1);
+
+  expect(screen.getByTestId('delete-size-2')).toBeDisabled();
+});
 
 it('calculates difference from zero point to project size', () => {
   render(<App />);
