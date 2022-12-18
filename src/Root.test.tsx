@@ -104,7 +104,18 @@ it('calculates difference from zero point to project size', () => {
   expect(target1).toHaveTextContent('350');
 });
 
-it.todo('calculates difference from zero point to project size as negative number');
+it('calculates difference from zero point to project size as negative number', () => {
+  render(<App />);
+
+  const inputZero = screen.getByTestId('input-zero-1') as TextInput;
+  const input1 = screen.getByTestId('input-size-1') as TextInput;
+
+  fireEvent.changeText(inputZero, '50');
+  fireEvent.changeText(input1, '150');
+
+  const target1 = screen.getByTestId('result-1');
+  expect(target1).toHaveTextContent('-100');
+});
 
 it.todo('recalculates differences when zero size is changed');
 
