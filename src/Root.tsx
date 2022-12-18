@@ -1,7 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import { observer } from 'mobx-react-lite';
 import { useContext } from 'react';
-import { ScrollView, StyleSheet, View } from 'react-native';
+import { ScrollView, StyleSheet, View, TextInput } from 'react-native';
 import { Input, Text } from '@rneui/themed';
 import { StoreContext } from './store';
 
@@ -27,7 +27,9 @@ const styles = StyleSheet.create({
     paddingTop: 7,
   },
   result: {
+    width: '20%',
     fontSize: 18,
+    textAlign: 'right',
     paddingTop: 7,
   },
   input: {
@@ -43,22 +45,6 @@ export const Root = observer(function() {
   const store = useContext(StoreContext);
   const sizes = [...store.sizes.map.values()];
 
-  const inputs = sizes.map((size) => {
-    return (
-      <Input
-        key={`input-size-${size.id}`}
-        testID={`input-size-${size.id}`}
-        keyboardType='numeric'
-        textAlign='right'
-        maxLength={6}
-        value={size.value?.toString() || ''}
-        onChangeText={text => store.sizes.set(text, size.id)}
-        containerStyle={styles.input}
-        style={styles.input}
-      />
-    );
-  });
-
   const rows = sizes.map((size, i) => {
     return (
       <View key={size.id} style={styles.row}>
@@ -69,7 +55,7 @@ export const Root = observer(function() {
           testID={`input-size-${size.id}`}
           placeholder='Проектный размер'
           keyboardType='numeric'
-          textAlign='right'
+          textAlign='left'
           maxLength={6}
           value={size.value?.toString() || ''}
           onChangeText={text => store.sizes.set(text, size.id)}
