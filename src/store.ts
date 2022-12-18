@@ -22,7 +22,11 @@ export const Store = types
     setSize(value: string, idx: number) {
       const target = self.sizes[idx];
       const size = toInteger(value);
+      const needNew = target.value === null && size !== null;
+      const needRemove = target.value !== null && size === null;
       target.value = size;
+      if(needNew) this.addSize();
+      if(needRemove) this.removeSize(idx);
     },
     setZero(value: string) {
       self.zero.value = toInteger(value);

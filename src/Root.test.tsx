@@ -68,9 +68,10 @@ it('render additional project size input only for last input', () => {
   fireEvent.changeText(screen.getByTestId('input-size-2'), '24');
 
   fireEvent.changeText(screen.getByTestId('input-size-1'), '');
-  fireEvent.changeText(screen.getByTestId('input-size-1'), '12');
+  fireEvent.changeText(screen.getByTestId('input-size-2'), '');
 
-  expect(screen.queryByTestId('input-size-3')).toBe(null);
+  expect(screen.getByTestId('input-size-3')).toBeVisible();
+  expect(screen.queryByTestId('input-size-4')).toBe(null);
 });
 
 it('dont render more than one additional project size input', () => {
