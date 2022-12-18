@@ -128,5 +128,34 @@ it('recalculates differences when zero size is changed', () => {
   expect(screen.getByText('50')).toBeVisible();
 });
 
-it.todo('shows first size position as 0');
+it('dont show difference if zero value is empty', () => {
+  render(<App />);
+
+  const inputZero = screen.getByTestId('input-zero-1') as TextInput;
+  const input1 = screen.getByTestId('input-size-1') as TextInput;
+
+  fireEvent.changeText(inputZero, '');
+  fireEvent.changeText(input1, '150');
+
+  expect(screen.queryByText('-150')).toBe(null);
+});
+
+it('dont show difference if project size value is empty', () => {
+  render(<App />);
+
+  const inputZero = screen.getByTestId('input-zero-1') as TextInput;
+  const input1 = screen.getByTestId('input-size-1') as TextInput;
+
+  fireEvent.changeText(inputZero, '150');
+  fireEvent.changeText(input1, '');
+
+  expect(screen.queryByText('150')).toBe(null);
+});
+
+it('shows first size position as 0', () => {
+  render(<App />);
+
+  expect(screen.getByText('0')).toBeVisible();
+});
+
 it.todo('shows next sizes positions as consecutive integers');

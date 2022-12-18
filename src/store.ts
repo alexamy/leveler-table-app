@@ -19,9 +19,12 @@ export const Store = types
     zero: types.optional(Zero, { id: '1' }),
   })
   .views(self => ({
-    get results() {
+    get results(): { value: number | null, sizeId: string }[] {
       return [...self.sizes.map.values()].map(size => {
-        const value = (self.zero.value || 0) - (size.value || 0);
+        const value = self.zero.value !== null && size.value !== null
+          ? self.zero.value - size.value
+          : null;
+
         return { value, sizeId: size.id };
       });
     },
