@@ -39,27 +39,26 @@ const SizeMap = types.model({
   },
 }));
 
-export const Store = types
-  .model({
-    sizes: types.optional(SizeMap, {}),
-    zero: types.optional(Zero, { id: '1' }),
-  })
-  .views(self => ({
-    get results(): Result[] {
-      return [...self.sizes.map.values()].map((size, index) => {
-        const value = self.zero.value !== null && size.value !== null
-          ? self.zero.value - size.value
-          : null;
+export const Store = types.model({
+  sizes: types.optional(SizeMap, {}),
+  zero: types.optional(Zero, { id: '1' }),
+})
+.views(self => ({
+  get results(): Result[] {
+    return [...self.sizes.map.values()].map((size, index) => {
+      const value = self.zero.value !== null && size.value !== null
+        ? self.zero.value - size.value
+        : null;
 
-        return { value, index, sizeId: size.id };
-      });
-    },
-  }))
-  .actions(self => ({
-    setZero(value: string) {
-      self.zero.value = toInteger(value);
-    },
-  }));
+      return { value, index, sizeId: size.id };
+    });
+  },
+}))
+.actions(self => ({
+  setZero(value: string) {
+    self.zero.value = toInteger(value);
+  },
+}));
 
 export interface IStore extends Instance<typeof Store> {}
 
