@@ -43,7 +43,7 @@ it('shows project sizes label', () => {
 it('allows to enter project size', () => {
   render(<App />);
 
-  const input = screen.getByTestId('input-size-0') as TextInput;
+  const input = screen.getByTestId('input-size-1') as TextInput;
   fireEvent.changeText(input, '100');
 
   expect(input.props.value).toBe('100');
@@ -52,10 +52,10 @@ it('allows to enter project size', () => {
 it('allows to add more project sizes', () => {
   render(<App />);
 
-  const input0 = screen.getByTestId('input-size-0') as TextInput;
+  const input0 = screen.getByTestId('input-size-1') as TextInput;
   fireEvent.changeText(input0, '12');
 
-  const input1 = screen.getByTestId('input-size-1') as TextInput;
+  const input1 = screen.getByTestId('input-size-2') as TextInput;
 
   expect(input1).toBeVisible();
   expect(input1.props.value).toBe(undefined);
@@ -64,25 +64,25 @@ it('allows to add more project sizes', () => {
 it('render additional project size input only for last input', () => {
   render(<App />);
 
-  fireEvent.changeText(screen.getByTestId('input-size-0'), '12');
-  fireEvent.changeText(screen.getByTestId('input-size-1'), '24');
+  fireEvent.changeText(screen.getByTestId('input-size-1'), '12');
+  fireEvent.changeText(screen.getByTestId('input-size-2'), '24');
 
-  fireEvent.changeText(screen.getByTestId('input-size-0'), '');
-  fireEvent.changeText(screen.getByTestId('input-size-0'), '12');
+  fireEvent.changeText(screen.getByTestId('input-size-1'), '');
+  fireEvent.changeText(screen.getByTestId('input-size-1'), '12');
 
-  expect(screen.queryByTestId('input-size-2')).toBe(null);
+  expect(screen.queryByTestId('input-size-3')).toBe(null);
 });
 
 it('dont render more than one additional project size input', () => {
   render(<App />);
 
-  const input0 = screen.getByTestId('input-size-0') as TextInput;
+  const input0 = screen.getByTestId('input-size-1') as TextInput;
 
   fireEvent.changeText(input0, '1');
   fireEvent.changeText(input0, '12');
 
-  expect(screen.queryByTestId('input-size-2')).toBe(null);
   expect(screen.queryByTestId('input-size-3')).toBe(null);
+  expect(screen.queryByTestId('input-size-4')).toBe(null);
 });
 
 it.todo('deletes project size');

@@ -1,7 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import { observer } from 'mobx-react-lite';
 import { useContext } from 'react';
-import { Button, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { StoreContext } from './store';
 
 const styles = StyleSheet.create({
@@ -25,13 +25,13 @@ export const Root = observer(function() {
   const inputs = store.sizes.map((size, idx) => {
     return (
       <TextInput
-        key={`input-size-${idx}`}
-        testID={`input-size-${idx}`}
+        key={`input-size-${size.id}`}
+        testID={`input-size-${size.id}`}
         style={styles.input}
         keyboardType='numeric'
         textAlign='right'
         maxLength={6}
-        value={size?.toString()}
+        value={size.value?.toString()}
         onChangeText={text => store.setSize(text, idx)}
       />
     );
@@ -45,7 +45,7 @@ export const Root = observer(function() {
         testID='input-zero-0'
         style={styles.input}
         keyboardType='numeric'
-        value={store.zero?.toString()}
+        value={store.zero.value?.toString()}
         onChangeText={store.setZero}
       />
       <ScrollView>

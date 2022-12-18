@@ -1,20 +1,26 @@
 import { Instance, types } from 'mobx-state-tree';
 import { createContext } from 'react';
 
+const Integer = types.model({
+  id: types.identifier,
+  value: types.maybeNull(types.integer),
+});
+
 export const Store = types
   .model({
-    sizes: types.optional(types.array(types.maybeNull(types.integer)), [null]),
-    zero: types.maybeNull(types.integer),
+    sizes: types.optional(types.array(Integer), [{ id: '1' }]),
+    zero: types.optional(Integer, { id: '1' }),
   })
   .actions(self => ({
     addSize() {
-      self.sizes.push(null);
+      const id = Math.max(...self.sizes.map(s => Number(s.id))) + 1;
+      self.sizes.push({ id: id.toString() });
     },
-    setSize(size: string, idx: number) {
-      self.sizes[idx] = toInteger(size);
+    setSize(value: string, idx: number) {
+      self.sizes[idx].value = toInteger(value);
     },
     setZero(value: string) {
-      self.zero = toInteger(value);
+      self.zero.value = toInteger(value);
     },
   }));
 
