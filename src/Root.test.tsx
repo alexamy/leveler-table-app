@@ -87,6 +87,7 @@ it('dont render more than one additional project size input', () => {
 });
 
 it.todo('deletes project size');
+
 it.todo('dont allow to delete single project size');
 
 it.todo('calculates difference from zero point to project size');

@@ -23,10 +23,8 @@ export const Store = types
       const target = self.sizes[idx];
       const size = toInteger(value);
       const needNew = target.value === null && size !== null;
-      const needRemove = target.value !== null && size === null;
       target.value = size;
-      if(needNew) this.addSize();
-      if(needRemove) this.removeSize(idx);
+      if(needNew) { this.addSize(); }
     },
     setZero(value: string) {
       self.zero.value = toInteger(value);
