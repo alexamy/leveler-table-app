@@ -41,7 +41,6 @@ export const Root = observer(function() {
     return (
       <Text
         key={`result-${result.sizeId}`}
-        testID={`result-${result.sizeId}`}
       >
         {result.value}
       </Text>

@@ -100,8 +100,7 @@ it('calculates difference from zero point to project size', () => {
   fireEvent.changeText(inputZero, '500');
   fireEvent.changeText(input1, '150');
 
-  const target1 = screen.getByTestId('result-1');
-  expect(target1).toHaveTextContent('350');
+  expect(screen.getByText('350')).toBeVisible();
 });
 
 it('calculates difference from zero point to project size as negative number', () => {
@@ -113,8 +112,7 @@ it('calculates difference from zero point to project size as negative number', (
   fireEvent.changeText(inputZero, '50');
   fireEvent.changeText(input1, '150');
 
-  const target1 = screen.getByTestId('result-1');
-  expect(target1).toHaveTextContent('-100');
+  expect(screen.getByText('-100')).toBeVisible();
 });
 
 it('recalculates differences when zero size is changed', () => {
@@ -127,8 +125,7 @@ it('recalculates differences when zero size is changed', () => {
   fireEvent.changeText(input1, '150');
   fireEvent.changeText(inputZero, '200');
 
-  const target1 = screen.getByTestId('result-1');
-  expect(target1).toHaveTextContent('50');
+  expect(screen.getByText('50')).toBeVisible();
 });
 
 it.todo('shows first size position as 0');
