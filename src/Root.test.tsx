@@ -49,6 +49,8 @@ it('allows to enter project size', () => {
   expect(input.props.value).toBe('100');
 });
 
+it.todo('restricts entering $kind value in project size input');
+
 it('allows to add more project sizes', () => {
   render(<App />);
 
@@ -198,3 +200,7 @@ it('shows next sizes positions as consecutive integers', () => {
 
   expect(screen.getByText('1')).toBeVisible();
 });
+
+it.todo('saves state to local storage');
+it.todo('populates state from link query');
+it.todo('copies table to clipboard');
