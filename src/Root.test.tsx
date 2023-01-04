@@ -104,10 +104,6 @@ it('dont allow to delete single project size', () => {
   expect(screen.getByTestId('delete-size-1')).toBeDisabled();
 });
 
-it.todo('deletes project size by one press');
-
-it.todo('properly handles deletion of last added empty size');
-
 it('calculates difference from zero point to project size', () => {
   render(<App />);
 
