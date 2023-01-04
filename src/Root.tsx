@@ -80,14 +80,22 @@ export const Root = observer(function() {
 
   return (
     <View style={styles.container}>
-      <Input
-        testID='input-zero-1'
-        keyboardType='numeric'
-        textAlign='right'
-        placeholder='Нулевая точка'
-        value={store.zero.value?.toString() || ''}
-        onChangeText={store.setZero}
-      />
+      <View style={styles.row}>
+        <Input
+          testID='input-zero-1'
+          keyboardType='numeric'
+          textAlign='right'
+          placeholder='Нулевая точка'
+          value={store.zero.value?.toString() || ''}
+          onChangeText={store.setZero}
+        />
+        <Chip
+          testID={'add-size'}
+          onPress={() => store.sizes.add()}
+        >
+          +
+        </Chip>
+      </View>
       <ScrollView style={styles.table}>
         {rows}
       </ScrollView>

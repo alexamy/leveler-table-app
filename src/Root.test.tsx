@@ -65,26 +65,9 @@ it.each([
 it('allows to add more project sizes', () => {
   render(<App />);
 
-  const input1 = screen.getByTestId('input-size-1') as TextInput;
-  fireEvent.changeText(input1, '12');
+  fireEvent.press(screen.getByText('+'));
 
-  const input2 = screen.getByTestId('input-size-2') as TextInput;
-
-  expect(input2).toBeVisible();
-  expect(input2.props.value).toBe('');
-});
-
-it('render additional project size input only for last input', () => {
-  render(<App />);
-
-  fireEvent.changeText(screen.getByTestId('input-size-1'), '12');
-  fireEvent.changeText(screen.getByTestId('input-size-2'), '24');
-
-  fireEvent.changeText(screen.getByTestId('input-size-1'), '');
-  fireEvent.changeText(screen.getByTestId('input-size-2'), '');
-
-  expect(screen.getByTestId('input-size-3')).toBeVisible();
-  expect(screen.queryByTestId('input-size-4')).toBe(null);
+  expect(screen.getByTestId('input-size-2')).toBeVisible();
 });
 
 it('dont render more than one additional project size input', () => {
@@ -109,11 +92,8 @@ it('shows delete button', () => {
 it('deletes project size', () => {
   render(<App />);
 
-  const input1 = screen.getByTestId('input-size-1') as TextInput;
-  fireEvent.changeText(input1, '12');
-
-  const delete2 = screen.getByTestId('delete-size-2');
-  fireEvent.press(delete2);
+  fireEvent.press(screen.getByText('+'));
+  fireEvent.press(screen.getByTestId('delete-size-2'));
 
   expect(screen.queryByTestId('input-size-2')).toBe(null);
 });
@@ -122,18 +102,6 @@ it('dont allow to delete single project size', () => {
   render(<App />);
 
   expect(screen.getByTestId('delete-size-1')).toBeDisabled();
-});
-
-it('dont allow to delete single project size if its other than first size', () => {
-  render(<App />);
-
-  const input1 = screen.getByTestId('input-size-1') as TextInput;
-  fireEvent.changeText(input1, '12');
-
-  const delete1 = screen.getByTestId('delete-size-1');
-  fireEvent.press(delete1);
-
-  expect(screen.getByTestId('delete-size-2')).toBeDisabled();
 });
 
 it.todo('deletes project size by one press');
@@ -210,8 +178,7 @@ it('shows first size position as 0', () => {
 it('shows next sizes positions as consecutive integers', () => {
   render(<App />);
 
-  const input1 = screen.getByTestId('input-size-1') as TextInput;
-  fireEvent.changeText(input1, '150');
+  fireEvent.press(screen.getByText('+'));
 
   expect(screen.getByText('1')).toBeVisible();
 });

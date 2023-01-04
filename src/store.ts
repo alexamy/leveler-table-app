@@ -30,12 +30,7 @@ const SizeMap = types.model({
     const target = self.map.get(id);
     if(!target) return;
 
-    const size = toInteger(value);
-    const isLast = target.id === self.lastId.toString();
-    const needNew = isLast && target.value === null && size !== null;
-
-    target.value = size;
-    if(needNew) { this.add(); }
+    target.value = toInteger(value);
   },
 }));
 
