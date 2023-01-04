@@ -1,8 +1,8 @@
+import { Chip, Input, Text } from '@rneui/themed';
 import { StatusBar } from 'expo-status-bar';
 import { observer } from 'mobx-react-lite';
 import { useContext } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
-import { Chip, Input, Text } from '@rneui/themed';
 import { StoreContext } from './store';
 
 const styles = StyleSheet.create({
