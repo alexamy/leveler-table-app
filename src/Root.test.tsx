@@ -1,12 +1,20 @@
-import { expect, it, jest } from '@jest/globals';
+import { expect, it, jest, afterEach } from '@jest/globals';
 import { fireEvent, render, screen } from '@testing-library/react-native';
 import { TextInput } from 'react-native';
 import * as Clipboard from 'expo-clipboard';
+import AsyncStorage from '@react-native-async-storage/async-storage/jest/async-storage-mock';
 import { dedent } from 'ts-dedent';
 import App from '../App';
 
 // suppress console warn: `useNativeDriver` is not supported
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper');
+jest.mock('@react-native-async-storage/async-storage', () =>
+  require('@react-native-async-storage/async-storage/jest/async-storage-mock')
+);
+
+afterEach(() => {
+  jest.clearAllMocks();
+});
 
 it('shows zero point label', () => {
   render(<App />);
@@ -181,7 +189,15 @@ it('shows next sizes positions as consecutive integers', () => {
   expect(screen.getByText('1')).toBeVisible();
 });
 
-it.todo('saves state to local storage');
+it('saves state to local storage', () => {
+  render(<App />);
+
+  fireEvent.changeText(screen.getByTestId('input-zero-1'), '50');
+
+  expect(AsyncStorage.setItem).toHaveBeenCalledTimes(1);
+});
+
+it.todo('loads state from local storage');
 
 it('copies table to clipboard', async () => {
   render(<App />);

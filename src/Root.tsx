@@ -1,10 +1,12 @@
 import { Chip, Input, Text } from '@rneui/themed';
 import { StatusBar } from 'expo-status-bar';
 import * as Clipboard from 'expo-clipboard';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { observer } from 'mobx-react-lite';
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { StoreContext } from './store';
+import { applySnapshot, onSnapshot } from 'mobx-state-tree';
 
 const styles = StyleSheet.create({
   container: {
@@ -57,6 +59,27 @@ const styles = StyleSheet.create({
 export const Root = observer(function() {
   const store = useContext(StoreContext);
   const sizes = [...store.sizes.map.values()];
+
+  useEffect(() => {
+    const key = '@leveler-app';
+
+    async function load() {
+      const json = await AsyncStorage.getItem(key);
+      if(json !== null) {
+        const snapshot = JSON.parse(json);
+        applySnapshot(store, snapshot);
+      }
+    }
+
+    load();
+
+    const dispose = onSnapshot(store, async (newSnapshot) => {
+      const json = JSON.stringify(newSnapshot);
+      await AsyncStorage.setItem(key, json);
+    });
+
+    return dispose;
+  }, [store]);
 
   const rows = sizes.map((size, i) => {
     return (
