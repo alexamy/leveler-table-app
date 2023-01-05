@@ -107,6 +107,7 @@ export const Root = observer(function() {
           testID={`delete-size-${size.id}`}
           disabled={store.sizes.map.size === 1}
           onPress={() => store.sizes.remove(size.id)}
+          color='secondary'
         >
           −
         </Chip>
