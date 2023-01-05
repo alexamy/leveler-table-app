@@ -7,6 +7,7 @@ import { useContext, useEffect } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { IStore, StoreContext } from './store';
 import { applySnapshot, onSnapshot } from 'mobx-state-tree';
+import base64 from 'react-native-base64';
 
 const styles = StyleSheet.create({
   container: {
