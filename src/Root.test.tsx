@@ -1,20 +1,9 @@
 import { expect, it, jest } from '@jest/globals';
 import { fireEvent, render, screen } from '@testing-library/react-native';
 import { TextInput } from 'react-native';
-import { setStringAsync } from 'expo-clipboard';
+import * as Clipboard from 'expo-clipboard';
 import { dedent } from 'ts-dedent';
 import App from '../App';
-
-jest.mock('expo-clipboard', () => {
-  const actual = jest.requireActual('expo-clipboard');
-
-  return {
-    __esModule: true,
-    // @ts-ignore
-    ...actual,
-    setStringAsync: jest.fn(),
-  };
-});
 
 // suppress console warn: `useNativeDriver` is not supported
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper');
@@ -197,6 +186,8 @@ it.todo('saves state to local storage');
 it('copies table to clipboard', async () => {
   render(<App />);
 
+  jest.spyOn(Clipboard, 'setStringAsync');
+
   fireEvent.changeText(screen.getByTestId('input-zero-1'), '500');
   fireEvent.press(screen.getByText('+'));
   fireEvent.changeText(screen.getByTestId('input-size-1'), '300');
@@ -204,7 +195,7 @@ it('copies table to clipboard', async () => {
 
   fireEvent.press(screen.getByTestId('copy-to-clipboard'));
 
-  expect(setStringAsync).toHaveBeenCalledWith(dedent`
+  expect(Clipboard.setStringAsync).toHaveBeenCalledWith(dedent`
     Нулевая точка	500
     0	300	200
     1	125	375
