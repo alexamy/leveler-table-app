@@ -1,5 +1,5 @@
 import { expect, it, jest } from '@jest/globals';
-import { act, fireEvent, render, screen } from '@testing-library/react-native';
+import { fireEvent, render, screen } from '@testing-library/react-native';
 import { TextInput } from 'react-native';
 import { setStringAsync } from 'expo-clipboard';
 import { dedent } from 'ts-dedent';

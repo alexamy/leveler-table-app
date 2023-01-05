@@ -49,10 +49,10 @@ export const Store = types.model({
     });
   },
   get asString(): string {
-    const { results } = this;
     const zero = ['Нулевая точка', self.zero.value];
-    const sizes = Object.values(self.sizes.map).map((value, i) => {
-      return ['what'];
+    const sizes = this.results.map(result => {
+      const size = self.sizes.map.get(result.sizeId)?.value;
+      return [result.index, size, result.value];
     });
     const result = [zero, ...sizes].map(strs => strs.join('	')).join('\n');
 
