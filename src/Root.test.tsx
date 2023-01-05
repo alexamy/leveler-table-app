@@ -239,6 +239,8 @@ it('copies table to clipboard', async () => {
   `);
 });
 
+it.todo('clears the state after press');
+
 it.todo('saves state to a link');
 
 it.todo('populates state from a link');
