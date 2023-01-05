@@ -13,11 +13,15 @@ const styles = StyleSheet.create({
     marginTop: 40,
     alignSelf: 'stretch',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
   },
   table: {
     alignSelf: 'stretch',
     width: '100%',
+    flexGrow: 0,
+  },
+  headRow: {
+    flexDirection: 'row',
   },
   row: {
     flexDirection: 'row',
@@ -81,13 +85,7 @@ export const Root = observer(function() {
 
   return (
     <View style={styles.container}>
-      <View style={styles.row}>
-        <Chip
-          testID={'copy-to-clipboard'}
-          onPress={async () => { await Clipboard.setStringAsync(store.asString); }}
-        >
-          copy
-        </Chip>
+      <View style={styles.headRow}>
         <Input
           testID='input-zero-1'
           keyboardType='numeric'
@@ -107,6 +105,11 @@ export const Root = observer(function() {
         {rows}
       </ScrollView>
 
+      <Chip
+        testID={'copy-to-clipboard'}
+        icon={{ name: 'copy', type: 'font-awesome', color: 'white' }}
+        onPress={async () => { await Clipboard.setStringAsync(store.asString); }}
+      />
       <StatusBar style='auto' />
     </View>
   );
