@@ -1,5 +1,6 @@
 import { Chip, Input, Text } from '@rneui/themed';
 import { StatusBar } from 'expo-status-bar';
+import * as Clipboard from 'expo-clipboard';
 import { observer } from 'mobx-react-lite';
 import { useContext } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
@@ -81,6 +82,12 @@ export const Root = observer(function() {
   return (
     <View style={styles.container}>
       <View style={styles.row}>
+        <Chip
+          testID={'copy-to-clipboard'}
+          onPress={async () => { await Clipboard.setStringAsync(store.asString); }}
+        >
+          copy
+        </Chip>
         <Input
           testID='input-zero-1'
           keyboardType='numeric'

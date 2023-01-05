@@ -48,6 +48,16 @@ export const Store = types.model({
       return { value, index, sizeId: size.id };
     });
   },
+  get asString(): string {
+    const { results } = this;
+    const zero = ['Нулевая точка', self.zero.value];
+    const sizes = Object.values(self.sizes.map).map((value, i) => {
+      return ['what'];
+    });
+    const result = [zero, ...sizes].map(strs => strs.join('	')).join('\n');
+
+    return result;
+  },
 }))
 .actions(self => ({
   setZero(value: string) {

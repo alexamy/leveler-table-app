@@ -24,4 +24,12 @@ module.exports = {
       },
     ],
   },
+  overrides: [
+    {
+      files: ['*.test.tsx'],
+      rules: {
+        '@typescript-eslint/ban-ts-comment': 'off',
+      },
+    },
+  ],
 };
