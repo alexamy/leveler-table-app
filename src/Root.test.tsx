@@ -13,7 +13,7 @@ jest.mock('@react-native-async-storage/async-storage', () =>
 );
 
 afterEach(() => {
-  jest.clearAllMocks();
+  jest.resetAllMocks();
 });
 
 it('shows zero point label', () => {
