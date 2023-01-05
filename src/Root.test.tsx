@@ -233,9 +233,9 @@ it('copies table to clipboard', async () => {
   fireEvent.press(screen.getByTestId('copy-to-clipboard'));
 
   expect(Clipboard.setStringAsync).toHaveBeenCalledWith(dedent`
-    Нулевая точка	500
-    0	300	200
-    1	125	375
+    Шаг	Нулевая точка	Проектные значения	Результат
+    0	500	300	200
+    1	500	125	375
   `);
 });
 

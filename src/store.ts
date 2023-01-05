@@ -49,12 +49,15 @@ export const Store = types.model({
     });
   },
   get asString(): string {
-    const zero = ['Нулевая точка', self.zero.value];
+    const headers = ['Шаг', 'Нулевая точка', 'Проектные значения', 'Результат'];
     const sizes = this.results.map(result => {
       const size = self.sizes.map.get(result.sizeId)?.value;
-      return [result.index, size, result.value];
+      return [result.index, self.zero.value, size, result.value];
     });
-    const result = [zero, ...sizes].map(strs => strs.join('	')).join('\n');
+
+    const result = [headers, ...sizes]
+      .map(strs => strs.join('	'))
+      .join('\n');
 
     return result;
   },
