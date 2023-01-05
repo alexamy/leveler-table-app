@@ -65,7 +65,7 @@ export const Root = observer(function() {
 
     async function load() {
       const json = await AsyncStorage.getItem(key);
-      if(json !== null) {
+      if(json) {
         const snapshot = JSON.parse(json);
         applySnapshot(store, snapshot);
       }

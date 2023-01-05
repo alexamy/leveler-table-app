@@ -1,5 +1,5 @@
 import { expect, it, jest, afterEach } from '@jest/globals';
-import { fireEvent, render, screen } from '@testing-library/react-native';
+import { act, fireEvent, render, screen, waitFor } from '@testing-library/react-native';
 import { TextInput } from 'react-native';
 import * as Clipboard from 'expo-clipboard';
 import AsyncStorage from '@react-native-async-storage/async-storage/jest/async-storage-mock';
@@ -195,9 +195,30 @@ it('saves state to local storage', () => {
   fireEvent.changeText(screen.getByTestId('input-zero-1'), '50');
 
   expect(AsyncStorage.setItem).toHaveBeenCalledTimes(1);
+  expect(AsyncStorage.setItem).toHaveBeenCalledWith(
+    '@leveler-app',
+    expect.anything(),
+  );
 });
 
-it.todo('loads state from local storage');
+it('loads state from local storage', async () => {
+  jest.spyOn(AsyncStorage, 'getItem').mockImplementation(() => {
+    const data = JSON.stringify({
+      zero: { id: '1', value: 50 },
+      sizes: { lastId: 1, map: { '1': { id: '1', value: null }}},
+    });
+
+    return Promise.resolve(data);
+  });
+
+  render(<App />);
+
+  const input = screen.getByTestId('input-zero-1') as TextInput;
+
+  await waitFor(() => {
+    expect(input.props.value).toBe('50');
+  });
+});
 
 it('copies table to clipboard', async () => {
   render(<App />);
