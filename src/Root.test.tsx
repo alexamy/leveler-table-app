@@ -239,4 +239,6 @@ it('copies table to clipboard', async () => {
   `);
 });
 
-it.todo('populates state from link query');
+it.todo('saves state to a link');
+
+it.todo('populates state from a link');
