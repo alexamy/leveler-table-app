@@ -5,7 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { observer } from 'mobx-react-lite';
 import { useContext, useEffect } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
-import { StoreContext } from './store';
+import { IStore, StoreContext } from './store';
 import { applySnapshot, onSnapshot } from 'mobx-state-tree';
 
 const styles = StyleSheet.create({
@@ -56,13 +56,8 @@ const styles = StyleSheet.create({
   },
 });
 
-export const Root = observer(function() {
-  const store = useContext(StoreContext);
-  const sizes = [...store.sizes.map.values()];
-
+function useMSTLocalStorage(store: IStore, key: string) {
   useEffect(() => {
-    const key = '@leveler-app';
-
     async function load() {
       const json = await AsyncStorage.getItem(key);
       if(json) {
@@ -79,7 +74,14 @@ export const Root = observer(function() {
     });
 
     return dispose;
-  }, [store]);
+  }, [store, key]);
+}
+
+export const Root = observer(function() {
+  const store = useContext(StoreContext);
+  const sizes = [...store.sizes.map.values()];
+
+  useMSTLocalStorage(store, '@leveler-app');
 
   const rows = sizes.map((size, i) => {
     return (
