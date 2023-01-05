@@ -46,6 +46,12 @@ const styles = StyleSheet.create({
     flexGrow: 0,
     flexShrink: 1,
   },
+  icons: {
+    flexDirection: 'row',
+  },
+  bottomIcon: {
+    marginHorizontal: 10,
+  },
 });
 
 export const Root = observer(function() {
@@ -105,11 +111,14 @@ export const Root = observer(function() {
         {rows}
       </ScrollView>
 
-      <Chip
-        testID={'copy-to-clipboard'}
-        icon={{ name: 'copy', type: 'font-awesome', color: 'white' }}
-        onPress={async () => { await Clipboard.setStringAsync(store.asString); }}
-      />
+      <View style={styles.icons}>
+        <Chip
+          testID={'copy-to-clipboard'}
+          icon={{ name: 'copy', type: 'font-awesome', color: 'white' }}
+          onPress={async () => { await Clipboard.setStringAsync(store.asString); }}
+          containerStyle={styles.bottomIcon}
+        />
+      </View>
       <StatusBar style='auto' />
     </View>
   );
