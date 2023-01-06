@@ -220,6 +220,8 @@ it('loads state from local storage', async () => {
   });
 });
 
+it.todo('resets to default state if local storage has malformed state');
+
 it('copies table to clipboard', async () => {
   render(<App />);
 
@@ -239,8 +241,10 @@ it('copies table to clipboard', async () => {
   `);
 });
 
-it.todo('clears the state after press');
+it.todo('clears the state after clear button press');
 
 it.todo('saves state to a link');
 
 it.todo('populates state from a link');
+
+it.todo('dont reset app state if link has malformed state');
