@@ -103,7 +103,7 @@ it('deletes project size', () => {
   render(<App />);
 
   fireEvent.press(screen.getByText('+'));
-  fireEvent.press(screen.getByTestId('delete-size-2'));
+  fireEvent.press(screen.getByTestId('delete-size-0'));
 
   expect(screen.queryByTestId('input-size-1')).toBe(null);
 });
@@ -111,7 +111,7 @@ it('deletes project size', () => {
 it('dont allow to delete single project size', () => {
   render(<App />);
 
-  expect(screen.getByTestId('delete-size-1')).toBeDisabled();
+  expect(screen.getByTestId('delete-size-0')).toBeDisabled();
 });
 
 it('calculates difference from zero point to project size', () => {
