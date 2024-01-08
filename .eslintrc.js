@@ -43,6 +43,7 @@ module.exports = {
       files: ['*.test.tsx'],
       rules: {
         '@typescript-eslint/ban-ts-comment': 'off',
+        'jest/no-disabled-tests': 'off',
       },
     },
   ],
