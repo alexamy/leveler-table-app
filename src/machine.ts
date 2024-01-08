@@ -9,8 +9,7 @@ type Events =
 
 type Context = {
   zero: string;
-  measurements: string[];
-  offsets: string[];
+  measurements: Array<{ size: string, offset: string }>;
 }
 
 export const levelerMachine = setup({
@@ -38,7 +37,9 @@ export const levelerMachine = setup({
     "add measurement": {
       actions: assign({
         measurements({ context }) {
-          return context.measurements.concat([""]);
+          return context.measurements.concat([
+            { size: "", offset: "" },
+          ]);
         },
       }),
     },
@@ -55,7 +56,12 @@ export const levelerMachine = setup({
       actions: assign({
         measurements({ context, event }) {
           const measurements = context.measurements.slice();
-          measurements[event.index] = event.value;
+          const measurement = measurements[event.index];
+          measurement.size = event.value;
+
+          const difference = Number(context.zero) - Number(measurement.size);
+          const offset = isNaN(difference) ? "" : difference.toString();
+          measurement.offset = offset;
           return measurements;
         },
       }),
@@ -83,8 +89,8 @@ function serializeToTable(context: Context): string {
     return [
       index,
       context.zero,
-      measurement,
-      context.offsets[index],
+      measurement.size,
+      measurement.offset,
     ];
   });
 
