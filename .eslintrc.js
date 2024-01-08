@@ -26,6 +26,13 @@ module.exports = {
   },
   overrides: [
     {
+      files: ['*'],
+      rules: {
+        'quotes': ['off', 'double'],
+        'jsx-quotes': ['off', 'prefer-double'],
+      },
+    },
+    {
       files: ['*.test.tsx'],
       rules: {
         '@typescript-eslint/ban-ts-comment': 'off',
