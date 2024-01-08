@@ -1,10 +1,9 @@
 import { assign, setup } from "xstate";
 
 type Events =
-| { type: "enter zero point", value: string }
+| { type: "change zero point", value: string }
 | { type: "add measurement" }
 | { type: "remove measurement", index: number }
-| { type: "enter measurement", index: number, value: string }
 | { type: "change measurement", index: number, value: string }
 | { type: "copy data" }
 
@@ -29,7 +28,7 @@ export const levelerMachine = setup({
     offsets: [],
   },
   on: {
-    "enter zero point": {
+    "change zero point": {
       actions: assign({
         zero({ event }) {
           return event.value;
@@ -52,7 +51,7 @@ export const levelerMachine = setup({
         },
       }),
     },
-    "enter measurement": {
+    "change measurement": {
       actions: assign({
         measurements({ context, event }) {
           const measurements = context.measurements.slice();
