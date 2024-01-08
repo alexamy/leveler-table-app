@@ -7,6 +7,8 @@ import { useContext, useEffect } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { IStore, StoreContext } from './store';
 import { applySnapshot, onSnapshot } from 'mobx-state-tree';
+import { useActor, useActorRef } from '@xstate/react';
+import { levelerMachine } from './machine';
 
 const styles = StyleSheet.create({
   container: {
@@ -78,36 +80,48 @@ function useMSTLocalStorage(store: IStore, key: string) {
 }
 
 export const Root = observer(function() {
-  const store = useContext(StoreContext);
-  const sizes = [...store.sizes.map.values()];
+  const [snapshot, send] = useActor(levelerMachine.provide({
+    actions: {
+      "copy data to clipboard": (_, { data }) => {
+        Clipboard.setStringAsync(data);
+      },
+     },
+  }));
 
-  useMSTLocalStorage(store, '@leveler-app');
+  const { measurements, zero } = snapshot.context;
 
-  const rows = sizes.map((size, i) => {
+  const rows = measurements.map((measurement, index) => {
     return (
-      <View key={size.id} style={styles.row}>
+      <View key={index} style={styles.row}>
         <Text style={styles.position}>
-          {store.results[i].index}
+          {index}
         </Text>
         <Input
-          testID={`input-size-${size.id}`}
+          testID={`input-size-${index}`}
           placeholder='Проектный размер'
           keyboardType='numeric'
           textAlign='left'
           maxLength={6}
-          value={size.value?.toString() || ''}
-          onChangeText={text => store.sizes.set(text, size.id)}
           containerStyle={styles.input}
           style={styles.input}
+          value={measurement.size}
+          onChangeText={text => send({
+            type: "change measurement",
+            value: text,
+            index,
+          })}
         />
         <Text style={styles.result}>
-          {store.results[i].value}
+          {measurement.offset}
         </Text>
         <Chip
-          testID={`delete-size-${size.id}`}
-          disabled={store.sizes.map.size === 1}
-          onPress={() => store.sizes.remove(size.id)}
+          testID={`delete-size-${index}`}
           color='secondary'
+          disabled={measurements.length === 1}
+          onPress={() => send({
+            type: "remove measurement",
+            index,
+          })}
         >
           −
         </Chip>
@@ -123,12 +137,17 @@ export const Root = observer(function() {
           keyboardType='numeric'
           textAlign='right'
           placeholder='Нулевая точка'
-          value={store.zero.value?.toString() || ''}
-          onChangeText={store.setZero}
+          value={zero}
+          onChangeText={text => send({
+            type: "change zero point",
+            value: text,
+          })}
         />
         <Chip
           testID={'add-size'}
-          onPress={() => store.sizes.add()}
+          onPress={() => send({
+            type: "add measurement",
+          })}
         >
           +
         </Chip>
@@ -141,8 +160,10 @@ export const Root = observer(function() {
         <Chip
           testID={'copy-to-clipboard'}
           icon={{ name: 'copy', type: 'font-awesome', color: 'white' }}
-          onPress={async () => { await Clipboard.setStringAsync(store.asString); }}
           containerStyle={styles.bottomIcon}
+          onPress={() => send({
+            type: "copy data",
+          })}
         />
       </View>
       <StatusBar style='auto' />
