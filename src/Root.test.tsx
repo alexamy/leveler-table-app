@@ -247,9 +247,6 @@ it.todo('shows empty offset if has malformed size');
 it.todo('shows error if has malformed zero point');
 
 it.todo('clears the state after clear button press');
-
 it.todo('saves state to a link');
-
 it.todo('populates state from a link');
-
 it.todo('dont reset app state if link has malformed state');
