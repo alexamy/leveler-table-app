@@ -77,6 +77,7 @@ export const levelerMachine = setup({
 });
 
 function calculateOffset(zero: string, size: string): string {
+  if(zero === "" || size === "") return "";
   const difference = Number(zero) - Number(size);
   const offset = isNaN(difference) ? "" : difference.toString();
   return offset;

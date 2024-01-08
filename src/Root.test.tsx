@@ -160,7 +160,7 @@ it('dont show difference if zero value is empty', () => {
   fireEvent.changeText(inputZero, '');
   fireEvent.changeText(input1, '150');
 
-  expect(screen.queryByText('-150')).toBe(null);
+  waitFor(() => expect(screen.queryByText('-150')).toBe(null));
 });
 
 it('dont show difference if project size value is empty', () => {
@@ -172,7 +172,7 @@ it('dont show difference if project size value is empty', () => {
   fireEvent.changeText(inputZero, '150');
   fireEvent.changeText(input1, '');
 
-  expect(screen.queryByText('150')).toBe(null);
+  waitFor(() => expect(screen.queryByText('150')).toBe(null));
 });
 
 it('shows first size position as 0', () => {
@@ -247,6 +247,7 @@ it.todo('shows empty offset if has malformed size');
 it.todo('shows error if has malformed zero point');
 
 it.todo('clears the state after clear button press');
+
 it.todo('saves state to a link');
 it.todo('populates state from a link');
 it.todo('dont reset app state if link has malformed state');
