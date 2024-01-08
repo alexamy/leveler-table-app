@@ -1,8 +1,7 @@
 import { expect, it, jest, afterEach } from '@jest/globals';
-import { act, fireEvent, render, screen, waitFor } from '@testing-library/react-native';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react-native';
 import { TextInput } from 'react-native';
 import * as Clipboard from 'expo-clipboard';
-import AsyncStorage from '@react-native-async-storage/async-storage/jest/async-storage-mock';
 import { dedent } from 'ts-dedent';
 import App from '../App';
 
@@ -189,7 +188,7 @@ it('shows next sizes positions as consecutive integers', () => {
   expect(screen.getByText('1')).toBeVisible();
 });
 
-it.only('loads state from local storage', async () => {
+it('loads state from local storage', async () => {
   render(<App />);
   const input = screen.getByTestId('input-zero-0') as TextInput;
   fireEvent.changeText(input, '100');
