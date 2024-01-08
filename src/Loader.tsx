@@ -2,10 +2,11 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useState, useEffect } from 'react';
 import { levelerMachine } from './machine';
 import { Root } from './Root';
+import { View } from 'react-native';
 
 export function Loader() {
   const [snapshot, setSnapshot] = useState(undefined);
-  const [isLoaded, setIsLoaded] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     async function load() {
@@ -14,14 +15,14 @@ export function Loader() {
       );
       const persisted = JSON.parse(data || "undefined");
       setSnapshot(persisted);
-      setIsLoaded(true);
+      setIsLoading(false);
     }
     load();
   }, []);
 
   return (
-    <Root
-      isSnapshotLoaded={isLoaded}
+    isLoading ? <View /> : <Root
+      isSnapshotLoading={isLoading}
       snapshot={snapshot}
     />
   );

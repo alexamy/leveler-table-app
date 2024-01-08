@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
 
 export function Root(props: {
   snapshot: any;
-  isSnapshotLoaded: boolean;
+  isSnapshotLoading: boolean;
 }) {
   const machine = levelerMachine.provide({
     actions: {
@@ -77,15 +77,14 @@ export function Root(props: {
 
   useEffect(() => {
     async function save() {
-      if(!props.isSnapshotLoaded) return;
-
+      if(props.isSnapshotLoading) return;
       await AsyncStorage.setItem(
         levelerMachine.id,
         JSON.stringify(actor.getPersistedSnapshot()),
       );
     }
     save();
-  }, [actor, snapshot, props.isSnapshotLoaded]);
+  }, [actor, snapshot, props.isSnapshotLoading]);
 
   const rows = measurements.map((measurement, index) => {
     return (
