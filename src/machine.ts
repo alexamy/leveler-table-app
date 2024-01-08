@@ -23,8 +23,7 @@ export const levelerMachine = setup({
 }).createMachine({
   context: {
     zero: "",
-    measurements: [],
-    offsets: [],
+    measurements: [{ size: "", offset: "" }],
   },
   on: {
     "change zero point": {
