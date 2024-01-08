@@ -21,6 +21,7 @@ export const levelerMachine = setup({
     "copy data to clipboard": (_, params: { table: string }) => {},
   },
 }).createMachine({
+  id: "leveler",
   context: {
     zero: "",
     measurements: [{ size: "", offset: "" }],

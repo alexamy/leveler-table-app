@@ -1,9 +1,9 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Chip, Input, Text } from '@rneui/themed';
-import { useActor } from '@xstate/react';
+import { useActorRef, useSelector } from '@xstate/react';
 import * as Clipboard from 'expo-clipboard';
 import { StatusBar } from 'expo-status-bar';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { levelerMachine } from './machine';
 
@@ -56,15 +56,39 @@ const styles = StyleSheet.create({
 });
 
 export const Root = function() {
-  const [snapshot, send] = useActor(levelerMachine.provide({
+  const machine = levelerMachine.provide({
     actions: {
       "copy data to clipboard": (_, { table }) => {
         Clipboard.setStringAsync(table);
       },
-     },
-  }));
+    },
+  });
 
-  const { measurements, zero } = snapshot.context;
+  const [state, setState] = useState(undefined);
+  useEffect(() => {
+    async function load() {
+      const data = await AsyncStorage.getItem(levelerMachine.id);
+      const snapshot = JSON.parse(data || "false");
+      // setState(snapshot);
+    }
+
+    load();
+  }, []);
+
+  const actor = useActorRef(machine, {
+    snapshot: state,
+  });
+
+  const send = actor.send;
+  const {
+    zero,
+    measurements,
+  } = useSelector(actor, snapshot => snapshot.context);
+
+  useEffect(() => {
+    const snapshot = actor.getPersistedSnapshot();
+    AsyncStorage.setItem(levelerMachine.id, JSON.stringify(snapshot));
+  }, [actor]);
 
   const rows = measurements.map((measurement, index) => {
     return (
