@@ -73,7 +73,7 @@ export const Root = function() {
           {index}
         </Text>
         <Input
-          testID={`input-size-${index}`}
+          testID={`input-size-${index + 1}`}
           placeholder='Проектный размер'
           keyboardType='numeric'
           textAlign='left'

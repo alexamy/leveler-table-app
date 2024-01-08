@@ -241,6 +241,11 @@ it('copies table to clipboard', async () => {
   `);
 });
 
+it.todo('recalculates offset when changing zero point');
+it.todo('recalculates offset when changing measurement size');
+it.todo('shows empty offset if has malformed size');
+it.todo('shows error if has malformed zero point');
+
 it.todo('clears the state after clear button press');
 
 it.todo('saves state to a link');
