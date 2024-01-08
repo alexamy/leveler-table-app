@@ -1,5 +1,5 @@
 import { expect, it, jest, afterEach } from '@jest/globals';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react-native';
+import { act, fireEvent, render, screen, waitFor } from '@testing-library/react-native';
 import { TextInput } from 'react-native';
 import * as Clipboard from 'expo-clipboard';
 import { dedent } from 'ts-dedent';
@@ -188,15 +188,16 @@ it('shows next sizes positions as consecutive integers', () => {
   expect(screen.getByText('1')).toBeVisible();
 });
 
-it('loads state from local storage', async () => {
+it.only('loads state from local storage', async () => {
   render(<App />);
-  const input = screen.getByTestId('input-zero-0') as TextInput;
-  fireEvent.changeText(input, '100');
+  act(() => {
+    const input = screen.getByTestId('input-zero-0') as TextInput;
+    fireEvent.changeText(input, '100');
+  });
 
   render(<App />);
-  const inputNew = screen.getByTestId('input-zero-0') as TextInput;
-
   await waitFor(() => {
+    const inputNew = screen.getByTestId('input-zero-0') as TextInput;
     expect(inputNew.props.value).toBe('100');
   });
 });

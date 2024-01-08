@@ -4,6 +4,8 @@ import * as Clipboard from 'expo-clipboard';
 import { StatusBar } from 'expo-status-bar';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { levelerMachine } from './machine';
+import { useEffect } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const styles = StyleSheet.create({
   container: {
@@ -53,7 +55,10 @@ const styles = StyleSheet.create({
   },
 });
 
-export const Root = function() {
+export function Root(props: {
+  snapshot: any;
+  isSnapshotLoaded: boolean;
+}) {
   const machine = levelerMachine.provide({
     actions: {
       "copy data to clipboard": (_, { table }) => {
@@ -62,13 +67,25 @@ export const Root = function() {
     },
   });
 
-  const actor = useActorRef(machine);
+  const actor = useActorRef(machine, {
+    snapshot: props.snapshot,
+  });
 
   const send = actor.send;
-  const { zero, measurements } = useSelector(
-    actor,
-    snapshot => snapshot.context,
-  );
+  const snapshot = useSelector(actor, snapshot => snapshot);
+  const { zero, measurements } = snapshot.context;
+
+  useEffect(() => {
+    async function save() {
+      if(!props.isSnapshotLoaded) return;
+
+      await AsyncStorage.setItem(
+        levelerMachine.id,
+        JSON.stringify(actor.getPersistedSnapshot()),
+      );
+    }
+    save();
+  }, [actor, snapshot, props.isSnapshotLoaded]);
 
   const rows = measurements.map((measurement, index) => {
     return (
