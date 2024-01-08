@@ -58,8 +58,8 @@ const styles = StyleSheet.create({
 export const Root = function() {
   const [snapshot, send] = useActor(levelerMachine.provide({
     actions: {
-      "copy data to clipboard": (_, { data }) => {
-        Clipboard.setStringAsync(data);
+      "copy data to clipboard": (_, { table }) => {
+        Clipboard.setStringAsync(table);
       },
      },
   }));

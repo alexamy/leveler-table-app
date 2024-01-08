@@ -18,7 +18,7 @@ export const levelerMachine = setup({
     context: Context,
   },
   actions: {
-    "copy data to clipboard": (_, params: { data: string }) => {},
+    "copy data to clipboard": (_, params: { table: string }) => {},
   },
 }).createMachine({
   context: {
@@ -70,7 +70,7 @@ export const levelerMachine = setup({
       actions: {
         type: "copy data to clipboard",
         params: ({ context }) => ({
-          data: serializeToTable(context),
+          table: serializeToTable(context),
         }),
       },
     },
