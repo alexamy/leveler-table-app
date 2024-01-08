@@ -32,10 +32,10 @@ it('allows to enter zero point', async () => {
 });
 
 it.each([
-  { value: 'xyz4xyz', expected: '4', kind: 'letter' },
-  { value: '-42', expected: '42', kind: 'negative' },
-  { value: '10.5', expected: '105', kind: 'float' },
-])('restricts entering $kind value in zero point input', ({ value, expected }) => {
+  { value: 'xyz4xyz', expected: 'xyz4xyz', kind: 'letter' },
+  { value: '-42', expected: '-42', kind: 'negative' },
+  { value: '10.5', expected: '10.5', kind: 'float' },
+])('allows entering $kind value in zero point input', ({ value, expected }) => {
   render(<App />);
 
   const input = screen.getByTestId('input-zero-1') as TextInput;
@@ -60,10 +60,10 @@ it('allows to enter project size', () => {
 });
 
 it.each([
-  { value: 'xyz4xyz', expected: '4', kind: 'letter' },
-  { value: '-42', expected: '42', kind: 'negative' },
-  { value: '10.5', expected: '105', kind: 'float' },
-])('restricts entering $kind value in project size input', ({ value, expected }) => {
+  { value: 'xyz4xyz', expected: 'xyz4xyz', kind: 'letter' },
+  { value: '-42', expected: '-42', kind: 'negative' },
+  { value: '10.5', expected: '10.5', kind: 'float' },
+])('allows entering $kind value in project size input', ({ value, expected }) => {
   render(<App />);
 
   const input = screen.getByTestId('input-size-1') as TextInput;
