@@ -73,7 +73,7 @@ export const Root = function() {
           {index}
         </Text>
         <Input
-          testID={`input-size-${index + 1}`}
+          testID={`input-size-${index}`}
           placeholder='Проектный размер'
           keyboardType='numeric'
           textAlign='left'
@@ -109,7 +109,7 @@ export const Root = function() {
     <View style={styles.container}>
       <View style={styles.headRow}>
         <Input
-          testID='input-zero-1'
+          testID='input-zero-0'
           keyboardType='numeric'
           textAlign='right'
           placeholder='Нулевая точка'

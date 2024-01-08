@@ -25,7 +25,7 @@ it('shows zero point label', () => {
 it('allows to enter zero point', async () => {
   render(<App />);
 
-  const input = screen.getByTestId('input-zero-1') as TextInput;
+  const input = screen.getByTestId('input-zero-0') as TextInput;
   fireEvent.changeText(input, '100');
 
   expect(input.props.value).toBe('100');
@@ -38,7 +38,7 @@ it.each([
 ])('allows entering $kind value in zero point input', ({ value, expected }) => {
   render(<App />);
 
-  const input = screen.getByTestId('input-zero-1') as TextInput;
+  const input = screen.getByTestId('input-zero-0') as TextInput;
   fireEvent.changeText(input, value);
 
   expect(input.props.value).toBe(expected);
@@ -53,7 +53,7 @@ it('shows project sizes label', () => {
 it('allows to enter project size', () => {
   render(<App />);
 
-  const input = screen.getByTestId('input-size-1') as TextInput;
+  const input = screen.getByTestId('input-size-0') as TextInput;
   fireEvent.changeText(input, '100');
 
   expect(input.props.value).toBe('100');
@@ -66,7 +66,7 @@ it.each([
 ])('allows entering $kind value in project size input', ({ value, expected }) => {
   render(<App />);
 
-  const input = screen.getByTestId('input-size-1') as TextInput;
+  const input = screen.getByTestId('input-size-0') as TextInput;
   fireEvent.changeText(input, value);
 
   expect(input.props.value).toBe(expected);
@@ -77,20 +77,20 @@ it('allows to add more project sizes', () => {
 
   fireEvent.press(screen.getByText('+'));
 
-  expect(screen.getByTestId('input-size-2')).toBeVisible();
+  expect(screen.getByTestId('input-size-1')).toBeVisible();
 });
 
 it('dont render more than one additional project size input', () => {
   render(<App />);
 
-  const input1 = screen.getByTestId('input-size-1') as TextInput;
+  const input1 = screen.getByTestId('input-size-0') as TextInput;
 
   fireEvent.changeText(input1, '1');
   fireEvent.changeText(input1, '');
   fireEvent.changeText(input1, '2');
 
+  expect(screen.queryByTestId('input-size-2')).toBe(null);
   expect(screen.queryByTestId('input-size-3')).toBe(null);
-  expect(screen.queryByTestId('input-size-4')).toBe(null);
 });
 
 it('shows delete button', () => {
@@ -105,7 +105,7 @@ it('deletes project size', () => {
   fireEvent.press(screen.getByText('+'));
   fireEvent.press(screen.getByTestId('delete-size-2'));
 
-  expect(screen.queryByTestId('input-size-2')).toBe(null);
+  expect(screen.queryByTestId('input-size-1')).toBe(null);
 });
 
 it('dont allow to delete single project size', () => {
@@ -117,8 +117,8 @@ it('dont allow to delete single project size', () => {
 it('calculates difference from zero point to project size', () => {
   render(<App />);
 
-  const inputZero = screen.getByTestId('input-zero-1') as TextInput;
-  const input1 = screen.getByTestId('input-size-1') as TextInput;
+  const inputZero = screen.getByTestId('input-zero-0') as TextInput;
+  const input1 = screen.getByTestId('input-size-0') as TextInput;
 
   fireEvent.changeText(inputZero, '500');
   fireEvent.changeText(input1, '150');
@@ -129,8 +129,8 @@ it('calculates difference from zero point to project size', () => {
 it('calculates difference from zero point to project size as negative number', () => {
   render(<App />);
 
-  const inputZero = screen.getByTestId('input-zero-1') as TextInput;
-  const input1 = screen.getByTestId('input-size-1') as TextInput;
+  const inputZero = screen.getByTestId('input-zero-0') as TextInput;
+  const input1 = screen.getByTestId('input-size-0') as TextInput;
 
   fireEvent.changeText(inputZero, '50');
   fireEvent.changeText(input1, '150');
@@ -141,8 +141,8 @@ it('calculates difference from zero point to project size as negative number', (
 it('recalculates differences when zero size is changed', () => {
   render(<App />);
 
-  const inputZero = screen.getByTestId('input-zero-1') as TextInput;
-  const input1 = screen.getByTestId('input-size-1') as TextInput;
+  const inputZero = screen.getByTestId('input-zero-0') as TextInput;
+  const input1 = screen.getByTestId('input-size-0') as TextInput;
 
   fireEvent.changeText(inputZero, '500');
   fireEvent.changeText(input1, '150');
@@ -154,8 +154,8 @@ it('recalculates differences when zero size is changed', () => {
 it('dont show difference if zero value is empty', () => {
   render(<App />);
 
-  const inputZero = screen.getByTestId('input-zero-1') as TextInput;
-  const input1 = screen.getByTestId('input-size-1') as TextInput;
+  const inputZero = screen.getByTestId('input-zero-0') as TextInput;
+  const input1 = screen.getByTestId('input-size-0') as TextInput;
 
   fireEvent.changeText(inputZero, '');
   fireEvent.changeText(input1, '150');
@@ -166,8 +166,8 @@ it('dont show difference if zero value is empty', () => {
 it('dont show difference if project size value is empty', () => {
   render(<App />);
 
-  const inputZero = screen.getByTestId('input-zero-1') as TextInput;
-  const input1 = screen.getByTestId('input-size-1') as TextInput;
+  const inputZero = screen.getByTestId('input-zero-0') as TextInput;
+  const input1 = screen.getByTestId('input-size-0') as TextInput;
 
   fireEvent.changeText(inputZero, '150');
   fireEvent.changeText(input1, '');
@@ -192,7 +192,7 @@ it('shows next sizes positions as consecutive integers', () => {
 it('saves state to local storage', () => {
   render(<App />);
 
-  fireEvent.changeText(screen.getByTestId('input-zero-1'), '50');
+  fireEvent.changeText(screen.getByTestId('input-zero-0'), '50');
 
   expect(AsyncStorage.setItem).toHaveBeenCalledTimes(1);
   expect(AsyncStorage.setItem).toHaveBeenCalledWith(
@@ -213,7 +213,7 @@ it('loads state from local storage', async () => {
 
   render(<App />);
 
-  const input = screen.getByTestId('input-zero-1') as TextInput;
+  const input = screen.getByTestId('input-zero-0') as TextInput;
 
   await waitFor(() => {
     expect(input.props.value).toBe('50');
@@ -227,10 +227,10 @@ it('copies table to clipboard', async () => {
 
   jest.spyOn(Clipboard, 'setStringAsync');
 
-  fireEvent.changeText(screen.getByTestId('input-zero-1'), '500');
+  fireEvent.changeText(screen.getByTestId('input-zero-0'), '500');
   fireEvent.press(screen.getByText('+'));
-  fireEvent.changeText(screen.getByTestId('input-size-1'), '300');
-  fireEvent.changeText(screen.getByTestId('input-size-2'), '125');
+  fireEvent.changeText(screen.getByTestId('input-size-0'), '300');
+  fireEvent.changeText(screen.getByTestId('input-size-1'), '125');
 
   fireEvent.press(screen.getByTestId('copy-to-clipboard'));
 
