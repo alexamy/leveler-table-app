@@ -1,13 +1,10 @@
-import { Chip, Input, Text } from '@rneui/themed';
-import { StatusBar } from 'expo-status-bar';
-import * as Clipboard from 'expo-clipboard';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { observer } from 'mobx-react-lite';
-import { useContext, useEffect } from 'react';
+import { Chip, Input, Text } from '@rneui/themed';
+import { useActor } from '@xstate/react';
+import * as Clipboard from 'expo-clipboard';
+import { StatusBar } from 'expo-status-bar';
+import { useEffect } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
-import { IStore, StoreContext } from './store';
-import { applySnapshot, onSnapshot } from 'mobx-state-tree';
-import { useActor, useActorRef } from '@xstate/react';
 import { levelerMachine } from './machine';
 
 const styles = StyleSheet.create({
@@ -58,28 +55,7 @@ const styles = StyleSheet.create({
   },
 });
 
-function useMSTLocalStorage(store: IStore, key: string) {
-  useEffect(() => {
-    async function load() {
-      const json = await AsyncStorage.getItem(key);
-      if(json) {
-        const snapshot = JSON.parse(json);
-        applySnapshot(store, snapshot);
-      }
-    }
-
-    load();
-
-    const dispose = onSnapshot(store, async (newSnapshot) => {
-      const json = JSON.stringify(newSnapshot);
-      await AsyncStorage.setItem(key, json);
-    });
-
-    return dispose;
-  }, [store, key]);
-}
-
-export const Root = observer(function() {
+export const Root = function() {
   const [snapshot, send] = useActor(levelerMachine.provide({
     actions: {
       "copy data to clipboard": (_, { data }) => {
@@ -169,4 +145,4 @@ export const Root = observer(function() {
       <StatusBar style='auto' />
     </View>
   );
-});
+};
