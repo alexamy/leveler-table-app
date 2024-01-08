@@ -32,6 +32,13 @@ export const levelerMachine = setup({
         zero({ event }) {
           return event.value;
         },
+        measurements({ context, event }) {
+          return context.measurements.map(measurement => {
+            const difference = Number(event.value) - Number(measurement.size);
+            const offset = isNaN(difference) ? "" : difference.toString();
+            return { ...measurement, offset };
+          });
+        },
       }),
     },
     "add measurement": {
