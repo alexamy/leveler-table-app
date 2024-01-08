@@ -79,16 +79,23 @@ export const Root = function() {
     snapshot: state,
   });
 
-  const send = actor.send;
-  const {
-    zero,
-    measurements,
-  } = useSelector(actor, snapshot => snapshot.context);
-
   useEffect(() => {
-    const snapshot = actor.getPersistedSnapshot();
-    AsyncStorage.setItem(levelerMachine.id, JSON.stringify(snapshot));
+    async function save() {
+      const snapshot = actor.getPersistedSnapshot();
+      await AsyncStorage.setItem(
+        levelerMachine.id,
+        JSON.stringify(snapshot),
+      );
+    }
+
+    save();
   }, [actor]);
+
+  const send = actor.send;
+  const { zero, measurements } = useSelector(
+    actor,
+    snapshot => snapshot.context,
+  );
 
   const rows = measurements.map((measurement, index) => {
     return (
