@@ -69,7 +69,7 @@ export const Root = function() {
     async function load() {
       const data = await AsyncStorage.getItem(levelerMachine.id);
       const snapshot = JSON.parse(data || "false");
-      // setState(snapshot);
+      setState(snapshot);
     }
 
     load();

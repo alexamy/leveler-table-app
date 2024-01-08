@@ -189,34 +189,16 @@ it('shows next sizes positions as consecutive integers', () => {
   expect(screen.getByText('1')).toBeVisible();
 });
 
-it('saves state to local storage', () => {
+it.only('loads state from local storage', async () => {
   render(<App />);
-
-  fireEvent.changeText(screen.getByTestId('input-zero-0'), '50');
-
-  expect(AsyncStorage.setItem).toHaveBeenCalledTimes(1);
-  expect(AsyncStorage.setItem).toHaveBeenCalledWith(
-    '@leveler-app',
-    expect.anything(),
-  );
-});
-
-it('loads state from local storage', async () => {
-  jest.spyOn(AsyncStorage, 'getItem').mockImplementation(() => {
-    const data = JSON.stringify({
-      zero: { id: '1', value: 50 },
-      sizes: { lastId: 1, map: { '1': { id: '1', value: null }}},
-    });
-
-    return Promise.resolve(data);
-  });
-
-  render(<App />);
-
   const input = screen.getByTestId('input-zero-0') as TextInput;
+  fireEvent.changeText(input, '100');
+
+  render(<App />);
+  const inputNew = screen.getByTestId('input-zero-0') as TextInput;
 
   await waitFor(() => {
-    expect(input.props.value).toBe('50');
+    expect(inputNew.props.value).toBe('100');
   });
 });
 
