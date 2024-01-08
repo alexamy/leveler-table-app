@@ -30,12 +30,11 @@ export const levelerMachine = setup({
     "change zero point": {
       actions: assign(({ context, event }) => {
         const zero = event.value;
-        const measurements = context.measurements.map(measurement => {
-          const difference = Number(zero) - Number(measurement.size);
+        const measurements = context.measurements.map(({ size }) => {
+          const difference = Number(zero) - Number(size);
           const offset = isNaN(difference) ? "" : difference.toString();
-          return { ...measurement, offset };
+          return { size, offset };
         });
-
         return { zero, measurements };
       }),
     },
