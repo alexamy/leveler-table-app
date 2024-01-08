@@ -28,17 +28,15 @@ export const levelerMachine = setup({
   },
   on: {
     "change zero point": {
-      actions: assign({
-        zero({ event }) {
-          return event.value;
-        },
-        measurements({ context, event }) {
-          return context.measurements.map(measurement => {
-            const difference = Number(event.value) - Number(measurement.size);
-            const offset = isNaN(difference) ? "" : difference.toString();
-            return { ...measurement, offset };
-          });
-        },
+      actions: assign(({ context, event }) => {
+        const zero = event.value;
+        const measurements = context.measurements.map(measurement => {
+          const difference = Number(zero) - Number(measurement.size);
+          const offset = isNaN(difference) ? "" : difference.toString();
+          return { ...measurement, offset };
+        });
+
+        return { zero, measurements };
       }),
     },
     "add measurement": {
