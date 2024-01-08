@@ -1,9 +1,7 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Chip, Input, Text } from '@rneui/themed';
 import { useActorRef, useSelector } from '@xstate/react';
 import * as Clipboard from 'expo-clipboard';
 import { StatusBar } from 'expo-status-bar';
-import { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { levelerMachine } from './machine';
 
@@ -64,32 +62,7 @@ export const Root = function() {
     },
   });
 
-  const [state, setState] = useState(undefined);
-  useEffect(() => {
-    async function load() {
-      const data = await AsyncStorage.getItem(levelerMachine.id);
-      const snapshot = JSON.parse(data || "false");
-      setState(snapshot);
-    }
-
-    load();
-  }, []);
-
-  const actor = useActorRef(machine, {
-    snapshot: state,
-  });
-
-  useEffect(() => {
-    async function save() {
-      const snapshot = actor.getPersistedSnapshot();
-      await AsyncStorage.setItem(
-        levelerMachine.id,
-        JSON.stringify(snapshot),
-      );
-    }
-
-    save();
-  }, [actor]);
+  const actor = useActorRef(machine);
 
   const send = actor.send;
   const { zero, measurements } = useSelector(
