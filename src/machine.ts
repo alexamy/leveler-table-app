@@ -31,8 +31,7 @@ export const levelerMachine = setup({
       actions: assign(({ context, event }) => {
         const zero = event.value;
         const measurements = context.measurements.map(({ size }) => {
-          const difference = Number(zero) - Number(size);
-          const offset = isNaN(difference) ? "" : difference.toString();
+          const offset = calculateOffset(zero, size);
           return { size, offset };
         });
         return { zero, measurements };
@@ -62,10 +61,7 @@ export const levelerMachine = setup({
           const measurements = context.measurements.slice();
           const measurement = measurements[event.index];
           measurement.size = event.value;
-
-          const difference = Number(context.zero) - Number(measurement.size);
-          const offset = isNaN(difference) ? "" : difference.toString();
-          measurement.offset = offset;
+          measurement.offset = calculateOffset(context.zero, measurement.size);
           return measurements;
         },
       }),
@@ -80,6 +76,12 @@ export const levelerMachine = setup({
     },
   },
 });
+
+function calculateOffset(zero: string, size: string): string {
+  const difference = Number(zero) - Number(size);
+  const offset = isNaN(difference) ? "" : difference.toString();
+  return offset;
+}
 
 function serializeToTable(context: Context): string {
   const headers = [
