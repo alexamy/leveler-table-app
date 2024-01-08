@@ -33,6 +33,13 @@ module.exports = {
       },
     },
     {
+      files: ['machine.ts'],
+      rules: {
+        '@typescript-eslint/no-unused-vars': 'off',
+        '@typescript-eslint/no-empty-function': 'off',
+      },
+    },
+    {
       files: ['*.test.tsx'],
       rules: {
         '@typescript-eslint/ban-ts-comment': 'off',
