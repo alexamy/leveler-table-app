@@ -5,8 +5,7 @@ import { Root } from './Root';
 import { View } from 'react-native';
 
 export function Loader() {
-  const [snapshot, setSnapshot] = useState(undefined);
-  const [isLoading, setIsLoading] = useState(true);
+  const [snapshot, setSnapshot] = useState(null);
 
   useEffect(() => {
     async function load() {
@@ -15,15 +14,11 @@ export function Loader() {
       );
       const persisted = JSON.parse(data || "undefined");
       setSnapshot(persisted);
-      setIsLoading(false);
     }
     load();
   }, []);
 
   return (
-    isLoading ? <View /> : <Root
-      isSnapshotLoading={isLoading}
-      snapshot={snapshot}
-    />
+    snapshot === null ? <View /> : <Root snapshot={snapshot} />
   );
 }

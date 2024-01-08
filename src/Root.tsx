@@ -6,6 +6,7 @@ import { ScrollView, StyleSheet, View } from 'react-native';
 import { levelerMachine } from './machine';
 import { useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { SnapshotFrom } from 'xstate';
 
 const styles = StyleSheet.create({
   container: {
@@ -56,8 +57,7 @@ const styles = StyleSheet.create({
 });
 
 export function Root(props: {
-  snapshot: any;
-  isSnapshotLoading: boolean;
+  snapshot: SnapshotFrom<typeof levelerMachine>,
 }) {
   const machine = levelerMachine.provide({
     actions: {
@@ -77,14 +77,14 @@ export function Root(props: {
 
   useEffect(() => {
     async function save() {
-      if(props.isSnapshotLoading) return;
+      if(props.snapshot === null) return;
       await AsyncStorage.setItem(
         levelerMachine.id,
         JSON.stringify(actor.getPersistedSnapshot()),
       );
     }
     save();
-  }, [actor, snapshot, props.isSnapshotLoading]);
+  }, [actor, snapshot, props.snapshot]);
 
   const rows = measurements.map((measurement, index) => {
     return (
