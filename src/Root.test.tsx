@@ -190,25 +190,6 @@ it('shows next sizes positions as consecutive integers', () => {
   expect(screen.getByText('1')).toBeVisible();
 });
 
-it.skip('loads state from local storage', async () => {
-  render(<App />);
-
-  waitFor(() => {
-    expect(AsyncStorage.getItem).toHaveBeenCalledTimes(1);
-  });
-
-  act(() => {
-    const input = screen.getByTestId('input-zero-0') as TextInput;
-    fireEvent.changeText(input, '100');
-  });
-
-  waitFor(() => {
-    expect(AsyncStorage.setItem).toHaveBeenCalledTimes(1);
-  });
-});
-
-it.todo('resets to default state if local storage has malformed state');
-
 it('copies table to clipboard', async () => {
   render(<Root />);
 
@@ -228,13 +209,108 @@ it('copies table to clipboard', async () => {
   `);
 });
 
-it.todo('recalculates offset when changing zero point');
-it.todo('recalculates offset when changing measurement size');
-it.todo('shows empty offset if has malformed size');
-it.todo('shows error if has malformed zero point');
+it('use tabs between values in serialized table', () => {
+  render(<Root />);
 
-it.todo('clears the state after clear button press');
+  jest.spyOn(Clipboard, 'setStringAsync');
+
+  fireEvent.changeText(screen.getByTestId('input-zero-0'), '500');
+  fireEvent.press(screen.getByText('+'));
+  fireEvent.changeText(screen.getByTestId('input-size-0'), '300');
+
+  fireEvent.press(screen.getByTestId('copy-to-clipboard'));
+
+  // @ts-expect-error mock
+  const result: string | undefined = Clipboard.setStringAsync.mock.calls?.[0]?.[0];
+
+  expect(result?.includes("\t")).toBe(true);
+});
+
+it('clears the state after clear button press', () => {
+  render(<Root />);
+
+  fireEvent.changeText(screen.getByTestId('input-zero-0'), '500');
+  fireEvent.changeText(screen.getByTestId('input-size-0'), '300');
+  fireEvent.press(screen.getByText('+'));
+  fireEvent.changeText(screen.getByTestId('input-size-1'), '300');
+
+  fireEvent.press(screen.getByTestId('clear-data'));
+
+  expect(screen.getByTestId('input-zero-0')).toHaveTextContent("");
+  expect(screen.getByTestId('input-size-0')).toHaveTextContent("");
+  expect(screen.queryByTestId('input-size-1')).toBe(null);
+});
+
+it('recalculates offset when changing zero point', () => {
+  render(<Root />);
+
+  const inputZero = screen.getByTestId('input-zero-0') as TextInput;
+  const input1 = screen.getByTestId('input-size-0') as TextInput;
+
+  fireEvent.changeText(inputZero, '500');
+  fireEvent.changeText(input1, '150');
+  fireEvent.changeText(inputZero, '400');
+
+  expect(screen.getByText('250')).toBeVisible();
+});
+
+it('recalculates offset when changing measurement size', () => {
+  render(<Root />);
+
+  const inputZero = screen.getByTestId('input-zero-0') as TextInput;
+  const input1 = screen.getByTestId('input-size-0') as TextInput;
+
+  fireEvent.changeText(inputZero, '500');
+  fireEvent.changeText(input1, '150');
+  fireEvent.changeText(input1, '250');
+
+  expect(screen.getByText('250')).toBeVisible();
+});
+
+it('shows empty offset if has malformed size', () => {
+  render(<Root />);
+
+  const inputZero = screen.getByTestId('input-zero-0') as TextInput;
+  const input1 = screen.getByTestId('input-size-0') as TextInput;
+
+  fireEvent.changeText(inputZero, '500');
+  fireEvent.changeText(input1, 'x150');
+
+  expect(screen.getByTestId('text-offset-0')).toHaveTextContent("");
+});
+
+it('shows empty offset if has malformed zero point', () => {
+  render(<Root />);
+
+  const inputZero = screen.getByTestId('input-zero-0') as TextInput;
+  const input1 = screen.getByTestId('input-size-0') as TextInput;
+
+  fireEvent.changeText(inputZero, 'x500');
+  fireEvent.changeText(input1, '150');
+
+  expect(screen.getByTestId('text-offset-0')).toHaveTextContent("");
+});
 
 it.todo('saves state to a link');
 it.todo('populates state from a link');
 it.todo('dont reset app state if link has malformed state');
+
+it.todo('resets to default state if local storage has malformed state');
+
+// it crashes randomly
+it.skip('loads state from local storage', async () => {
+  render(<App />);
+
+  waitFor(() => {
+    expect(AsyncStorage.getItem).toHaveBeenCalledTimes(1);
+  });
+
+  act(() => {
+    const input = screen.getByTestId('input-zero-0') as TextInput;
+    fireEvent.changeText(input, '100');
+  });
+
+  waitFor(() => {
+    expect(AsyncStorage.setItem).toHaveBeenCalledTimes(1);
+  });
+});
