@@ -80,7 +80,7 @@ it.each([
 it('allows to add more project sizes', () => {
   render(<Root />);
 
-  fireEvent.press(screen.getByText('+'));
+  fireEvent.press(screen.getByTestId('add-size'));
 
   expect(screen.getByTestId('input-size-1')).toBeVisible();
 });
@@ -107,7 +107,7 @@ it('shows delete button', () => {
 it('deletes project size', () => {
   render(<Root />);
 
-  fireEvent.press(screen.getByText('+'));
+  fireEvent.press(screen.getByTestId('add-size'));
   fireEvent.press(screen.getByTestId('delete-size-0'));
 
   expect(screen.queryByTestId('input-size-1')).toBe(null);
@@ -189,7 +189,7 @@ it('shows first size position as 0', () => {
 it('shows next sizes positions as consecutive integers', () => {
   render(<Root />);
 
-  fireEvent.press(screen.getByText('+'));
+  fireEvent.press(screen.getByTestId('add-size'));
 
   expect(screen.getByText('1')).toBeVisible();
 });
@@ -200,7 +200,7 @@ it('copies table to clipboard', async () => {
   jest.spyOn(Clipboard, 'setStringAsync');
 
   fireEvent.changeText(screen.getByTestId('input-zero-0'), '500');
-  fireEvent.press(screen.getByText('+'));
+  fireEvent.press(screen.getByTestId('add-size'));
   fireEvent.changeText(screen.getByTestId('input-size-0'), '300');
   fireEvent.changeText(screen.getByTestId('input-size-1'), '125');
 
@@ -219,7 +219,7 @@ it('use tabs between values in serialized table', () => {
   jest.spyOn(Clipboard, 'setStringAsync');
 
   fireEvent.changeText(screen.getByTestId('input-zero-0'), '500');
-  fireEvent.press(screen.getByText('+'));
+  fireEvent.press(screen.getByTestId('add-size'));
   fireEvent.changeText(screen.getByTestId('input-size-0'), '300');
 
   fireEvent.press(screen.getByTestId('copy-to-clipboard'));
@@ -244,7 +244,7 @@ it('clears the state after clear button press', () => {
 
   fireEvent.changeText(screen.getByTestId('input-zero-0'), '500');
   fireEvent.changeText(screen.getByTestId('input-size-0'), '300');
-  fireEvent.press(screen.getByText('+'));
+  fireEvent.press(screen.getByTestId('add-size'));
   fireEvent.changeText(screen.getByTestId('input-size-1'), '300');
 
   fireEvent.press(screen.getByTestId('clear-data'));
