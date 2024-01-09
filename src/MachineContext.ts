@@ -1,7 +1,7 @@
 import * as Clipboard from 'expo-clipboard';
 import { createActorContext } from '@xstate/react';
 import { levelerMachine } from './machine';
-import { ToastAndroid } from 'react-native';
+import { Platform, ToastAndroid } from 'react-native';
 
 const machine = levelerMachine.provide({
   actions: {
@@ -9,6 +9,7 @@ const machine = levelerMachine.provide({
       Clipboard.setStringAsync(table);
     },
     "show copy toast": () => {
+      if (Platform.OS !== "android") return;
       ToastAndroid.showWithGravity(
         "Таблица скопирована!",
         ToastAndroid.SHORT,
