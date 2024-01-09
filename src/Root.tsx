@@ -7,6 +7,7 @@ import { levelerMachine } from './machine';
 import { useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SnapshotFrom } from 'xstate';
+import { saveSnapshot } from './persist';
 
 const styles = StyleSheet.create({
   container: {
@@ -76,16 +77,8 @@ export function Root(props: {
   const { zero, measurements } = snapshot.context;
 
   useEffect(() => {
-    async function save() {
-      if(props.snapshot === null) return;
-
-      const state = actor.getPersistedSnapshot();
-      await AsyncStorage.setItem(
-        levelerMachine.id,
-        JSON.stringify(state),
-      );
-    }
-    save();
+    if(props.snapshot === null) return;
+    saveSnapshot(levelerMachine.id, actor);
   }, [actor, snapshot, props.snapshot]);
 
   const rows = measurements.map((measurement, index) => {
