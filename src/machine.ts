@@ -74,7 +74,9 @@ export const levelerMachine = setup({
         params: ({ context }) => ({
           table: serializeToTable(context),
         }),
-      }, "show copy toast"],
+      }, {
+        type: "show copy toast",
+      }],
     },
     "clear data": {
       actions: assign(() => ({
