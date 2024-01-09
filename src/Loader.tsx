@@ -4,9 +4,9 @@ import { Root } from './Root';
 import { View } from 'react-native';
 
 export function Loader() {
-  const snapshot = useLoadSnapshot(levelerMachine.id);
+  const [snapshot, isLoading] = useLoadSnapshot(levelerMachine.id);
 
   return (
-    snapshot === null ? <View /> : <Root snapshot={snapshot} />
+    isLoading ? <View /> : <Root snapshot={snapshot} />
   );
 }

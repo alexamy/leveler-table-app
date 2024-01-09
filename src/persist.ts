@@ -1,29 +1,43 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useSelector } from '@xstate/react';
 import { useState, useEffect } from 'react';
-import { ActorRef } from 'xstate';
+import { AnyActor, AnyActorRef, SnapshotFrom } from 'xstate';
 
-export function useLoadSnapshot(machineId: string) {
-  const [snapshot, setSnapshot] = useState(null);
+export function useLoadSnapshot(machineId: string): [
+  SnapshotFrom<AnyActor>,
+  boolean,
+] {
+  const [snapshot, setSnapshot] = useState(undefined);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     async function load() {
       const data = await AsyncStorage.getItem(machineId);
       const persisted = JSON.parse(data || "undefined");
       setSnapshot(persisted);
+      setIsLoading(false);
     }
     load();
   }, [machineId]);
 
-  return snapshot;
+  return [snapshot, isLoading];
 }
 
-export async function saveSnapshot(
+export function useSaveSnapshot(
   machineId: string,
-  actor: ActorRef<any, any>,
+  actor: AnyActorRef,
 ) {
-  const snapshot = actor.getPersistedSnapshot();
-  await AsyncStorage.setItem(
-    machineId,
-    JSON.stringify(snapshot),
-  );
+  const snapshot = useSelector(actor, snapshot => snapshot);
+
+  useEffect(() => {
+    async function save() {
+      const state = actor.getPersistedSnapshot();
+      await AsyncStorage.setItem(
+        machineId,
+        JSON.stringify(state),
+      );
+    }
+
+    save();
+  }, [snapshot, machineId, actor]);
 }

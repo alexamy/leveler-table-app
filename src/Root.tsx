@@ -4,9 +4,8 @@ import * as Clipboard from 'expo-clipboard';
 import { StatusBar } from 'expo-status-bar';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { levelerMachine } from './machine';
-import { useEffect } from 'react';
 import { SnapshotFrom } from 'xstate';
-import { saveSnapshot } from './persist';
+import { useSaveSnapshot } from './persist';
 
 const styles = StyleSheet.create({
   container: {
@@ -71,14 +70,13 @@ export function Root(props: {
     snapshot: props.snapshot,
   });
 
-  const send = actor.send;
-  const snapshot = useSelector(actor, snapshot => snapshot);
-  const { zero, measurements } = snapshot.context;
+  useSaveSnapshot(levelerMachine.id, actor);
 
-  useEffect(() => {
-    if(props.snapshot === null) return;
-    saveSnapshot(levelerMachine.id, actor);
-  }, [actor, snapshot, props.snapshot]);
+  const send = actor.send;
+  const { zero, measurements } = useSelector(
+    actor,
+    snapshot => snapshot.context,
+  );
 
   const rows = measurements.map((measurement, index) => {
     return (
