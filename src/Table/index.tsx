@@ -4,6 +4,7 @@ import { View } from 'react-native';
 import { MachineContext } from '../MachineContext';
 import { styles } from './styles';
 import { Rows } from './Rows';
+import { Buttons } from './Buttons';
 
 export function Table() {
   const actor = MachineContext.useActorRef();
@@ -36,17 +37,7 @@ export function Table() {
       </View>
 
       <Rows />
-
-      <View style={styles.icons}>
-        <Chip
-          testID={'copy-to-clipboard'}
-          icon={{ name: 'copy', type: 'font-awesome', color: 'white' }}
-          containerStyle={styles.bottomIcon}
-          onPress={() => actor.send({
-            type: "copy data",
-          })}
-        />
-      </View>
+      <Buttons />
       <StatusBar style='auto' />
     </View>
   );
