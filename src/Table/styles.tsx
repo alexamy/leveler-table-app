@@ -9,6 +9,15 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'flex-start',
   },
+  top: {
+    flex: 1,
+    alignSelf: 'stretch',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+  },
+  bottom: {
+    marginBottom: 40,
+  },
   table: {
     alignSelf: 'stretch',
     width: '100%',

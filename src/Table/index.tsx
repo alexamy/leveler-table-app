@@ -8,9 +8,13 @@ import { styles } from './styles';
 export function Table() {
   return (
     <View style={styles.container}>
-      <Zero />
-      <Measurements />
-      <Buttons />
+      <View style={styles.top}>
+        <Zero />
+        <Measurements />
+      </View>
+      <View style={styles.bottom}>
+        <Buttons />
+      </View>
       <StatusBar style='auto' />
     </View>
   );
