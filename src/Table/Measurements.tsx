@@ -76,7 +76,6 @@ function DeleteChip(props: {
       testID={props.testID}
       disabled={props.disabled}
       onPress={props.onPress}
-      color='secondary'
     >
       −
     </Chip>
