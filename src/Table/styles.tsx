@@ -16,6 +16,7 @@ export const styles = StyleSheet.create({
     justifyContent: 'flex-start',
   },
   bottom: {
+    marginTop: 20,
     marginBottom: 40,
   },
   table: {
@@ -30,7 +31,7 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   position: {
-    width: '5%',
+    width: '8%',
     fontSize: 18,
     textAlign: 'center',
     paddingTop: 7,
