@@ -1,7 +1,7 @@
 import { Chip, Input, Text } from '@rneui/themed';
 import { StatusBar } from 'expo-status-bar';
 import { ScrollView, StyleSheet, View } from 'react-native';
-import { MachineContext } from './MachineContext';
+import { MachineContext } from '../MachineContext';
 
 const styles = StyleSheet.create({
   container: {
