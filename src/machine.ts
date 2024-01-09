@@ -6,6 +6,7 @@ type Events =
 | { type: "remove measurement", index: number }
 | { type: "change measurement", index: number, value: string }
 | { type: "copy data" }
+| { type: "clear data" }
 
 type Context = {
   zero: string;
