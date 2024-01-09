@@ -1,7 +1,8 @@
-import { Chip, Input } from '@rneui/themed';
+import { Input } from '@rneui/themed';
 import { View } from 'react-native';
 import { styles } from './styles';
 import { MachineContext } from '../MachineContext';
+import { getNumberColor } from '.';
 
 export function Zero() {
   const actor = MachineContext.useActorRef();
@@ -18,11 +19,6 @@ export function Zero() {
           value: text,
         })}
       />
-      <AddChip
-        onPress={() => actor.send({
-          type: "add measurement",
-        })}
-      />
     </View>
   );
 }
@@ -31,6 +27,8 @@ function ZeroInput(props: {
   value: string;
   onChangeText: (text: string) => void;
 }) {
+  const color = getNumberColor(props.value);
+
   return (
     <Input
       testID='input-zero-0'
@@ -39,19 +37,7 @@ function ZeroInput(props: {
       placeholder='Нулевая точка'
       value={props.value}
       onChangeText={props.onChangeText}
+      style={{ color }}
     />
-  );
-}
-
-function AddChip(props: {
-  onPress: () => void;
-}) {
-  return (
-    <Chip
-      testID='add-size'
-      onPress={props.onPress}
-    >
-      +
-    </Chip>
   );
 }

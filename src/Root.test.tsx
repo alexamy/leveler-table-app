@@ -36,6 +36,18 @@ it('allows to enter zero point', async () => {
   expect(input.props.value).toBe('100');
 });
 
+it('highlight zero point if it has incorrect format', () => {
+  render(<Root />);
+
+  const input = screen.getByTestId('input-zero-0') as TextInput;
+
+  expect(input.props.style).toMatchObject({ color: '#242424' });
+
+  fireEvent.changeText(input, 'x');
+
+  expect(input.props.style).toMatchObject({ color: '#ff190c' });
+});
+
 it.each([
   { value: 'xyz4xyz', expected: 'xyz4xyz', kind: 'letter' },
   { value: '-42', expected: '-42', kind: 'negative' },
@@ -77,10 +89,22 @@ it.each([
   expect(input.props.value).toBe(expected);
 });
 
+it('highlight project size if it has incorrect format', () => {
+  render(<Root />);
+
+  const input = screen.getByTestId('input-size-0') as TextInput;
+
+  expect(input.props.style).toMatchObject({ color: '#242424' });
+
+  fireEvent.changeText(input, 'x');
+
+  expect(input.props.style).toMatchObject({ color: '#ff190c' });
+});
+
 it('allows to add more project sizes', () => {
   render(<Root />);
 
-  fireEvent.press(screen.getByText('+'));
+  fireEvent.press(screen.getByTestId('add-size'));
 
   expect(screen.getByTestId('input-size-1')).toBeVisible();
 });
@@ -107,7 +131,7 @@ it('shows delete button', () => {
 it('deletes project size', () => {
   render(<Root />);
 
-  fireEvent.press(screen.getByText('+'));
+  fireEvent.press(screen.getByTestId('add-size'));
   fireEvent.press(screen.getByTestId('delete-size-0'));
 
   expect(screen.queryByTestId('input-size-1')).toBe(null);
@@ -189,7 +213,7 @@ it('shows first size position as 0', () => {
 it('shows next sizes positions as consecutive integers', () => {
   render(<Root />);
 
-  fireEvent.press(screen.getByText('+'));
+  fireEvent.press(screen.getByTestId('add-size'));
 
   expect(screen.getByText('1')).toBeVisible();
 });
@@ -200,7 +224,7 @@ it('copies table to clipboard', async () => {
   jest.spyOn(Clipboard, 'setStringAsync');
 
   fireEvent.changeText(screen.getByTestId('input-zero-0'), '500');
-  fireEvent.press(screen.getByText('+'));
+  fireEvent.press(screen.getByTestId('add-size'));
   fireEvent.changeText(screen.getByTestId('input-size-0'), '300');
   fireEvent.changeText(screen.getByTestId('input-size-1'), '125');
 
@@ -219,7 +243,7 @@ it('use tabs between values in serialized table', () => {
   jest.spyOn(Clipboard, 'setStringAsync');
 
   fireEvent.changeText(screen.getByTestId('input-zero-0'), '500');
-  fireEvent.press(screen.getByText('+'));
+  fireEvent.press(screen.getByTestId('add-size'));
   fireEvent.changeText(screen.getByTestId('input-size-0'), '300');
 
   fireEvent.press(screen.getByTestId('copy-to-clipboard'));
@@ -230,12 +254,21 @@ it('use tabs between values in serialized table', () => {
   expect(result?.includes("\t")).toBe(true);
 });
 
+// ToastAndroid is not supported
+it.skip('shows a toast when clicking copy button', () => {
+  render(<Root />);
+
+  fireEvent.press(screen.getByTestId('copy-to-clipboard'));
+
+  expect(screen.getByText("Таблица скопирована!")).toBeVisible();
+});
+
 it('clears the state after clear button press', () => {
   render(<Root />);
 
   fireEvent.changeText(screen.getByTestId('input-zero-0'), '500');
   fireEvent.changeText(screen.getByTestId('input-size-0'), '300');
-  fireEvent.press(screen.getByText('+'));
+  fireEvent.press(screen.getByTestId('add-size'));
   fireEvent.changeText(screen.getByTestId('input-size-1'), '300');
 
   fireEvent.press(screen.getByTestId('clear-data'));
@@ -295,18 +328,16 @@ it('shows empty offset if has malformed zero point', () => {
   expect(screen.getByTestId('text-offset-0')).toHaveTextContent("");
 });
 
-it.todo('saves state to a link');
-it.todo('populates state from a link');
-it.todo('dont reset app state if link has malformed state');
-
-it.todo('resets to default state if local storage has malformed state');
-
-// it crashes randomly
-it.skip('loads state from local storage', async () => {
+it('loads state from local storage', async () => {
   render(<App />);
 
   await waitFor(() => {
     expect(AsyncStorage.getItem).toHaveBeenCalledTimes(1);
+  });
+
+  // TODO why?
+  await waitFor(() => {
+    expect(AsyncStorage.setItem).toHaveBeenCalledTimes(1);
   });
 
   act(() => {
@@ -315,6 +346,12 @@ it.skip('loads state from local storage', async () => {
   });
 
   await waitFor(() => {
-    expect(AsyncStorage.setItem).toHaveBeenCalledTimes(1);
+    expect(AsyncStorage.setItem).toHaveBeenCalledTimes(2);
   });
 });
+
+it.todo('resets to default state if local storage has malformed state');
+
+it.todo('saves state to a link');
+it.todo('populates state from a link');
+it.todo('dont reset app state if link has malformed state');

@@ -2,6 +2,7 @@ import { ScrollView, View } from 'react-native';
 import { Text, Input, Chip } from '@rneui/themed';
 import { MachineContext } from '../MachineContext';
 import { styles } from './styles';
+import { getNumberColor } from '.';
 
 export function Measurements() {
   const actor = MachineContext.useActorRef();
@@ -51,6 +52,8 @@ function SizeInput(props: {
   value: string;
   onChangeText: (text: string) => void;
 }) {
+  const color = getNumberColor(props.value);
+
   return (
     <Input
       testID={props.testID}
@@ -61,7 +64,7 @@ function SizeInput(props: {
       textAlign='left'
       maxLength={6}
       containerStyle={styles.input}
-      style={styles.input}
+      style={{ ...styles.input, color }}
     />
   );
 }
@@ -76,7 +79,6 @@ function DeleteChip(props: {
       testID={props.testID}
       disabled={props.disabled}
       onPress={props.onPress}
-      color='secondary'
     >
       −
     </Chip>

@@ -20,6 +20,7 @@ export const levelerMachine = setup({
   },
   actions: {
     "copy data to clipboard": (_, params: { table: string }) => {},
+    "show copy toast": () => {},
   },
 }).createMachine({
   id: "leveler",
@@ -68,12 +69,14 @@ export const levelerMachine = setup({
       }),
     },
     "copy data": {
-      actions: {
+      actions: [{
         type: "copy data to clipboard",
         params: ({ context }) => ({
           table: serializeToTable(context),
         }),
-      },
+      }, {
+        type: "show copy toast",
+      }],
     },
     "clear data": {
       actions: assign(() => ({

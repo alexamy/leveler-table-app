@@ -9,6 +9,16 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'flex-start',
   },
+  top: {
+    flex: 1,
+    alignSelf: 'stretch',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+  },
+  bottom: {
+    marginTop: 20,
+    marginBottom: 40,
+  },
   table: {
     alignSelf: 'stretch',
     width: '100%',
@@ -21,7 +31,7 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   position: {
-    width: '5%',
+    width: '8%',
     fontSize: 18,
     textAlign: 'center',
     paddingTop: 7,
@@ -44,6 +54,7 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   bottomIcon: {
+    width: '25%',
     marginHorizontal: 10,
   },
 });
