@@ -230,6 +230,8 @@ it('use tabs between values in serialized table', () => {
   expect(result?.includes("\t")).toBe(true);
 });
 
+it.todo('shows a toast when clicking copy button');
+
 it('clears the state after clear button press', () => {
   render(<Root />);
 
