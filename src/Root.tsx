@@ -1,12 +1,12 @@
 import { Chip, Input, Text } from '@rneui/themed';
-import { useActorRef, useSelector } from '@xstate/react';
-import * as Clipboard from 'expo-clipboard';
 import { StatusBar } from 'expo-status-bar';
+import * as Clipboard from 'expo-clipboard';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { observer } from 'mobx-react-lite';
+import { useContext, useEffect } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
-import { levelerMachine } from './machine';
-import { useEffect } from 'react';
-import { SnapshotFrom } from 'xstate';
-import { saveSnapshot } from './persist';
+import { IStore, StoreContext } from './store';
+import { applySnapshot, onSnapshot } from 'mobx-state-tree';
 
 const styles = StyleSheet.create({
   container: {
@@ -56,62 +56,58 @@ const styles = StyleSheet.create({
   },
 });
 
-export function Root(props: {
-  snapshot?: SnapshotFrom<typeof levelerMachine>,
-}) {
-  const machine = levelerMachine.provide({
-    actions: {
-      "copy data to clipboard": (_, { table }) => {
-        Clipboard.setStringAsync(table);
-      },
-    },
-  });
-
-  const actor = useActorRef(machine, {
-    snapshot: props.snapshot,
-  });
-
-  const send = actor.send;
-  const snapshot = useSelector(actor, snapshot => snapshot);
-  const { zero, measurements } = snapshot.context;
-
+function useMSTLocalStorage(store: IStore, key: string) {
   useEffect(() => {
-    if(props.snapshot === null) return;
-    saveSnapshot(levelerMachine.id, actor);
-  }, [actor, snapshot, props.snapshot]);
+    async function load() {
+      const json = await AsyncStorage.getItem(key);
+      if(json) {
+        const snapshot = JSON.parse(json);
+        applySnapshot(store, snapshot);
+      }
+    }
 
-  const rows = measurements.map((measurement, index) => {
+    load();
+
+    const dispose = onSnapshot(store, async (newSnapshot) => {
+      const json = JSON.stringify(newSnapshot);
+      await AsyncStorage.setItem(key, json);
+    });
+
+    return dispose;
+  }, [store, key]);
+}
+
+export const Root = observer(function() {
+  const store = useContext(StoreContext);
+  const sizes = [...store.sizes.map.values()];
+
+  useMSTLocalStorage(store, '@leveler-app');
+
+  const rows = sizes.map((size, i) => {
     return (
-      <View key={index} style={styles.row}>
+      <View key={size.id} style={styles.row}>
         <Text style={styles.position}>
-          {index}
+          {store.results[i].index}
         </Text>
         <Input
-          testID={`input-size-${index}`}
+          testID={`input-size-${size.id}`}
           placeholder='Проектный размер'
           keyboardType='numeric'
           textAlign='left'
           maxLength={6}
+          value={size.value?.toString() || ''}
+          onChangeText={text => store.sizes.set(text, size.id)}
           containerStyle={styles.input}
           style={styles.input}
-          value={measurement.size}
-          onChangeText={text => send({
-            type: "change measurement",
-            value: text,
-            index,
-          })}
         />
         <Text style={styles.result}>
-          {measurement.offset}
+          {store.results[i].value}
         </Text>
         <Chip
-          testID={`delete-size-${index}`}
+          testID={`delete-size-${size.id}`}
+          disabled={store.sizes.map.size === 1}
+          onPress={() => store.sizes.remove(size.id)}
           color='secondary'
-          disabled={measurements.length === 1}
-          onPress={() => send({
-            type: "remove measurement",
-            index,
-          })}
         >
           −
         </Chip>
@@ -123,21 +119,16 @@ export function Root(props: {
     <View style={styles.container}>
       <View style={styles.headRow}>
         <Input
-          testID='input-zero-0'
+          testID='input-zero-1'
           keyboardType='numeric'
           textAlign='right'
           placeholder='Нулевая точка'
-          value={zero}
-          onChangeText={text => send({
-            type: "change zero point",
-            value: text,
-          })}
+          value={store.zero.value?.toString() || ''}
+          onChangeText={store.setZero}
         />
         <Chip
           testID={'add-size'}
-          onPress={() => send({
-            type: "add measurement",
-          })}
+          onPress={() => store.sizes.add()}
         >
           +
         </Chip>
@@ -150,13 +141,11 @@ export function Root(props: {
         <Chip
           testID={'copy-to-clipboard'}
           icon={{ name: 'copy', type: 'font-awesome', color: 'white' }}
+          onPress={async () => { await Clipboard.setStringAsync(store.asString); }}
           containerStyle={styles.bottomIcon}
-          onPress={() => send({
-            type: "copy data",
-          })}
         />
       </View>
       <StatusBar style='auto' />
     </View>
   );
-}
+});

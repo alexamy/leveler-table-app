@@ -1,5 +1,6 @@
 import { StyleSheet, View } from 'react-native';
-import { Loader } from './src/Loader';
+import { Root } from './src/Root';
+import { Store, StoreContext } from './src/store';
 
 const styles = StyleSheet.create({
   app: {
@@ -11,9 +12,13 @@ const styles = StyleSheet.create({
 });
 
 export default function App() {
+  const store = Store.create();
+
   return (
     <View style={styles.app}>
-      <Loader />
+      <StoreContext.Provider value={store}>
+        <Root />
+      </StoreContext.Provider>
     </View>
   );
 }
