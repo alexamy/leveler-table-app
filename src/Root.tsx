@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
 });
 
 export function Root(props: {
-  snapshot: SnapshotFrom<typeof levelerMachine>,
+  snapshot?: SnapshotFrom<typeof levelerMachine>,
 }) {
   const machine = levelerMachine.provide({
     actions: {

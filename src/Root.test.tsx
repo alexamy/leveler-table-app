@@ -1,10 +1,11 @@
 import { expect, it, jest, afterEach } from '@jest/globals';
-import { act, fireEvent, render, cleanup, screen, waitFor } from '@testing-library/react-native';
+import { act, fireEvent, render, screen, waitFor } from '@testing-library/react-native';
 import { TextInput } from 'react-native';
 import * as Clipboard from 'expo-clipboard';
 import { dedent } from 'ts-dedent';
-import App from '../App';
+import { Root } from './Root';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import App from '../App';
 
 // suppress console warn: `useNativeDriver` is not supported
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper');
@@ -17,13 +18,13 @@ afterEach(() => {
 });
 
 it('shows zero point label', () => {
-  render(<App />);
+  render(<Root />);
 
   expect(screen.getByPlaceholderText('Нулевая точка')).toBeVisible();
 });
 
 it('allows to enter zero point', async () => {
-  render(<App />);
+  render(<Root />);
 
   const input = screen.getByTestId('input-zero-0') as TextInput;
   fireEvent.changeText(input, '100');
@@ -36,7 +37,7 @@ it.each([
   { value: '-42', expected: '-42', kind: 'negative' },
   { value: '10.5', expected: '10.5', kind: 'float' },
 ])('allows entering $kind value in zero point input', ({ value, expected }) => {
-  render(<App />);
+  render(<Root />);
 
   const input = screen.getByTestId('input-zero-0') as TextInput;
   fireEvent.changeText(input, value);
@@ -45,13 +46,13 @@ it.each([
 });
 
 it('shows project sizes label', () => {
-  render(<App />);
+  render(<Root />);
 
   expect(screen.getByPlaceholderText('Проектный размер')).toBeVisible();
 });
 
 it('allows to enter project size', () => {
-  render(<App />);
+  render(<Root />);
 
   const input = screen.getByTestId('input-size-0') as TextInput;
   fireEvent.changeText(input, '100');
@@ -64,7 +65,7 @@ it.each([
   { value: '-42', expected: '-42', kind: 'negative' },
   { value: '10.5', expected: '10.5', kind: 'float' },
 ])('allows entering $kind value in project size input', ({ value, expected }) => {
-  render(<App />);
+  render(<Root />);
 
   const input = screen.getByTestId('input-size-0') as TextInput;
   fireEvent.changeText(input, value);
@@ -73,7 +74,7 @@ it.each([
 });
 
 it('allows to add more project sizes', () => {
-  render(<App />);
+  render(<Root />);
 
   fireEvent.press(screen.getByText('+'));
 
@@ -81,7 +82,7 @@ it('allows to add more project sizes', () => {
 });
 
 it('dont render more than one additional project size input', () => {
-  render(<App />);
+  render(<Root />);
 
   const input1 = screen.getByTestId('input-size-0') as TextInput;
 
@@ -94,13 +95,13 @@ it('dont render more than one additional project size input', () => {
 });
 
 it('shows delete button', () => {
-  render(<App />);
+  render(<Root />);
 
   expect(screen.getByText('−')).toBeVisible();
 });
 
 it('deletes project size', () => {
-  render(<App />);
+  render(<Root />);
 
   fireEvent.press(screen.getByText('+'));
   fireEvent.press(screen.getByTestId('delete-size-0'));
@@ -109,13 +110,13 @@ it('deletes project size', () => {
 });
 
 it('dont allow to delete single project size', () => {
-  render(<App />);
+  render(<Root />);
 
   expect(screen.getByTestId('delete-size-0')).toBeDisabled();
 });
 
 it('calculates difference from zero point to project size', () => {
-  render(<App />);
+  render(<Root />);
 
   const inputZero = screen.getByTestId('input-zero-0') as TextInput;
   const input1 = screen.getByTestId('input-size-0') as TextInput;
@@ -127,7 +128,7 @@ it('calculates difference from zero point to project size', () => {
 });
 
 it('calculates difference from zero point to project size as negative number', () => {
-  render(<App />);
+  render(<Root />);
 
   const inputZero = screen.getByTestId('input-zero-0') as TextInput;
   const input1 = screen.getByTestId('input-size-0') as TextInput;
@@ -139,7 +140,7 @@ it('calculates difference from zero point to project size as negative number', (
 });
 
 it('recalculates differences when zero size is changed', () => {
-  render(<App />);
+  render(<Root />);
 
   const inputZero = screen.getByTestId('input-zero-0') as TextInput;
   const input1 = screen.getByTestId('input-size-0') as TextInput;
@@ -152,7 +153,7 @@ it('recalculates differences when zero size is changed', () => {
 });
 
 it('dont show difference if zero value is empty', () => {
-  render(<App />);
+  render(<Root />);
 
   const inputZero = screen.getByTestId('input-zero-0') as TextInput;
   const input1 = screen.getByTestId('input-size-0') as TextInput;
@@ -164,7 +165,7 @@ it('dont show difference if zero value is empty', () => {
 });
 
 it('dont show difference if project size value is empty', () => {
-  render(<App />);
+  render(<Root />);
 
   const inputZero = screen.getByTestId('input-zero-0') as TextInput;
   const input1 = screen.getByTestId('input-size-0') as TextInput;
@@ -176,13 +177,13 @@ it('dont show difference if project size value is empty', () => {
 });
 
 it('shows first size position as 0', () => {
-  render(<App />);
+  render(<Root />);
 
   expect(screen.getByText('0')).toBeVisible();
 });
 
 it('shows next sizes positions as consecutive integers', () => {
-  render(<App />);
+  render(<Root />);
 
   fireEvent.press(screen.getByText('+'));
 
@@ -209,7 +210,7 @@ it.skip('loads state from local storage', async () => {
 it.todo('resets to default state if local storage has malformed state');
 
 it('copies table to clipboard', async () => {
-  render(<App />);
+  render(<Root />);
 
   jest.spyOn(Clipboard, 'setStringAsync');
 
