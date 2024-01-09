@@ -36,6 +36,8 @@ it('allows to enter zero point', async () => {
   expect(input.props.value).toBe('100');
 });
 
+it.todo('highlight zero point if it has incorrect format');
+
 it.each([
   { value: 'xyz4xyz', expected: 'xyz4xyz', kind: 'letter' },
   { value: '-42', expected: '-42', kind: 'negative' },
@@ -76,6 +78,8 @@ it.each([
 
   expect(input.props.value).toBe(expected);
 });
+
+it.todo('highlight project size if it has incorrect format');
 
 it('allows to add more project sizes', () => {
   render(<Root />);

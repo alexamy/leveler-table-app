@@ -1,7 +1,8 @@
-import { Chip, Input } from '@rneui/themed';
+import { Input } from '@rneui/themed';
 import { View } from 'react-native';
 import { styles } from './styles';
 import { MachineContext } from '../MachineContext';
+import { validateNumberInput } from '.';
 
 export function Zero() {
   const actor = MachineContext.useActorRef();
@@ -26,6 +27,8 @@ function ZeroInput(props: {
   value: string;
   onChangeText: (text: string) => void;
 }) {
+  const { color, isNumber } = validateNumberInput(props.value);
+
   return (
     <Input
       testID='input-zero-0'
@@ -34,6 +37,8 @@ function ZeroInput(props: {
       placeholder='Нулевая точка'
       value={props.value}
       onChangeText={props.onChangeText}
+      style={{ color }}
+      data-is-number={isNumber}
     />
   );
 }
