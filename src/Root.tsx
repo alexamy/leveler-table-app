@@ -78,9 +78,11 @@ export function Root(props: {
   useEffect(() => {
     async function save() {
       if(props.snapshot === null) return;
+
+      const state = actor.getPersistedSnapshot();
       await AsyncStorage.setItem(
         levelerMachine.id,
-        JSON.stringify(actor.getPersistedSnapshot()),
+        JSON.stringify(state),
       );
     }
     save();
