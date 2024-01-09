@@ -226,8 +226,32 @@ it('use tabs between values in serialized table', () => {
   expect(result?.includes("\t")).toBe(true);
 });
 
-it.todo('recalculates offset when changing zero point');
-it.todo('recalculates offset when changing measurement size');
+it('recalculates offset when changing zero point', () => {
+  render(<Root />);
+
+  const inputZero = screen.getByTestId('input-zero-0') as TextInput;
+  const input1 = screen.getByTestId('input-size-0') as TextInput;
+
+  fireEvent.changeText(inputZero, '500');
+  fireEvent.changeText(input1, '150');
+  fireEvent.changeText(inputZero, '400');
+
+  expect(screen.getByText('250')).toBeVisible();
+});
+
+it('recalculates offset when changing measurement size', () => {
+  render(<Root />);
+
+  const inputZero = screen.getByTestId('input-zero-0') as TextInput;
+  const input1 = screen.getByTestId('input-size-0') as TextInput;
+
+  fireEvent.changeText(inputZero, '500');
+  fireEvent.changeText(input1, '150');
+  fireEvent.changeText(input1, '250');
+
+  expect(screen.getByText('250')).toBeVisible();
+});
+
 it.todo('shows empty offset if has malformed size');
 it.todo('shows error if has malformed zero point');
 
