@@ -24,7 +24,7 @@ export function Measurements() {
             index,
           })}
         />
-        <Text style={styles.result}>
+        <Text testID={`text-offset-${index}`} style={styles.result}>
           {measurement.offset}
         </Text>
         <DeleteChip

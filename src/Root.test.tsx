@@ -252,8 +252,29 @@ it('recalculates offset when changing measurement size', () => {
   expect(screen.getByText('250')).toBeVisible();
 });
 
-it.todo('shows empty offset if has malformed size');
-it.todo('shows error if has malformed zero point');
+it('shows empty offset if has malformed size', () => {
+  render(<Root />);
+
+  const inputZero = screen.getByTestId('input-zero-0') as TextInput;
+  const input1 = screen.getByTestId('input-size-0') as TextInput;
+
+  fireEvent.changeText(inputZero, '500');
+  fireEvent.changeText(input1, 'x150');
+
+  expect(screen.getByTestId('text-offset-0')).toHaveTextContent("");
+});
+
+it('shows empty offset if has malformed zero point', () => {
+  render(<Root />);
+
+  const inputZero = screen.getByTestId('input-zero-0') as TextInput;
+  const input1 = screen.getByTestId('input-size-0') as TextInput;
+
+  fireEvent.changeText(inputZero, 'x500');
+  fireEvent.changeText(input1, '150');
+
+  expect(screen.getByTestId('text-offset-0')).toHaveTextContent("");
+});
 
 it.todo('clears the state after clear button press');
 
