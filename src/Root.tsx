@@ -13,7 +13,7 @@ function Persistence({ children }: { children: JSX.Element }) {
 
 
 export function Root({ snapshot }: {
-  snapshot: SnapshotFrom<typeof levelerMachine>,
+  snapshot?: SnapshotFrom<typeof levelerMachine>,
 }) {
   return (
     <MachineContext.Provider options={{ snapshot }}>
