@@ -53,12 +53,11 @@ const styles = StyleSheet.create({
 
 export function Table() {
   const actor = MachineContext.useActorRef();
-  const send = actor.send;
-  const { zero, measurements } = MachineContext.useSelector(
+  const context = MachineContext.useSelector(
     snapshot => snapshot.context,
   );
 
-  const rows = measurements.map((measurement, index) => {
+  const rows = context.measurements.map((measurement, index) => {
     return (
       <View key={index} style={styles.row}>
         <Text style={styles.position}>
@@ -73,7 +72,7 @@ export function Table() {
           containerStyle={styles.input}
           style={styles.input}
           value={measurement.size}
-          onChangeText={text => send({
+          onChangeText={text => actor.send({
             type: "change measurement",
             value: text,
             index,
@@ -85,8 +84,8 @@ export function Table() {
         <Chip
           testID={`delete-size-${index}`}
           color='secondary'
-          disabled={measurements.length === 1}
-          onPress={() => send({
+          disabled={context.measurements.length === 1}
+          onPress={() => actor.send({
             type: "remove measurement",
             index,
           })}
@@ -105,15 +104,15 @@ export function Table() {
           keyboardType='numeric'
           textAlign='right'
           placeholder='Нулевая точка'
-          value={zero}
-          onChangeText={text => send({
+          value={context.zero}
+          onChangeText={text => actor.send({
             type: "change zero point",
             value: text,
           })}
         />
         <Chip
           testID={'add-size'}
-          onPress={() => send({
+          onPress={() => actor.send({
             type: "add measurement",
           })}
         >
@@ -129,7 +128,7 @@ export function Table() {
           testID={'copy-to-clipboard'}
           icon={{ name: 'copy', type: 'font-awesome', color: 'white' }}
           containerStyle={styles.bottomIcon}
-          onPress={() => send({
+          onPress={() => actor.send({
             type: "copy data",
           })}
         />
