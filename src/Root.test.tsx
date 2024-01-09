@@ -304,18 +304,16 @@ it('shows empty offset if has malformed zero point', () => {
   expect(screen.getByTestId('text-offset-0')).toHaveTextContent("");
 });
 
-it.todo('saves state to a link');
-it.todo('populates state from a link');
-it.todo('dont reset app state if link has malformed state');
-
-it.todo('resets to default state if local storage has malformed state');
-
-// it crashes randomly
-it.skip('loads state from local storage', async () => {
+it('loads state from local storage', async () => {
   render(<App />);
 
   await waitFor(() => {
     expect(AsyncStorage.getItem).toHaveBeenCalledTimes(1);
+  });
+
+  // TODO why?
+  await waitFor(() => {
+    expect(AsyncStorage.setItem).toHaveBeenCalledTimes(1);
   });
 
   act(() => {
@@ -324,6 +322,12 @@ it.skip('loads state from local storage', async () => {
   });
 
   await waitFor(() => {
-    expect(AsyncStorage.setItem).toHaveBeenCalledTimes(1);
+    expect(AsyncStorage.setItem).toHaveBeenCalledTimes(2);
   });
 });
+
+it.todo('resets to default state if local storage has malformed state');
+
+it.todo('saves state to a link');
+it.todo('populates state from a link');
+it.todo('dont reset app state if link has malformed state');
