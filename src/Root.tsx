@@ -1,7 +1,7 @@
 import { levelerMachine } from './machine';
 import { SnapshotFrom } from 'xstate';
 import { Table } from './Table';
-import { MachineContext } from './context';
+import { MachineContext } from './MachineContext';
 
 export function Root({ snapshot }: {
   snapshot?: SnapshotFrom<typeof levelerMachine>,
