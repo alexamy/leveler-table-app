@@ -5,7 +5,6 @@ import { StatusBar } from 'expo-status-bar';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { levelerMachine } from './machine';
 import { useEffect } from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SnapshotFrom } from 'xstate';
 import { saveSnapshot } from './persist';
 
