@@ -1,9 +1,9 @@
 import { Chip, Input, Text } from '@rneui/themed';
 import { StatusBar } from 'expo-status-bar';
 import { ScrollView, StyleSheet, View } from 'react-native';
-import { MachineContext } from './Root';
 import { useSaveSnapshot } from './persist';
 import { levelerMachine } from './machine';
+import { MachineContext } from './context';
 
 const styles = StyleSheet.create({
   container: {

@@ -1,18 +1,7 @@
-import * as Clipboard from 'expo-clipboard';
-import { createActorContext } from '@xstate/react';
 import { levelerMachine } from './machine';
 import { SnapshotFrom } from 'xstate';
 import { Table } from './Table';
-
-const machine = levelerMachine.provide({
-  actions: {
-    "copy data to clipboard": (_, { table }) => {
-      Clipboard.setStringAsync(table);
-    },
-  },
-});
-
-export const MachineContext = createActorContext(machine);
+import { MachineContext } from './context';
 
 export function Root({ snapshot }: {
   snapshot?: SnapshotFrom<typeof levelerMachine>,
