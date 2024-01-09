@@ -190,23 +190,6 @@ it('shows next sizes positions as consecutive integers', () => {
   expect(screen.getByText('1')).toBeVisible();
 });
 
-it.skip('loads state from local storage', async () => {
-  render(<App />);
-
-  waitFor(() => {
-    expect(AsyncStorage.getItem).toHaveBeenCalledTimes(1);
-  });
-
-  act(() => {
-    const input = screen.getByTestId('input-zero-0') as TextInput;
-    fireEvent.changeText(input, '100');
-  });
-
-  waitFor(() => {
-    expect(AsyncStorage.setItem).toHaveBeenCalledTimes(1);
-  });
-});
-
 it.todo('resets to default state if local storage has malformed state');
 
 it('copies table to clipboard', async () => {
@@ -240,3 +223,21 @@ it.todo('clears the state after clear button press');
 it.todo('saves state to a link');
 it.todo('populates state from a link');
 it.todo('dont reset app state if link has malformed state');
+
+// it crashes randomly
+it.skip('loads state from local storage', async () => {
+  render(<App />);
+
+  waitFor(() => {
+    expect(AsyncStorage.getItem).toHaveBeenCalledTimes(1);
+  });
+
+  act(() => {
+    const input = screen.getByTestId('input-zero-0') as TextInput;
+    fireEvent.changeText(input, '100');
+  });
+
+  waitFor(() => {
+    expect(AsyncStorage.setItem).toHaveBeenCalledTimes(1);
+  });
+});
