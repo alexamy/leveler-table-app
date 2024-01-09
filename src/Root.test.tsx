@@ -226,6 +226,21 @@ it('use tabs between values in serialized table', () => {
   expect(result?.includes("\t")).toBe(true);
 });
 
+it('clears the state after clear button press', () => {
+  render(<Root />);
+
+  fireEvent.changeText(screen.getByTestId('input-zero-0'), '500');
+  fireEvent.changeText(screen.getByTestId('input-size-0'), '300');
+  fireEvent.press(screen.getByText('+'));
+  fireEvent.changeText(screen.getByTestId('input-size-1'), '300');
+
+  fireEvent.press(screen.getByTestId('clear-data'));
+
+  expect(screen.getByTestId('input-zero-0')).toHaveTextContent("");
+  expect(screen.getByTestId('input-size-0')).toHaveTextContent("");
+  expect(screen.queryByTestId('input-size-1')).toBe(null);
+});
+
 it('recalculates offset when changing zero point', () => {
   render(<Root />);
 
@@ -275,8 +290,6 @@ it('shows empty offset if has malformed zero point', () => {
 
   expect(screen.getByTestId('text-offset-0')).toHaveTextContent("");
 });
-
-it.todo('clears the state after clear button press');
 
 it.todo('saves state to a link');
 it.todo('populates state from a link');

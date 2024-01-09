@@ -75,6 +75,12 @@ export const levelerMachine = setup({
         }),
       },
     },
+    "clear data": {
+      actions: assign(() => ({
+        zero: "",
+        measurements: [{ size: "", offset: "" }],
+      })),
+    },
   },
 });
 
