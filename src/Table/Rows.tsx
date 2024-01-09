@@ -30,6 +30,7 @@ export function Rows() {
             index,
           })}
         />
+
         <Text style={styles.result}>
           {measurement.offset}
         </Text>
