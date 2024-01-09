@@ -3,7 +3,7 @@ import { Text, Input, Chip } from '@rneui/themed';
 import { MachineContext } from '../MachineContext';
 import { styles } from './styles';
 
-export function Rows() {
+export function Measurments() {
   const actor = MachineContext.useActorRef();
   const measurements = MachineContext.useSelector(
     snapshot => snapshot.context.measurements,
