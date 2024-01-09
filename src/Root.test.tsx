@@ -228,6 +228,8 @@ it('copies table to clipboard', async () => {
   `);
 });
 
+it.todo('use tabs between values in serialized table');
+
 it.todo('recalculates offset when changing zero point');
 it.todo('recalculates offset when changing measurement size');
 it.todo('shows empty offset if has malformed size');
