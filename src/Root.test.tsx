@@ -36,7 +36,17 @@ it('allows to enter zero point', async () => {
   expect(input.props.value).toBe('100');
 });
 
-it.todo('highlight zero point if it has incorrect format');
+it('highlight zero point if it has incorrect format', () => {
+  render(<Root />);
+
+  const input = screen.getByTestId('input-zero-0') as TextInput;
+
+  expect(input.props.style).toMatchObject({ color: '#242424' });
+
+  fireEvent.changeText(input, 'x');
+
+  expect(input.props.style).toMatchObject({ color: '#ff190c' });
+});
 
 it.each([
   { value: 'xyz4xyz', expected: 'xyz4xyz', kind: 'letter' },
@@ -79,7 +89,17 @@ it.each([
   expect(input.props.value).toBe(expected);
 });
 
-it.todo('highlight project size if it has incorrect format');
+it('highlight project size if it has incorrect format', () => {
+  render(<Root />);
+
+  const input = screen.getByTestId('input-size-0') as TextInput;
+
+  expect(input.props.style).toMatchObject({ color: '#242424' });
+
+  fireEvent.changeText(input, 'x');
+
+  expect(input.props.style).toMatchObject({ color: '#ff190c' });
+});
 
 it('allows to add more project sizes', () => {
   render(<Root />);
