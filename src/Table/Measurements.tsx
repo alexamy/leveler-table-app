@@ -2,7 +2,7 @@ import { ScrollView, View } from 'react-native';
 import { Text, Input, Chip } from '@rneui/themed';
 import { MachineContext } from '../MachineContext';
 import { styles } from './styles';
-import { getNumberColor } from '.';
+import { getNumberColor } from './helpers';
 
 export function Measurements() {
   const actor = MachineContext.useActorRef();

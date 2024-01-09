@@ -2,7 +2,7 @@ import { Input } from '@rneui/themed';
 import { View } from 'react-native';
 import { styles } from './styles';
 import { MachineContext } from '../MachineContext';
-import { getNumberColor } from '.';
+import { getNumberColor } from './helpers';
 
 export function Zero() {
   const actor = MachineContext.useActorRef();
