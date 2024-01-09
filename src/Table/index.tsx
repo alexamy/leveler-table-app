@@ -21,11 +21,8 @@ export function Table() {
   );
 }
 
-export function validateNumberInput(value: string): {
-  color: string, isNumber: boolean,
-} {
+export function getNumberColor(value: string): string {
   const isNumber = !isNaN(Number(value));
   const color = isNumber ? lightColors.black : lightColors.error;
-
-  return { color, isNumber };
+  return color;
 }

@@ -2,7 +2,7 @@ import { ScrollView, View } from 'react-native';
 import { Text, Input, Chip } from '@rneui/themed';
 import { MachineContext } from '../MachineContext';
 import { styles } from './styles';
-import { validateNumberInput } from '.';
+import { getNumberColor } from '.';
 
 export function Measurements() {
   const actor = MachineContext.useActorRef();
@@ -52,7 +52,7 @@ function SizeInput(props: {
   value: string;
   onChangeText: (text: string) => void;
 }) {
-  const { color, isNumber } = validateNumberInput(props.value);
+  const color = getNumberColor(props.value);
 
   return (
     <Input
@@ -65,7 +65,6 @@ function SizeInput(props: {
       maxLength={6}
       containerStyle={styles.input}
       style={{ ...styles.input, color }}
-      data-is-number={isNumber}
     />
   );
 }

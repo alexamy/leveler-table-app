@@ -2,7 +2,7 @@ import { Input } from '@rneui/themed';
 import { View } from 'react-native';
 import { styles } from './styles';
 import { MachineContext } from '../MachineContext';
-import { validateNumberInput } from '.';
+import { getNumberColor } from '.';
 
 export function Zero() {
   const actor = MachineContext.useActorRef();
@@ -27,7 +27,7 @@ function ZeroInput(props: {
   value: string;
   onChangeText: (text: string) => void;
 }) {
-  const { color, isNumber } = validateNumberInput(props.value);
+  const color = getNumberColor(props.value);
 
   return (
     <Input
@@ -38,7 +38,6 @@ function ZeroInput(props: {
       value={props.value}
       onChangeText={props.onChangeText}
       style={{ color }}
-      data-is-number={isNumber}
     />
   );
 }
