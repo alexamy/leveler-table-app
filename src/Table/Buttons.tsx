@@ -9,10 +9,11 @@ export function Buttons() {
   return (
     <View style={styles.icons}>
       <Chip
-        testID='add-size'
-        icon={{ name: 'plus', type: 'font-awesome', color: 'white' }}
+        testID={'clear-data'}
+        icon={{ name: 'trash', type: 'font-awesome', color: 'white' }}
         containerStyle={styles.bottomIcon}
-        onPress={() => actor.send({ type: "add measurement" })}
+        color={'warning'}
+        onPress={() => actor.send({ type: "clear data" })}
       />
       <Chip
         testID={'copy-to-clipboard'}
@@ -21,11 +22,10 @@ export function Buttons() {
         onPress={() => actor.send({ type: "copy data" })}
       />
       <Chip
-        testID={'clear-data'}
-        icon={{ name: 'trash', type: 'font-awesome', color: 'white' }}
+        testID='add-size'
+        icon={{ name: 'plus', type: 'font-awesome', color: 'white' }}
         containerStyle={styles.bottomIcon}
-        color={'warning'}
-        onPress={() => actor.send({ type: "clear data" })}
+        onPress={() => actor.send({ type: "add measurement" })}
       />
     </View>
   );

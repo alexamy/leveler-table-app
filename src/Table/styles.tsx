@@ -54,6 +54,7 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   bottomIcon: {
+    width: '25%',
     marginHorizontal: 10,
   },
 });
