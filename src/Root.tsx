@@ -159,4 +159,4 @@ export function Root(props: {
       <StatusBar style='auto' />
     </View>
   );
-};
+}
