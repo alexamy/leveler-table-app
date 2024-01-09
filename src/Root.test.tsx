@@ -190,8 +190,6 @@ it('shows next sizes positions as consecutive integers', () => {
   expect(screen.getByText('1')).toBeVisible();
 });
 
-it.todo('resets to default state if local storage has malformed state');
-
 it('copies table to clipboard', async () => {
   render(<Root />);
 
@@ -238,6 +236,8 @@ it.todo('clears the state after clear button press');
 it.todo('saves state to a link');
 it.todo('populates state from a link');
 it.todo('dont reset app state if link has malformed state');
+
+it.todo('resets to default state if local storage has malformed state');
 
 // it crashes randomly
 it.skip('loads state from local storage', async () => {
