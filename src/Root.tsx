@@ -3,6 +3,7 @@ import { Table } from './Table';
 import { MachineContext } from './MachineContext';
 import { useLoadSnapshot } from './persist';
 import { View } from 'react-native';
+import { Persistence } from './Persistence';
 
 export function Root() {
   const [snapshot, isLoading] = useLoadSnapshot(levelerMachine.id);
@@ -10,7 +11,9 @@ export function Root() {
   return (
     isLoading ? <View /> :
     <MachineContext.Provider options={{ snapshot }}>
-      <Table />
+      <Persistence>
+        <Table />
+      </Persistence>
     </MachineContext.Provider>
   );
 }

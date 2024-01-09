@@ -1,8 +1,6 @@
 import { Chip, Input, Text } from '@rneui/themed';
 import { StatusBar } from 'expo-status-bar';
 import { ScrollView, StyleSheet, View } from 'react-native';
-import { useSaveSnapshot } from './persist';
-import { levelerMachine } from './machine';
 import { MachineContext } from './MachineContext';
 
 const styles = StyleSheet.create({
@@ -55,8 +53,6 @@ const styles = StyleSheet.create({
 
 export function Table() {
   const actor = MachineContext.useActorRef();
-  useSaveSnapshot(levelerMachine.id, actor);
-
   const send = actor.send;
   const { zero, measurements } = MachineContext.useSelector(
     snapshot => snapshot.context,

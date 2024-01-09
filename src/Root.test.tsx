@@ -3,7 +3,7 @@ import { act, fireEvent, render, screen, waitFor } from '@testing-library/react-
 import { TextInput } from 'react-native';
 import * as Clipboard from 'expo-clipboard';
 import { dedent } from 'ts-dedent';
-import { Root } from './Root';
+import { Table as Root } from './Table';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import App from '../App';
 
