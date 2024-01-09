@@ -9,6 +9,12 @@ export function Buttons() {
   return (
     <View style={styles.icons}>
       <Chip
+        testID='add-size'
+        icon={{ name: 'plus', type: 'font-awesome', color: 'white' }}
+        containerStyle={styles.bottomIcon}
+        onPress={() => actor.send({ type: "add measurement" })}
+      />
+      <Chip
         testID={'copy-to-clipboard'}
         icon={{ name: 'copy', type: 'font-awesome', color: 'white' }}
         containerStyle={styles.bottomIcon}

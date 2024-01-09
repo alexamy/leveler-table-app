@@ -18,11 +18,6 @@ export function Zero() {
           value: text,
         })}
       />
-      <AddChip
-        onPress={() => actor.send({
-          type: "add measurement",
-        })}
-      />
     </View>
   );
 }
@@ -40,18 +35,5 @@ function ZeroInput(props: {
       value={props.value}
       onChangeText={props.onChangeText}
     />
-  );
-}
-
-function AddChip(props: {
-  onPress: () => void;
-}) {
-  return (
-    <Chip
-      testID='add-size'
-      onPress={props.onPress}
-    >
-      +
-    </Chip>
   );
 }
