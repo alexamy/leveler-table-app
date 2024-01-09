@@ -15,14 +15,8 @@ export function Rows() {
         <Text style={styles.position}>
           {index}
         </Text>
-        <Input
+        <SizeInput
           testID={`input-size-${index}`}
-          placeholder='Проектный размер'
-          keyboardType='numeric'
-          textAlign='left'
-          maxLength={6}
-          containerStyle={styles.input}
-          style={styles.input}
           value={measurement.size}
           onChangeText={text => actor.send({
             type: "change measurement",
@@ -30,21 +24,17 @@ export function Rows() {
             index,
           })}
         />
-
         <Text style={styles.result}>
           {measurement.offset}
         </Text>
-        <Chip
+        <DeleteChip
           testID={`delete-size-${index}`}
-          color='secondary'
           disabled={measurements.length === 1}
           onPress={() => actor.send({
             type: "remove measurement",
             index,
           })}
-        >
-          −
-        </Chip>
+        />
       </View>
     );
   });
@@ -53,5 +43,42 @@ export function Rows() {
     <ScrollView style={styles.table}>
       {rows}
     </ScrollView>
+  );
+}
+
+function SizeInput(props: {
+  testID: string;
+  value: string;
+  onChangeText: (text: string) => void;
+}) {
+  return (
+    <Input
+      testID={props.testID}
+      value={props.value}
+      onChangeText={props.onChangeText}
+      placeholder='Проектный размер'
+      keyboardType='numeric'
+      textAlign='left'
+      maxLength={6}
+      containerStyle={styles.input}
+      style={styles.input}
+    />
+  );
+}
+
+function DeleteChip(props: {
+  testID: string;
+  disabled: boolean;
+  onPress: () => void;
+}) {
+  return (
+    <Chip
+      testID={props.testID}
+      disabled={props.disabled}
+      onPress={props.onPress}
+      color='secondary'
+    >
+      −
+    </Chip>
   );
 }
