@@ -152,7 +152,7 @@ it('recalculates differences when zero size is changed', () => {
   expect(screen.getByText('50')).toBeVisible();
 });
 
-it('dont show difference if zero value is empty', () => {
+it('dont show difference if zero value is empty', async () => {
   render(<Root />);
 
   const inputZero = screen.getByTestId('input-zero-0') as TextInput;
@@ -161,10 +161,10 @@ it('dont show difference if zero value is empty', () => {
   fireEvent.changeText(inputZero, '');
   fireEvent.changeText(input1, '150');
 
-  waitFor(() => expect(screen.queryByText('-150')).toBe(null));
+  await waitFor(() => expect(screen.queryByText('-150')).toBe(null));
 });
 
-it('dont show difference if project size value is empty', () => {
+it('dont show difference if project size value is empty', async () => {
   render(<Root />);
 
   const inputZero = screen.getByTestId('input-zero-0') as TextInput;
@@ -173,7 +173,7 @@ it('dont show difference if project size value is empty', () => {
   fireEvent.changeText(inputZero, '150');
   fireEvent.changeText(input1, '');
 
-  waitFor(() => expect(screen.queryByText('150')).toBe(null));
+  await waitFor(() => expect(screen.queryByText('150')).toBe(null));
 });
 
 it('shows first size position as 0', () => {
@@ -301,7 +301,7 @@ it.todo('resets to default state if local storage has malformed state');
 it.skip('loads state from local storage', async () => {
   render(<App />);
 
-  waitFor(() => {
+  await waitFor(() => {
     expect(AsyncStorage.getItem).toHaveBeenCalledTimes(1);
   });
 
@@ -310,7 +310,7 @@ it.skip('loads state from local storage', async () => {
     fireEvent.changeText(input, '100');
   });
 
-  waitFor(() => {
+  await waitFor(() => {
     expect(AsyncStorage.setItem).toHaveBeenCalledTimes(1);
   });
 });
