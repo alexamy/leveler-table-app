@@ -5,7 +5,7 @@ import { useLoadSnapshot } from './persist';
 import { View } from 'react-native';
 import { Persistence } from './Persistence';
 
-export function Root() {
+export function Loader() {
   const [snapshot, isLoading] = useLoadSnapshot(levelerMachine.id);
 
   return (
