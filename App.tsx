@@ -1,5 +1,5 @@
 import { StyleSheet, View } from 'react-native';
-import { Loader } from './src/Loader';
+import { Root } from './src/Root';
 
 const styles = StyleSheet.create({
   app: {
@@ -13,7 +13,7 @@ const styles = StyleSheet.create({
 export default function App() {
   return (
     <View style={styles.app}>
-      <Loader />
+      <Root />
     </View>
   );
 }
