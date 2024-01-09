@@ -1,4 +1,4 @@
-import { expect, it, jest, afterEach } from '@jest/globals';
+import { expect, it, jest, beforeEach, afterEach } from '@jest/globals';
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react-native';
 import { TextInput } from 'react-native';
 import * as Clipboard from 'expo-clipboard';
@@ -12,6 +12,10 @@ jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper');
 jest.mock('@react-native-async-storage/async-storage', () =>
   require('@react-native-async-storage/async-storage/jest/async-storage-mock')
 );
+
+beforeEach(() => {
+  jest.useFakeTimers();
+});
 
 afterEach(() => {
   jest.resetAllMocks();
