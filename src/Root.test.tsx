@@ -211,7 +211,22 @@ it('copies table to clipboard', async () => {
   `);
 });
 
-it.todo('use tabs between values in serialized table');
+it('use tabs between values in serialized table', () => {
+  render(<Root />);
+
+  jest.spyOn(Clipboard, 'setStringAsync');
+
+  fireEvent.changeText(screen.getByTestId('input-zero-0'), '500');
+  fireEvent.press(screen.getByText('+'));
+  fireEvent.changeText(screen.getByTestId('input-size-0'), '300');
+
+  fireEvent.press(screen.getByTestId('copy-to-clipboard'));
+
+  // @ts-expect-error mock
+  const result: string | undefined = Clipboard.setStringAsync.mock.calls?.[0]?.[0];
+
+  expect(result?.includes("\t")).toBe(true);
+});
 
 it.todo('recalculates offset when changing zero point');
 it.todo('recalculates offset when changing measurement size');
