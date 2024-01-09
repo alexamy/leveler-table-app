@@ -1,8 +1,7 @@
 import { levelerMachine } from './machine';
 import { useLoadSnapshot } from './persist';
-import { View } from 'react-native';
+import { ActivityIndicator, View } from 'react-native';
 import { Root } from './Root';
-import { Skeleton } from '@rneui/themed';
 
 export function Loader() {
   const [snapshot, isLoading] = useLoadSnapshot(levelerMachine.id);
@@ -15,7 +14,7 @@ export function Loader() {
 function Loading() {
   return (
     <View>
-      <Skeleton />
+      <ActivityIndicator size="large" />
     </View>
   );
 }
