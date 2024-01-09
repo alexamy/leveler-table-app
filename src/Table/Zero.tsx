@@ -11,25 +11,47 @@ export function Zero() {
 
   return (
     <View style={styles.headRow}>
-      <Input
-        testID='input-zero-0'
-        keyboardType='numeric'
-        textAlign='right'
-        placeholder='Нулевая точка'
+      <ZeroInput
         value={zero}
         onChangeText={text => actor.send({
           type: "change zero point",
           value: text,
         })}
       />
-      <Chip
-        testID={'add-size'}
+      <AddChip
         onPress={() => actor.send({
           type: "add measurement",
         })}
-      >
-        +
-      </Chip>
+      />
     </View>
+  );
+}
+
+function ZeroInput(props: {
+  value: string;
+  onChangeText: (text: string) => void;
+}) {
+  return (
+    <Input
+      testID='input-zero-0'
+      keyboardType='numeric'
+      textAlign='right'
+      placeholder='Нулевая точка'
+      value={props.value}
+      onChangeText={props.onChangeText}
+    />
+  );
+}
+
+function AddChip(props: {
+  onPress: () => void;
+}) {
+  return (
+    <Chip
+      testID='add-size'
+      onPress={props.onPress}
+    >
+      +
+    </Chip>
   );
 }
