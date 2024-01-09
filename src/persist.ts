@@ -13,7 +13,7 @@ export function useLoadSnapshot(machineId: string): [
   useEffect(() => {
     async function load() {
       const data = await AsyncStorage.getItem(machineId);
-      const persisted = JSON.parse(data || "undefined");
+      const persisted = JSON.parse(data || "false");
       setSnapshot(persisted);
       setIsLoading(false);
     }
