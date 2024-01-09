@@ -1,53 +1,15 @@
-import { Chip, Input, Text } from '@rneui/themed';
+import { Chip, Input } from '@rneui/themed';
 import { StatusBar } from 'expo-status-bar';
-import { ScrollView, View } from 'react-native';
+import { View } from 'react-native';
 import { MachineContext } from '../MachineContext';
 import { styles } from './styles';
+import { Rows } from './Rows';
 
 export function Table() {
   const actor = MachineContext.useActorRef();
   const context = MachineContext.useSelector(
     snapshot => snapshot.context,
   );
-
-  const rows = context.measurements.map((measurement, index) => {
-    return (
-      <View key={index} style={styles.row}>
-        <Text style={styles.position}>
-          {index}
-        </Text>
-        <Input
-          testID={`input-size-${index}`}
-          placeholder='Проектный размер'
-          keyboardType='numeric'
-          textAlign='left'
-          maxLength={6}
-          containerStyle={styles.input}
-          style={styles.input}
-          value={measurement.size}
-          onChangeText={text => actor.send({
-            type: "change measurement",
-            value: text,
-            index,
-          })}
-        />
-        <Text style={styles.result}>
-          {measurement.offset}
-        </Text>
-        <Chip
-          testID={`delete-size-${index}`}
-          color='secondary'
-          disabled={context.measurements.length === 1}
-          onPress={() => actor.send({
-            type: "remove measurement",
-            index,
-          })}
-        >
-          −
-        </Chip>
-      </View>
-    );
-  });
 
   return (
     <View style={styles.container}>
@@ -72,9 +34,8 @@ export function Table() {
           +
         </Chip>
       </View>
-      <ScrollView style={styles.table}>
-        {rows}
-      </ScrollView>
+
+      <Rows />
 
       <View style={styles.icons}>
         <Chip
