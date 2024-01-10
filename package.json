@@ -13,6 +13,8 @@
     "@react-native-async-storage/async-storage": "1.18.2",
     "@rneui/base": "^4.0.0-rc.7",
     "@rneui/themed": "^4.0.0-rc.7",
+    "@typescript-eslint/eslint-plugin": "^6.18.1",
+    "@typescript-eslint/parser": "^6.18.1",
     "@xstate/react": "^4.0.2",
     "expo": "^49.0.21",
     "expo-clipboard": "~4.3.1",
