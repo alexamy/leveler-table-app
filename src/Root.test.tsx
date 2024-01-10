@@ -1,4 +1,4 @@
-import { expect, it, jest, beforeEach, afterEach } from '@jest/globals';
+import { expect, it, jest } from '@jest/globals';
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react-native';
 import { TextInput } from 'react-native';
 import * as Clipboard from 'expo-clipboard';
@@ -6,20 +6,6 @@ import { dedent } from 'ts-dedent';
 import { Root } from './Root';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import App from '../App';
-
-// suppress console warn: `useNativeDriver` is not supported
-jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper');
-jest.mock('@react-native-async-storage/async-storage', () =>
-  require('@react-native-async-storage/async-storage/jest/async-storage-mock')
-);
-
-beforeEach(() => {
-  jest.useFakeTimers();
-});
-
-afterEach(() => {
-  jest.resetAllMocks();
-});
 
 it('shows zero point label', () => {
   render(<Root />);
@@ -425,7 +411,6 @@ it('doesnt calculate new size if step is malformed', () => {
   expect(input1.props.value).toBe('');
 });
 
-// doesnt calcuate new size if zero point is empty
 it("doesn't calculate new size if zero point is empty", () => {
   render(<Root />);
 
