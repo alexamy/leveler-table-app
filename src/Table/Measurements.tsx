@@ -10,39 +10,36 @@ export function Measurements() {
     snapshot => snapshot.context.measurements,
   );
 
-  const rows = measurements.map((measurement, index) => {
-    return (
-      <View key={index} style={styles.row}>
-        <Text style={styles.position}>
-          {index}
-        </Text>
-        <SizeInput
-          testID={`input-size-${index}`}
-          value={measurement.size}
-          onChangeText={text => actor.send({
-            type: "change measurement",
-            value: text,
-            index,
-          })}
-        />
-        <Text testID={`text-offset-${index}`} style={styles.result}>
-          {measurement.offset}
-        </Text>
-        <DeleteChip
-          testID={`delete-size-${index}`}
-          disabled={measurements.length === 1}
-          onPress={() => actor.send({
-            type: "remove measurement",
-            index,
-          })}
-        />
-      </View>
-    );
-  });
-
   return (
     <ScrollView style={styles.table}>
-      {rows}
+      {measurements.map((measurement, index) =>
+        <View key={index} style={styles.row}>
+          <Text style={styles.position}>
+            {index}
+          </Text>
+          <SizeInput
+            testID={`input-size-${index}`}
+            value={measurement.size}
+            onChangeText={text => actor.send({
+              type: "change measurement",
+              value: text,
+              index,
+            })}
+          />
+
+          <Text testID={`text-offset-${index}`} style={styles.result}>
+            {measurement.offset}
+          </Text>
+          <DeleteChip
+            testID={`delete-size-${index}`}
+            disabled={measurements.length === 1}
+            onPress={() => actor.send({
+              type: "remove measurement",
+              index,
+            })}
+          />
+        </View>
+      )}
     </ScrollView>
   );
 }
