@@ -13,33 +13,54 @@ export function Measurements() {
   return (
     <ScrollView style={styles.table}>
       {measurements.map((measurement, index) =>
-        <View key={index} style={styles.row}>
-          <Text style={styles.position}>
-            {index}
-          </Text>
-          <SizeInput
-            testID={`input-size-${index}`}
-            value={measurement.size}
-            onChangeText={text => actor.send({
-              type: "change measurement",
-              value: text,
-              index,
-            })}
-          />
-
-          <Text testID={`text-offset-${index}`} style={styles.result}>
-            {measurement.offset}
-          </Text>
-          <DeleteChip
-            testID={`delete-size-${index}`}
-            onPress={() => actor.send({
-              type: "remove measurement",
-              index,
-            })}
-          />
-        </View>
+        <Measurement
+          key={index}
+          index={index}
+          measurement={measurement}
+          onChangeText={text => actor.send({
+            type: "change measurement",
+            value: text,
+            index,
+          })}
+          onPressDelete={() => actor.send({
+            type: "remove measurement",
+            index,
+          })}
+        />
       )}
     </ScrollView>
+  );
+}
+
+function Measurement({
+  measurement, index,
+  onChangeText,
+  onPressDelete,
+}: {
+  measurement: { size: string; offset: string; },
+  index: number,
+  onChangeText: (text: string) => void,
+  onPressDelete: () => void,
+}) {
+  return (
+    <View key={index} style={styles.row}>
+      <Text style={styles.position}>
+        {index}
+      </Text>
+      <SizeInput
+        testID={`input-size-${index}`}
+        value={measurement.size}
+        onChangeText={onChangeText}
+      />
+
+      <Text testID={`text-offset-${index}`} style={styles.result}>
+        {measurement.offset}
+      </Text>
+      <DeleteChip
+        testID={`delete-size-${index}`}
+        onPress={onPressDelete}
+      />
+    </View>
   );
 }
 
