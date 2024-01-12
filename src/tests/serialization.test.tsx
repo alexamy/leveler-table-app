@@ -10,9 +10,10 @@ import { Root } from '../Root';
 it('clears the state after clear button press', () => {
   render(<Root />);
 
+  fireEvent.press(screen.getByTestId('add-size'));
+  fireEvent.press(screen.getByTestId('add-size'));
   fireEvent.changeText(screen.getByTestId('input-zero-0'), '500');
   fireEvent.changeText(screen.getByTestId('input-size-0'), '300');
-  fireEvent.press(screen.getByTestId('add-size'));
   fireEvent.changeText(screen.getByTestId('input-size-1'), '300');
 
   fireEvent.press(screen.getByTestId('clear-data'));
@@ -27,8 +28,9 @@ it('copies table to clipboard', async () => {
 
   jest.spyOn(Clipboard, 'setStringAsync');
 
-  fireEvent.changeText(screen.getByTestId('input-zero-0'), '500');
   fireEvent.press(screen.getByTestId('add-size'));
+  fireEvent.press(screen.getByTestId('add-size'));
+  fireEvent.changeText(screen.getByTestId('input-zero-0'), '500');
   fireEvent.changeText(screen.getByTestId('input-size-0'), '300');
   fireEvent.changeText(screen.getByTestId('input-size-1'), '125');
 
@@ -46,8 +48,8 @@ it('use tabs between values in serialized table', () => {
 
   jest.spyOn(Clipboard, 'setStringAsync');
 
-  fireEvent.changeText(screen.getByTestId('input-zero-0'), '500');
   fireEvent.press(screen.getByTestId('add-size'));
+  fireEvent.changeText(screen.getByTestId('input-zero-0'), '500');
   fireEvent.changeText(screen.getByTestId('input-size-0'), '300');
 
   fireEvent.press(screen.getByTestId('copy-to-clipboard'));
