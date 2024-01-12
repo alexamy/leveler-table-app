@@ -1,5 +1,5 @@
 import { expect, it } from '@jest/globals';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react-native';
+import { fireEvent, render, screen } from '@testing-library/react-native';
 import { TextInput } from 'react-native';
 import { Root } from '../Root';
 
