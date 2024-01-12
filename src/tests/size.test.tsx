@@ -6,12 +6,15 @@ import { Root } from '../Root';
 it('shows project sizes label', () => {
   render(<Root />);
 
+  fireEvent.press(screen.getByTestId('add-size'));
+
   expect(screen.getByPlaceholderText('Проектный размер')).toBeVisible();
 });
 
 it('allows to enter project size', () => {
   render(<Root />);
 
+  fireEvent.press(screen.getByTestId('add-size'));
   const input = screen.getByTestId('input-size-0') as TextInput;
   fireEvent.changeText(input, '100');
 
@@ -25,6 +28,7 @@ it.each([
 ])('allows entering $kind value in project size input', ({ value, expected }) => {
   render(<Root />);
 
+  fireEvent.press(screen.getByTestId('add-size'));
   const input = screen.getByTestId('input-size-0') as TextInput;
   fireEvent.changeText(input, value);
 
@@ -34,6 +38,7 @@ it.each([
 it('highlight project size if it has incorrect format', () => {
   render(<Root />);
 
+  fireEvent.press(screen.getByTestId('add-size'));
   const input = screen.getByTestId('input-size-0') as TextInput;
 
   expect(input.props.style).toMatchObject({ color: '#242424' });
@@ -47,6 +52,7 @@ it('allows to add more project sizes', () => {
   render(<Root />);
 
   fireEvent.press(screen.getByTestId('add-size'));
+  fireEvent.press(screen.getByTestId('add-size'));
 
   expect(screen.getByTestId('input-size-1')).toBeVisible();
 });
@@ -54,6 +60,7 @@ it('allows to add more project sizes', () => {
 it('dont render more than one additional project size input', () => {
   render(<Root />);
 
+  fireEvent.press(screen.getByTestId('add-size'));
   const input1 = screen.getByTestId('input-size-0') as TextInput;
 
   fireEvent.changeText(input1, '1');
@@ -67,6 +74,8 @@ it('dont render more than one additional project size input', () => {
 it('shows delete button', () => {
   render(<Root />);
 
+  fireEvent.press(screen.getByTestId('add-size'));
+
   expect(screen.getByText('−')).toBeVisible();
 });
 
@@ -76,17 +85,21 @@ it('deletes project size', () => {
   fireEvent.press(screen.getByTestId('add-size'));
   fireEvent.press(screen.getByTestId('delete-size-0'));
 
-  expect(screen.queryByTestId('input-size-1')).toBe(null);
+  expect(screen.queryByTestId('input-size-0')).toBe(null);
 });
 
-it('dont allow to delete single project size', () => {
+it('allows to delete single project size', () => {
   render(<Root />);
 
-  expect(screen.getByTestId('delete-size-0')).toBeDisabled();
+  fireEvent.press(screen.getByTestId('add-size'));
+
+  expect(screen.getByTestId('delete-size-0')).toBeEnabled();
 });
 
 it('shows first size position as 0', () => {
   render(<Root />);
+
+  fireEvent.press(screen.getByTestId('add-size'));
 
   expect(screen.getByText('0')).toBeVisible();
 });
@@ -94,6 +107,7 @@ it('shows first size position as 0', () => {
 it('shows next sizes positions as consecutive integers', () => {
   render(<Root />);
 
+  fireEvent.press(screen.getByTestId('add-size'));
   fireEvent.press(screen.getByTestId('add-size'));
 
   expect(screen.getByText('1')).toBeVisible();

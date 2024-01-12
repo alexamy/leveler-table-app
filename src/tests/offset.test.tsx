@@ -6,6 +6,7 @@ import { Root } from '../Root';
 it('calculates difference from zero point to project size', () => {
   render(<Root />);
 
+  fireEvent.press(screen.getByTestId('add-size'));
   const inputZero = screen.getByTestId('input-zero-0') as TextInput;
   const input1 = screen.getByTestId('input-size-0') as TextInput;
 
@@ -18,6 +19,7 @@ it('calculates difference from zero point to project size', () => {
 it('calculates difference from zero point to project size as negative number', () => {
   render(<Root />);
 
+  fireEvent.press(screen.getByTestId('add-size'));
   const inputZero = screen.getByTestId('input-zero-0') as TextInput;
   const input1 = screen.getByTestId('input-size-0') as TextInput;
 
@@ -30,6 +32,7 @@ it('calculates difference from zero point to project size as negative number', (
 it('recalculates differences when zero size is changed', () => {
   render(<Root />);
 
+  fireEvent.press(screen.getByTestId('add-size'));
   const inputZero = screen.getByTestId('input-zero-0') as TextInput;
   const input1 = screen.getByTestId('input-size-0') as TextInput;
 
@@ -43,6 +46,7 @@ it('recalculates differences when zero size is changed', () => {
 it('dont show difference if zero value is empty', async () => {
   render(<Root />);
 
+  fireEvent.press(screen.getByTestId('add-size'));
   const inputZero = screen.getByTestId('input-zero-0') as TextInput;
   const input1 = screen.getByTestId('input-size-0') as TextInput;
 
@@ -55,6 +59,7 @@ it('dont show difference if zero value is empty', async () => {
 it('dont show difference if project size value is empty', async () => {
   render(<Root />);
 
+  fireEvent.press(screen.getByTestId('add-size'));
   const inputZero = screen.getByTestId('input-zero-0') as TextInput;
   const input1 = screen.getByTestId('input-size-0') as TextInput;
 
@@ -67,6 +72,7 @@ it('dont show difference if project size value is empty', async () => {
 it('recalculates offset when changing zero point', () => {
   render(<Root />);
 
+  fireEvent.press(screen.getByTestId('add-size'));
   const inputZero = screen.getByTestId('input-zero-0') as TextInput;
   const input1 = screen.getByTestId('input-size-0') as TextInput;
 
@@ -80,6 +86,7 @@ it('recalculates offset when changing zero point', () => {
 it('recalculates offset when changing measurement size', () => {
   render(<Root />);
 
+  fireEvent.press(screen.getByTestId('add-size'));
   const inputZero = screen.getByTestId('input-zero-0') as TextInput;
   const input1 = screen.getByTestId('input-size-0') as TextInput;
 
@@ -93,6 +100,7 @@ it('recalculates offset when changing measurement size', () => {
 it('shows empty offset if has malformed size', () => {
   render(<Root />);
 
+  fireEvent.press(screen.getByTestId('add-size'));
   const inputZero = screen.getByTestId('input-zero-0') as TextInput;
   const input1 = screen.getByTestId('input-size-0') as TextInput;
 
@@ -105,6 +113,7 @@ it('shows empty offset if has malformed size', () => {
 it('shows empty offset if has malformed zero point', () => {
   render(<Root />);
 
+  fireEvent.press(screen.getByTestId('add-size'));
   const inputZero = screen.getByTestId('input-zero-0') as TextInput;
   const input1 = screen.getByTestId('input-size-0') as TextInput;
 

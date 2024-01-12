@@ -25,7 +25,7 @@ export const levelerMachine = setup({
   id: "leveler",
   context: {
     zero: "",
-    measurements: [{ size: "", offset: "" }],
+    measurements: [],
   },
   on: {
     "change zero point": {
@@ -78,7 +78,7 @@ export const levelerMachine = setup({
     "clear data": {
       actions: assign(() => ({
         zero: "",
-        measurements: [{ size: "", offset: "" }],
+        measurements: [],
       })),
     },
   },
