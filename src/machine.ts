@@ -86,8 +86,14 @@ export const levelerMachine = setup({
 
 function calculateOffset(zero: string, size: string): string {
   if(zero === "" || size === "") return "";
+
   const difference = Number(zero) - Number(size);
-  const offset = isNaN(difference) ? "" : difference.toString();
+  if(isNaN(difference)) return "";
+
+  const offset = difference.toFixed(2)
+    .replace(".00", "")
+    .replace(/\.(\d)0$/, ".$1");
+
   return offset;
 }
 

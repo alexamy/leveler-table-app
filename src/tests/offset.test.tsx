@@ -130,10 +130,23 @@ it('rounds offset to 2 decimal places', () => {
   const inputZero = screen.getByTestId('input-zero-0') as TextInput;
   const input1 = screen.getByTestId('input-size-0') as TextInput;
 
+  fireEvent.changeText(inputZero, '0.35');
+  fireEvent.changeText(input1, '0.1');
+
+  expect(screen.getByTestId('text-offset-0')).toHaveTextContent(/0\.25$/);
+});
+
+it('rounds offset to 1 decimal places', () => {
+  render(<Root />);
+
+  fireEvent.press(screen.getByTestId('add-size'));
+  const inputZero = screen.getByTestId('input-zero-0') as TextInput;
+  const input1 = screen.getByTestId('input-size-0') as TextInput;
+
   fireEvent.changeText(inputZero, '0.3');
   fireEvent.changeText(input1, '0.1');
 
-  expect(screen.getByTestId('text-offset-0')).toHaveTextContent("0.2");
+  expect(screen.getByTestId('text-offset-0')).toHaveTextContent(/0\.2$/);
 });
 
 it('doesnt round offset for integers', () => {
