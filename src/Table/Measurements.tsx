@@ -32,7 +32,6 @@ export function Measurements() {
           </Text>
           <DeleteChip
             testID={`delete-size-${index}`}
-            disabled={measurements.length === 1}
             onPress={() => actor.send({
               type: "remove measurement",
               index,
@@ -68,13 +67,11 @@ function SizeInput(props: {
 
 function DeleteChip(props: {
   testID: string;
-  disabled: boolean;
   onPress: () => void;
 }) {
   return (
     <Chip
       testID={props.testID}
-      disabled={props.disabled}
       onPress={props.onPress}
     >
       −

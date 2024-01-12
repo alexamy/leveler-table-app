@@ -19,8 +19,7 @@ it('clears the state after clear button press', () => {
   fireEvent.press(screen.getByTestId('clear-data'));
 
   expect(screen.getByTestId('input-zero-0')).toHaveTextContent("");
-  expect(screen.getByTestId('input-size-0')).toHaveTextContent("");
-  expect(screen.queryByTestId('input-size-1')).toBe(null);
+  expect(screen.queryByTestId('input-size-0')).toBe(null);
 });
 
 it('copies table to clipboard', async () => {
