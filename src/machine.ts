@@ -6,7 +6,8 @@ type Events =
 | { type: "remove measurement", index: number }
 | { type: "change measurement", index: number, value: string }
 | { type: "copy data" }
-| { type: "clear data" }
+| { type: "press clear data" }
+| { type: "release clear data" }
 
 type Context = {
   zero: string;
@@ -26,6 +27,28 @@ export const levelerMachine = setup({
   context: {
     zero: "",
     measurements: [],
+  },
+  initial: "main",
+  states: {
+    "main": {
+      on: {
+        "press clear data": "clear data",
+      },
+    },
+    "clear data": {
+      on: {
+        "release clear data": "main",
+      },
+      after: {
+        500: {
+          target: "main",
+          actions: assign(() => ({
+            zero: "",
+            measurements: [],
+          })),
+        },
+      },
+    },
   },
   on: {
     "change zero point": {
@@ -74,12 +97,6 @@ export const levelerMachine = setup({
           table: serializeToTable(context),
         }),
       }],
-    },
-    "clear data": {
-      actions: assign(() => ({
-        zero: "",
-        measurements: [],
-      })),
     },
   },
 });

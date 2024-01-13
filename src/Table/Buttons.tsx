@@ -13,7 +13,8 @@ export function Buttons() {
         icon={{ name: 'trash', type: 'font-awesome', color: 'white' }}
         containerStyle={styles.bottomIcon}
         color={'warning'}
-        onPress={() => actor.send({ type: "clear data" })}
+        onPressIn={() => actor.send({ type: "press clear data" })}
+        onPressOut={() => actor.send({ type: "release clear data" })}
       />
       <Chip
         testID={'copy-to-clipboard'}
