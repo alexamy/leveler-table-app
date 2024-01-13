@@ -14,6 +14,11 @@ type Context = {
   measurements: Array<{ size: string, offset: string }>;
 }
 
+const initialContext = {
+  zero: "",
+  measurements: [],
+} satisfies Context;
+
 export const levelerMachine = setup({
   types: {} as {
     events: Events,
@@ -24,10 +29,7 @@ export const levelerMachine = setup({
   },
 }).createMachine({
   id: "leveler",
-  context: {
-    zero: "",
-    measurements: [],
-  },
+  context: initialContext,
   initial: "main",
   states: {
     "main": {
@@ -42,10 +44,7 @@ export const levelerMachine = setup({
       after: {
         500: {
           target: "main",
-          actions: assign(() => ({
-            zero: "",
-            measurements: [],
-          })),
+          actions: assign(() => initialContext),
         },
       },
     },
