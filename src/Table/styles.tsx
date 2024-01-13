@@ -61,6 +61,5 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     alignSelf: 'flex-end',
     marginBottom: 10,
-
   },
 });
