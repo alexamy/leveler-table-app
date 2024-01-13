@@ -6,14 +6,14 @@ import { getNumberColor } from './helpers';
 
 export function Step() {
   const actor = MachineContext.useActorRef();
-  const zero = MachineContext.useSelector(
+  const step = MachineContext.useSelector(
     snapshot => snapshot.context.step,
   );
 
   return (
     <View style={styles.headRow}>
       <StepInput
-        value={zero}
+        value={step}
         onChangeText={text => actor.send({
           type: "change step",
           value: text,
