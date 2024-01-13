@@ -89,9 +89,7 @@ export const levelerMachine = setup({
             start = last.size;
           }
 
-          const size = start
-            ? prettyNumber(Number(start) + Number(step))
-            : "";
+          const size = calculate(start, "plus", step);
 
           return measurements.concat([
             { size, offset: "" },
