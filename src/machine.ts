@@ -42,7 +42,7 @@ export const levelerMachine = setup({
         "release clear data": "main",
       },
       after: {
-        500: {
+        1500: {
           target: "main",
           actions: assign(() => initialContext),
         },

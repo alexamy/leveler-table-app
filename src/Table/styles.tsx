@@ -57,4 +57,10 @@ export const styles = StyleSheet.create({
     width: '25%',
     marginHorizontal: 10,
   },
+  deleteIndicator: {
+    flexDirection: 'row',
+    alignSelf: 'flex-end',
+    marginBottom: 10,
+
+  },
 });
