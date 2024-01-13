@@ -29,6 +29,14 @@ export const levelerMachine = setup({
   },
   actions: {
     "copy data to clipboard": (_, params: { table: string }) => {},
+    "recalculate offsets": assign(({ context, event }) => {
+      const zero = context.zero;
+      const measurements = context.measurements.map(({ size }) => {
+        const offset = calculateOffset(zero, size);
+        return { size, offset };
+      });
+      return { zero, measurements };
+    }),
   },
 }).createMachine({
   id: "leveler",
@@ -54,14 +62,9 @@ export const levelerMachine = setup({
   },
   on: {
     "change zero point": {
-      actions: assign(({ context, event }) => {
-        const zero = event.value;
-        const measurements = context.measurements.map(({ size }) => {
-          const offset = calculateOffset(zero, size);
-          return { size, offset };
-        });
-        return { zero, measurements };
-      }),
+      actions: [assign({
+        zero: ({ event }) => event.value,
+      }), "recalculate offsets"],
     },
     "change step": {
       actions: assign({
