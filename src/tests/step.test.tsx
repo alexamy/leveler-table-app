@@ -1,6 +1,6 @@
 import { expect, it } from '@jest/globals';
 import { fireEvent, render, screen } from '@testing-library/react-native';
-import { TextInput } from 'react-native';
+import { TextInput, Text } from 'react-native';
 import { Root } from '../Root';
 
 it('shows step label', () => {
@@ -115,4 +115,17 @@ it("doesn't calculate new size if zero point is malformed", () => {
   const input1 = screen.getByTestId('input-size-0') as TextInput;
 
   expect(input1.props.value).toBe('');
+});
+
+it("recalculates offset when adding stepped value", () => {
+  render(<Root />);
+
+  const inputZero = screen.getByTestId('input-zero-0') as TextInput;
+  const inputStep = screen.getByTestId('input-step') as TextInput;
+  fireEvent.press(screen.getByTestId('add-size'));
+
+  fireEvent.changeText(inputZero, '500');
+  fireEvent.changeText(inputStep, '50');
+
+  expect(screen.getByText('-50')).toBeVisible();
 });

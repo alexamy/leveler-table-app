@@ -80,7 +80,7 @@ export const levelerMachine = setup({
           if(step && zero && measurements.length === 0) {
             size = prettyNumber(Number(zero) + Number(step));
           } else if (step && last?.size) {
-            size = prettyNumber(Number(last.size) + Number(step))
+            size = prettyNumber(Number(last.size) + Number(step));
           }
 
           return measurements.concat([
