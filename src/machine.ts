@@ -32,7 +32,7 @@ export const levelerMachine = setup({
     "recalculate offsets": assign({
       measurements({ context }) {
         return context.measurements.map(({ size }) => {
-          const offset = calculate(context.zero, size);
+          const offset = calculate(context.zero, "minus", size);
           return { size, offset };
         });
       },
@@ -114,7 +114,7 @@ export const levelerMachine = setup({
           const measurements = context.measurements.slice();
           const measurement = measurements[event.index];
           measurement.size = event.value;
-          measurement.offset = calculate(context.zero, measurement.size);
+          measurement.offset = calculate(context.zero, "minus", measurement.size);
           return measurements;
         },
       }),
@@ -131,14 +131,15 @@ export const levelerMachine = setup({
 });
 
 function calculate(
-  zero: string, size: string,
-  op: 'plus' | 'minus' = 'plus',
+  left: string,
+  op: 'plus' | 'minus',
+  right: string,
 ): string {
-  if(zero === "" || size === "") return "";
+  if(left === "" || right === "") return "";
 
   const results = {
-    plus: Number(zero) + Number(size),
-    minus: Number(zero) - Number(size),
+    plus: Number(left) + Number(right),
+    minus: Number(left) - Number(right),
   };
 
   const result = prettyNumber(results[op]);
