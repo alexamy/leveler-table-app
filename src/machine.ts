@@ -29,13 +29,13 @@ export const levelerMachine = setup({
   },
   actions: {
     "copy data to clipboard": (_, params: { table: string }) => {},
-    "recalculate offsets": assign(({ context, event }) => {
-      const zero = context.zero;
-      const measurements = context.measurements.map(({ size }) => {
-        const offset = calculateOffset(zero, size);
-        return { size, offset };
-      });
-      return { zero, measurements };
+    "recalculate offsets": assign({
+      measurements({ context }) {
+        return context.measurements.map(({ size }) => {
+          const offset = calculateOffset(context.zero, size);
+          return { size, offset };
+        });
+      },
     }),
   },
 }).createMachine({
