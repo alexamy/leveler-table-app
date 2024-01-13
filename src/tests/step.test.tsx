@@ -57,6 +57,25 @@ it('calculates new size as previous size + step when single step is presented', 
   expect(input2.props.value).toBe('600');
 });
 
+it('doesnt calculate new size if previous size is empty', () => {
+  render(<Root />);
+
+  const inputZero = screen.getByTestId('input-zero-0') as TextInput;
+  const inputStep = screen.getByTestId('input-step') as TextInput;
+
+  fireEvent.changeText(inputZero, '500');
+  fireEvent.changeText(inputStep, '50');
+  fireEvent.press(screen.getByTestId('add-size'));
+
+  const input1 = screen.getByTestId('input-size-0') as TextInput;
+  fireEvent.changeText(input1, '');
+  fireEvent.press(screen.getByTestId('add-size'));
+
+  const input2 = screen.getByTestId('input-size-1') as TextInput;
+
+  expect(input2.props.value).toBe('');
+});
+
 it('doesnt calculate new size if step is empty', () => {
   render(<Root />);
 
