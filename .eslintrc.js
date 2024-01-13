@@ -30,6 +30,7 @@ module.exports = {
       rules: {
         'quotes': ['off', 'double'],
         'jsx-quotes': ['off', 'prefer-double'],
+        '@typescript-eslint/no-shadow': 'off',
       },
     },
     {
