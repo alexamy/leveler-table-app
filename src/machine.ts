@@ -2,6 +2,7 @@ import { assign, setup } from "xstate";
 
 type Events =
 | { type: "change zero point", value: string }
+| { type: "change step", value: string }
 | { type: "add measurement" }
 | { type: "remove measurement", index: number }
 | { type: "change measurement", index: number, value: string }
@@ -11,11 +12,13 @@ type Events =
 
 type Context = {
   zero: string;
+  step: string;
   measurements: Array<{ size: string, offset: string }>;
 }
 
 const initialContext = {
   zero: "",
+  step: "",
   measurements: [],
 } satisfies Context;
 
@@ -26,6 +29,14 @@ export const levelerMachine = setup({
   },
   actions: {
     "copy data to clipboard": (_, params: { table: string }) => {},
+    "recalculate offsets": assign({
+      measurements({ context }) {
+        return context.measurements.map(({ size }) => {
+          const offset = calculate(context.zero, "minus", size);
+          return { size, offset };
+        });
+      },
+    }),
   },
 }).createMachine({
   id: "leveler",
@@ -51,16 +62,17 @@ export const levelerMachine = setup({
   },
   on: {
     "change zero point": {
-      actions: assign(({ context, event }) => {
-        const zero = event.value;
-        const measurements = context.measurements.map(({ size }) => {
-          const offset = calculateOffset(zero, size);
-          return { size, offset };
-        });
-        return { zero, measurements };
+      actions: [assign({
+        zero: ({ event }) => event.value,
+      }), "recalculate offsets"],
+    },
+    "change step": {
+      actions: assign({
+        step: ({ event }) => event.value,
       }),
     },
-    "add measurement": {
+    "add measurement": [{
+      guard: ({ context }) => context.step === "",
       actions: assign({
         measurements({ context }) {
           return context.measurements.concat([
@@ -68,7 +80,23 @@ export const levelerMachine = setup({
           ]);
         },
       }),
-    },
+    }, {
+      actions: [assign({
+        measurements({ context: { measurements, zero, step } }) {
+          let start = zero;
+          if(measurements.length > 0) {
+            const last = measurements[measurements.length - 1];
+            start = last.size;
+          }
+
+          const size = calculate(start, "plus", step);
+
+          return measurements.concat([
+            { size, offset: "" },
+          ]);
+        },
+      }), "recalculate offsets"],
+    }],
     "remove measurement": {
       actions: assign({
         measurements({ context, event }) {
@@ -84,7 +112,7 @@ export const levelerMachine = setup({
           const measurements = context.measurements.slice();
           const measurement = measurements[event.index];
           measurement.size = event.value;
-          measurement.offset = calculateOffset(context.zero, measurement.size);
+          measurement.offset = calculate(context.zero, "minus", measurement.size);
           return measurements;
         },
       }),
@@ -100,17 +128,30 @@ export const levelerMachine = setup({
   },
 });
 
-function calculateOffset(zero: string, size: string): string {
-  if(zero === "" || size === "") return "";
+function calculate(
+  left: string,
+  op: 'plus' | 'minus',
+  right: string,
+): string {
+  if(left === "" || right === "") return "";
 
-  const difference = Number(zero) - Number(size);
-  if(isNaN(difference)) return "";
+  const results = {
+    plus: Number(left) + Number(right),
+    minus: Number(left) - Number(right),
+  };
 
-  const offset = difference.toFixed(2)
+  const result = prettyNumber(results[op]);
+  return result;
+}
+
+function prettyNumber(value: number): string {
+  if(isNaN(value)) return "";
+
+  const result = value.toFixed(2)
     .replace(".00", "")
     .replace(/\.(\d)0$/, ".$1");
 
-  return offset;
+  return result;
 }
 
 function serializeToTable(context: Context): string {

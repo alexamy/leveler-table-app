@@ -9,13 +9,13 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'flex-start',
   },
-  top: {
+  content: {
     flex: 1,
     alignSelf: 'stretch',
     alignItems: 'center',
     justifyContent: 'flex-start',
   },
-  bottom: {
+  buttons: {
     marginTop: 20,
     marginBottom: 40,
   },
@@ -23,9 +23,11 @@ export const styles = StyleSheet.create({
     alignSelf: 'stretch',
     width: '100%',
     flexGrow: 0,
+    marginTop: 10,
   },
   headRow: {
     flexDirection: 'row',
+    maxHeight: 50,
   },
   row: {
     flexDirection: 'row',
