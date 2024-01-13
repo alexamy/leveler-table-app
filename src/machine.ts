@@ -63,6 +63,11 @@ export const levelerMachine = setup({
         return { zero, measurements };
       }),
     },
+    "change step": {
+      actions: assign({
+        step: ({ event }) => event.value,
+      }),
+    },
     "add measurement": {
       actions: assign({
         measurements({ context }) {
