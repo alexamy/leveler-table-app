@@ -75,18 +75,13 @@ export const levelerMachine = setup({
       actions: assign({
         measurements({ context: { measurements, zero, step } }) {
           const last = measurements[measurements.length - 1];
+          let size = "";
 
           if(step && zero && measurements.length === 0) {
-            const size = prettyNumber(Number(zero) + Number(step));
-
-            return measurements.concat([
-              { size, offset: "" },
-            ]);
+            size = prettyNumber(Number(zero) + Number(step));
+          } else if (step && last?.size) {
+            size = prettyNumber(Number(last.size) + Number(step))
           }
-
-          const size = step && last?.size
-            ? prettyNumber(Number(last.size) + Number(step))
-            : "";
 
           return measurements.concat([
             { size, offset: "" },
