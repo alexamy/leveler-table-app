@@ -31,7 +31,7 @@ function DeleteIndicator() {
   );
 
   return (
-    snapshot.matches("clear data") &&
+    snapshot.matches("wait clear data") &&
     <View style={styles.deleteIndicator}>
       <Text>Удерживай для удаления всех значений </Text>
       <ActivityIndicator size="small" />

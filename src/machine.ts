@@ -7,7 +7,7 @@ type Events =
 | { type: "remove measurement", index: number }
 | { type: "change measurement", index: number, value: string }
 | { type: "copy data" }
-| { type: "press clear data" }
+| { type: "hold clear data" }
 | { type: "release clear data" }
 
 type Context = {
@@ -45,10 +45,10 @@ export const levelerMachine = setup({
   states: {
     "main": {
       on: {
-        "press clear data": "clear data",
+        "hold clear data": "wait clear data",
       },
     },
-    "clear data": {
+    "wait clear data": {
       on: {
         "release clear data": "main",
       },
