@@ -11,11 +11,14 @@ it('clears the state after clear button press', async () => {
   fireEvent.changeText(screen.getByTestId('input-size-0'), '300');
   fireEvent.changeText(screen.getByTestId('input-size-1'), '300');
 
+  fireEvent(screen.getByTestId('clear-data'), 'pressIn');
+  expect(screen.getByText('Удаляем...')).toBeVisible();
+
   act(() => {
-    fireEvent(screen.getByTestId('clear-data'), 'pressIn');
     jest.advanceTimersByTime(5000);
-    fireEvent(screen.getByTestId('clear-data'), 'pressOut');
   });
+
+  fireEvent(screen.getByTestId('clear-data'), 'pressOut');
 
   await waitFor(() => {
     expect(screen.getByTestId('input-zero-0')).toHaveTextContent("");
