@@ -73,9 +73,23 @@ export const levelerMachine = setup({
     },
     "add measurement": {
       actions: assign({
-        measurements({ context }) {
-          return context.measurements.concat([
-            { size: "", offset: "" },
+        measurements({ context: { measurements, zero, step } }) {
+          const last = measurements[measurements.length - 1];
+
+          if(step && zero && measurements.length === 0) {
+            const size = prettyNumber(Number(zero) + Number(step));
+
+            return measurements.concat([
+              { size, offset: "" },
+            ]);
+          }
+
+          const size = step && last?.size
+            ? prettyNumber(Number(last.size) + Number(step))
+            : "";
+
+          return measurements.concat([
+            { size, offset: "" },
           ]);
         },
       }),
@@ -115,13 +129,18 @@ function calculateOffset(zero: string, size: string): string {
   if(zero === "" || size === "") return "";
 
   const difference = Number(zero) - Number(size);
-  if(isNaN(difference)) return "";
+  const result = prettyNumber(difference);
+  return result;
+}
 
-  const offset = difference.toFixed(2)
+function prettyNumber(value: number): string {
+  if(isNaN(value)) return "";
+
+  const result = value.toFixed(2)
     .replace(".00", "")
     .replace(/\.(\d)0$/, ".$1");
 
-  return offset;
+  return result;
 }
 
 function serializeToTable(context: Context): string {
