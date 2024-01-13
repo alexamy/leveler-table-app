@@ -1,5 +1,5 @@
 import { expect, it } from '@jest/globals';
-import { fireEvent, render, screen } from '@testing-library/react-native';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react-native';
 import { TextInput, Text } from 'react-native';
 import { Root } from '../Root';
 
@@ -122,10 +122,10 @@ it("recalculates offset when adding stepped value", () => {
 
   const inputZero = screen.getByTestId('input-zero-0') as TextInput;
   const inputStep = screen.getByTestId('input-step') as TextInput;
-  fireEvent.press(screen.getByTestId('add-size'));
 
   fireEvent.changeText(inputZero, '500');
   fireEvent.changeText(inputStep, '50');
+  fireEvent.press(screen.getByTestId('add-size'));
 
   expect(screen.getByText('-50')).toBeVisible();
 });
