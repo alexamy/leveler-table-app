@@ -2,6 +2,7 @@ import { assign, setup } from "xstate";
 
 type Events =
 | { type: "change zero point", value: string }
+| { type: "change step", value: string }
 | { type: "add measurement" }
 | { type: "remove measurement", index: number }
 | { type: "change measurement", index: number, value: string }
@@ -11,11 +12,13 @@ type Events =
 
 type Context = {
   zero: string;
+  step: string;
   measurements: Array<{ size: string, offset: string }>;
 }
 
 const initialContext = {
   zero: "",
+  step: "",
   measurements: [],
 } satisfies Context;
 

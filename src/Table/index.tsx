@@ -6,6 +6,7 @@ import { Zero } from './Zero';
 import { styles } from './styles';
 import { Text } from '@rneui/themed';
 import { MachineContext } from '../MachineContext';
+import { Step } from './Step';
 
 export function Table() {
   return (
@@ -13,6 +14,7 @@ export function Table() {
       <View style={styles.top}>
         <Zero />
         <DeleteIndicator />
+        <Step />
         <Measurements />
       </View>
       <View style={styles.bottom}>
