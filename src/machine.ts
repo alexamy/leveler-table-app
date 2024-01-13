@@ -81,7 +81,7 @@ export const levelerMachine = setup({
         },
       }),
     }, {
-      actions: [assign({
+      actions: assign({
         measurements({ context: { measurements, zero, step } }) {
           let start = zero;
           if(measurements.length > 0) {
@@ -90,12 +90,13 @@ export const levelerMachine = setup({
           }
 
           const size = calculate(start, "plus", step);
+          const offset = calculate(zero, "minus", size);
 
           return measurements.concat([
-            { size, offset: "" },
+            { size, offset },
           ]);
         },
-      }), "recalculate offsets"],
+      }),
     }],
     "remove measurement": {
       actions: assign({
