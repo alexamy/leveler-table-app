@@ -71,15 +71,18 @@ export const levelerMachine = setup({
         step: ({ event }) => event.value,
       }),
     },
-    "add measurement": {
+    "add measurement": [{
+      guard: ({ context }) => context.step === "",
+      actions: assign({
+        measurements({ context }) {
+          return context.measurements.concat([
+            { size: "", offset: "" },
+          ]);
+        },
+      }),
+    }, {
       actions: [assign({
         measurements({ context: { measurements, zero, step } }) {
-          if(!step) {
-            return measurements.concat([
-              { size: "", offset: "" },
-            ]);
-          }
-
           let start = zero;
           if(measurements.length > 0) {
             const last = measurements[measurements.length - 1];
@@ -95,7 +98,7 @@ export const levelerMachine = setup({
           ]);
         },
       }), "recalculate offsets"],
-    },
+    }],
     "remove measurement": {
       actions: assign({
         measurements({ context, event }) {
