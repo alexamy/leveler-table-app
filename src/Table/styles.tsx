@@ -23,9 +23,11 @@ export const styles = StyleSheet.create({
     alignSelf: 'stretch',
     width: '100%',
     flexGrow: 0,
+    marginTop: 10,
   },
   headRow: {
     flexDirection: 'row',
+    maxHeight: 50,
   },
   row: {
     flexDirection: 'row',

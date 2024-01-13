@@ -13,8 +13,8 @@ export function Table() {
     <View style={styles.container}>
       <View style={styles.top}>
         <Zero />
-        <DeleteIndicator />
         <Step />
+        <DeleteIndicator />
         <Measurements />
       </View>
       <View style={styles.bottom}>
