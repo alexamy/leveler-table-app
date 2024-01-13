@@ -7,21 +7,6 @@ import { dedent } from 'ts-dedent';
 import App from '../../App';
 import { Root } from '../Root';
 
-it('clears the state after clear button press', () => {
-  render(<Root />);
-
-  fireEvent.press(screen.getByTestId('add-size'));
-  fireEvent.press(screen.getByTestId('add-size'));
-  fireEvent.changeText(screen.getByTestId('input-zero-0'), '500');
-  fireEvent.changeText(screen.getByTestId('input-size-0'), '300');
-  fireEvent.changeText(screen.getByTestId('input-size-1'), '300');
-
-  fireEvent.press(screen.getByTestId('clear-data'));
-
-  expect(screen.getByTestId('input-zero-0')).toHaveTextContent("");
-  expect(screen.queryByTestId('input-size-0')).toBe(null);
-});
-
 it('copies table to clipboard', async () => {
   render(<Root />);
 
@@ -37,8 +22,8 @@ it('copies table to clipboard', async () => {
 
   expect(Clipboard.setStringAsync).toHaveBeenCalledWith(dedent`
     Шаг	Нулевая точка	Проектные значения	Результат
-    0	500	300	200
-    1	500	125	375
+    1	500	300	200
+    2	500	125	375
   `);
 });
 

@@ -43,9 +43,9 @@ function Measurement({
   onPressDelete: () => void,
 }) {
   return (
-    <View key={index} style={styles.row}>
+    <View style={styles.row}>
       <Text style={styles.position}>
-        {index}
+        {index + 1}
       </Text>
       <SizeInput
         testID={`input-size-${index}`}

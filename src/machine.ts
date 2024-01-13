@@ -6,12 +6,18 @@ type Events =
 | { type: "remove measurement", index: number }
 | { type: "change measurement", index: number, value: string }
 | { type: "copy data" }
-| { type: "clear data" }
+| { type: "press clear data" }
+| { type: "release clear data" }
 
 type Context = {
   zero: string;
   measurements: Array<{ size: string, offset: string }>;
 }
+
+const initialContext = {
+  zero: "",
+  measurements: [],
+} satisfies Context;
 
 export const levelerMachine = setup({
   types: {} as {
@@ -23,9 +29,25 @@ export const levelerMachine = setup({
   },
 }).createMachine({
   id: "leveler",
-  context: {
-    zero: "",
-    measurements: [],
+  context: initialContext,
+  initial: "main",
+  states: {
+    "main": {
+      on: {
+        "press clear data": "clear data",
+      },
+    },
+    "clear data": {
+      on: {
+        "release clear data": "main",
+      },
+      after: {
+        1500: {
+          target: "main",
+          actions: assign(() => initialContext),
+        },
+      },
+    },
   },
   on: {
     "change zero point": {
@@ -75,19 +97,19 @@ export const levelerMachine = setup({
         }),
       }],
     },
-    "clear data": {
-      actions: assign(() => ({
-        zero: "",
-        measurements: [],
-      })),
-    },
   },
 });
 
 function calculateOffset(zero: string, size: string): string {
   if(zero === "" || size === "") return "";
+
   const difference = Number(zero) - Number(size);
-  const offset = isNaN(difference) ? "" : difference.toString();
+  if(isNaN(difference)) return "";
+
+  const offset = difference.toFixed(2)
+    .replace(".00", "")
+    .replace(/\.(\d)0$/, ".$1");
+
   return offset;
 }
 
@@ -101,7 +123,7 @@ function serializeToTable(context: Context): string {
 
   const sizes = context.measurements.map((measurement, index) => {
     return [
-      index,
+      index + 1,
       context.zero,
       measurement.size,
       measurement.offset,
