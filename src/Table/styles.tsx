@@ -9,13 +9,13 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'flex-start',
   },
-  top: {
+  content: {
     flex: 1,
     alignSelf: 'stretch',
     alignItems: 'center',
     justifyContent: 'flex-start',
   },
-  bottom: {
+  buttons: {
     marginTop: 20,
     marginBottom: 40,
   },
