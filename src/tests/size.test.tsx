@@ -96,12 +96,12 @@ it('allows to delete single project size', () => {
   expect(screen.getByTestId('delete-size-0')).toBeEnabled();
 });
 
-it('shows first size position as 1', () => {
+it('shows first size position as 0', () => {
   render(<Root />);
 
   fireEvent.press(screen.getByTestId('add-size'));
 
-  expect(screen.getByText('1')).toBeVisible();
+  expect(screen.getByText('0')).toBeVisible();
 });
 
 it('shows next sizes positions as consecutive integers', () => {
@@ -110,5 +110,5 @@ it('shows next sizes positions as consecutive integers', () => {
   fireEvent.press(screen.getByTestId('add-size'));
   fireEvent.press(screen.getByTestId('add-size'));
 
-  expect(screen.getByText('2')).toBeVisible();
+  expect(screen.getByText('1')).toBeVisible();
 });

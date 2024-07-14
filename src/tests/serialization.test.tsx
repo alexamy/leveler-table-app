@@ -22,8 +22,8 @@ it('copies table to clipboard', async () => {
 
   expect(Clipboard.setStringAsync).toHaveBeenCalledWith(dedent`
     Шаг	Нулевая точка	Проектные значения	Результат
-    1	500	300	200
-    2	500	125	375
+    0	500	300	200
+    1	500	125	375
   `);
 });
 
