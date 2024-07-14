@@ -1,8 +1,8 @@
+import { Chip, Input, Text } from '@rneui/themed';
 import { ScrollView, View } from 'react-native';
-import { Text, Input, Chip } from '@rneui/themed';
 import { MachineContext } from '../MachineContext';
-import { styles } from './styles';
 import { getNumberColor } from './helpers';
+import { styles } from './styles';
 
 export function Measurements() {
   const actor = MachineContext.useActorRef();
@@ -45,7 +45,7 @@ function Measurement({
   return (
     <View style={styles.row}>
       <Text style={styles.position}>
-        {index + 1}
+        {index}
       </Text>
       <SizeInput
         testID={`input-size-${index}`}

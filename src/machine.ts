@@ -165,7 +165,7 @@ function serializeToTable(context: Context): string {
 
   const sizes = context.measurements.map((measurement, index) => {
     return [
-      index + 1,
+      index,
       context.zero,
       measurement.size,
       measurement.offset,
