@@ -14,7 +14,7 @@ module.exports = {
     'prefer-user-event': 'off',
     'react/react-in-jsx-scope': 'off',
     'jsx-quotes': ['warn', 'prefer-single'],
-    'curly': 'off',
+    curly: 'off',
     'keyword-spacing': 'off',
     '@typescript-eslint/no-unused-vars': 'warn',
     '@typescript-eslint/no-empty-interface': [
@@ -28,7 +28,7 @@ module.exports = {
     {
       files: ['*'],
       rules: {
-        'quotes': ['off', 'double'],
+        quotes: ['off', 'double'],
         'jsx-quotes': ['off', 'prefer-double'],
         '@typescript-eslint/no-shadow': 'off',
       },

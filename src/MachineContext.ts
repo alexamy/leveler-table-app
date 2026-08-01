@@ -4,7 +4,7 @@ import { levelerMachine } from './machine';
 
 const machine = levelerMachine.provide({
   actions: {
-    "copy data to clipboard": (_, { table }) => {
+    'copy data to clipboard': (_, { table }) => {
       Clipboard.setStringAsync(table);
     },
   },

@@ -136,7 +136,7 @@ it("doesn't calculate new size if zero point is malformed", () => {
   expect(input1.props.value).toBe('');
 });
 
-it("recalculates offset when adding stepped value", () => {
+it('recalculates offset when adding stepped value', () => {
   render(<Root />);
 
   const inputZero = screen.getByTestId('input-zero-0') as TextInput;

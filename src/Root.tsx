@@ -4,8 +4,10 @@ import { MachineContext } from './MachineContext';
 import { Table } from './Table';
 import { useSaveSnapshot } from './persist';
 
-export function Root({ snapshot }: {
-  snapshot?: SnapshotFrom<typeof levelerMachine>,
+export function Root({
+  snapshot,
+}: {
+  snapshot?: SnapshotFrom<typeof levelerMachine>;
 }) {
   return (
     <MachineContext.Provider options={{ snapshot }}>

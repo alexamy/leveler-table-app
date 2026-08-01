@@ -6,18 +6,18 @@ import { getNumberColor } from './helpers';
 
 export function Zero() {
   const actor = MachineContext.useActorRef();
-  const zero = MachineContext.useSelector(
-    snapshot => snapshot.context.zero,
-  );
+  const zero = MachineContext.useSelector((snapshot) => snapshot.context.zero);
 
   return (
     <View style={styles.headRow}>
       <ZeroInput
         value={zero}
-        onChangeText={text => actor.send({
-          type: "change zero point",
-          value: text,
-        })}
+        onChangeText={(text) =>
+          actor.send({
+            type: 'change zero point',
+            value: text,
+          })
+        }
       />
     </View>
   );

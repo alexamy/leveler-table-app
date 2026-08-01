@@ -6,15 +6,13 @@ import { Root } from './Root';
 export function Loader() {
   const [snapshot, isLoading] = useLoadSnapshot(levelerMachine.id);
 
-  return (
-    isLoading ? <Loading /> : <Root snapshot={snapshot} />
-  );
+  return isLoading ? <Loading /> : <Root snapshot={snapshot} />;
 }
 
 function Loading() {
   return (
     <View>
-      <ActivityIndicator size="large" />
+      <ActivityIndicator size='large' />
     </View>
   );
 }

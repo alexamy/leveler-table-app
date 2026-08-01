@@ -4,7 +4,10 @@ export interface JestNativeMatchers<R> {
   toBeEnabled(): R;
   toBeVisible(): R;
   toContainElement(element: ReactTestInstance | null): R;
-  toHaveTextContent(text: string | RegExp, options?: { normalizeWhitespace: boolean }): R;
+  toHaveTextContent(
+    text: string | RegExp,
+    options?: { normalizeWhitespace: boolean }
+  ): R;
   toHaveProp(attr: string, value?: unknown): R;
   toHaveStyle(style: StyleProp<ViewStyle | TextStyle | ImageStyle>): R;
   toHaveAccessibilityState(state: AccessibilityState): R;
@@ -24,5 +27,6 @@ declare global {
 
 // explicit jest globals
 declare module '@jest/expect' {
-  interface Matchers<R extends void | Promise<void>> extends JestNativeMatchers<R> {}
+  interface Matchers<R extends void | Promise<void>>
+    extends JestNativeMatchers<R> {}
 }

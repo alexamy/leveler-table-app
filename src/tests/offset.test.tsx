@@ -1,5 +1,10 @@
 import { expect, it } from '@jest/globals';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react-native';
+import {
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+} from '@testing-library/react-native';
 import { TextInput } from 'react-native';
 import { Root } from '../Root';
 
@@ -107,7 +112,7 @@ it('shows empty offset if has malformed size', () => {
   fireEvent.changeText(inputZero, '500');
   fireEvent.changeText(input1, 'x150');
 
-  expect(screen.getByTestId('text-offset-0')).toHaveTextContent("");
+  expect(screen.getByTestId('text-offset-0')).toHaveTextContent('');
 });
 
 it('shows empty offset if has malformed zero point', () => {
@@ -120,7 +125,7 @@ it('shows empty offset if has malformed zero point', () => {
   fireEvent.changeText(inputZero, 'x500');
   fireEvent.changeText(input1, '150');
 
-  expect(screen.getByTestId('text-offset-0')).toHaveTextContent("");
+  expect(screen.getByTestId('text-offset-0')).toHaveTextContent('');
 });
 
 it('rounds offset to 2 decimal places', () => {
@@ -159,5 +164,5 @@ it('doesnt round offset for integers', () => {
   fireEvent.changeText(inputZero, '2');
   fireEvent.changeText(input1, '1');
 
-  expect(screen.getByTestId('text-offset-0')).toHaveTextContent("1");
+  expect(screen.getByTestId('text-offset-0')).toHaveTextContent('1');
 });

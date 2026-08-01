@@ -1,5 +1,11 @@
 import { jest, expect, it } from '@jest/globals';
-import { act, fireEvent, render, screen, waitFor } from '@testing-library/react-native';
+import {
+  act,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+} from '@testing-library/react-native';
 import { Root } from '../Root';
 
 it('clears the state after clear button press', async () => {
@@ -12,7 +18,9 @@ it('clears the state after clear button press', async () => {
   fireEvent.changeText(screen.getByTestId('input-size-1'), '300');
 
   fireEvent(screen.getByTestId('clear-data'), 'pressIn');
-  expect(screen.getByText('Удерживай для удаления всех значений')).toBeVisible();
+  expect(
+    screen.getByText('Удерживай для удаления всех значений')
+  ).toBeVisible();
 
   act(() => {
     jest.advanceTimersByTime(5000);
@@ -21,7 +29,7 @@ it('clears the state after clear button press', async () => {
   fireEvent(screen.getByTestId('clear-data'), 'pressOut');
 
   await waitFor(() => {
-    expect(screen.getByTestId('input-zero-0')).toHaveTextContent("");
+    expect(screen.getByTestId('input-zero-0')).toHaveTextContent('');
     expect(screen.queryByTestId('input-size-0')).toBe(null);
   });
 });

@@ -1,104 +1,106 @@
-import { assign, setup } from "xstate";
+import { assign, setup } from 'xstate';
 
 type Events =
-| { type: "change zero point", value: string }
-| { type: "change step", value: string }
-| { type: "add measurement" }
-| { type: "remove measurement", index: number }
-| { type: "change measurement", index: number, value: string }
-| { type: "copy data" }
-| { type: "hold clear data" }
-| { type: "release clear data" }
+  | { type: 'change zero point'; value: string }
+  | { type: 'change step'; value: string }
+  | { type: 'add measurement' }
+  | { type: 'remove measurement'; index: number }
+  | { type: 'change measurement'; index: number; value: string }
+  | { type: 'copy data' }
+  | { type: 'hold clear data' }
+  | { type: 'release clear data' };
 
 type Context = {
   zero: string;
   step: string;
-  measurements: Array<{ size: string, offset: string }>;
-}
+  measurements: Array<{ size: string; offset: string }>;
+};
 
 const initialContext = {
-  zero: "",
-  step: "",
+  zero: '',
+  step: '',
   measurements: [],
 } satisfies Context;
 
 export const levelerMachine = setup({
   types: {} as {
-    events: Events,
-    context: Context,
+    events: Events;
+    context: Context;
   },
   actions: {
-    "copy data to clipboard": (_, params: { table: string }) => {},
-    "recalculate offsets": assign({
+    'copy data to clipboard': (_, params: { table: string }) => {},
+    'recalculate offsets': assign({
       measurements({ context }) {
         return context.measurements.map(({ size }) => {
-          const offset = calculate(context.zero, "minus", size);
+          const offset = calculate(context.zero, 'minus', size);
           return { size, offset };
         });
       },
     }),
   },
 }).createMachine({
-  id: "leveler",
+  id: 'leveler',
   context: initialContext,
-  initial: "main",
+  initial: 'main',
   states: {
-    "main": {
+    main: {
       on: {
-        "hold clear data": "wait clear data",
+        'hold clear data': 'wait clear data',
       },
     },
-    "wait clear data": {
+    'wait clear data': {
       on: {
-        "release clear data": "main",
+        'release clear data': 'main',
       },
       after: {
         1500: {
-          target: "main",
+          target: 'main',
           actions: assign(() => initialContext),
         },
       },
     },
   },
   on: {
-    "change zero point": {
-      actions: [assign({
-        zero: ({ event }) => event.value,
-      }), "recalculate offsets"],
+    'change zero point': {
+      actions: [
+        assign({
+          zero: ({ event }) => event.value,
+        }),
+        'recalculate offsets',
+      ],
     },
-    "change step": {
+    'change step': {
       actions: assign({
         step: ({ event }) => event.value,
       }),
     },
-    "add measurement": [{
-      guard: ({ context }) => context.step === "",
-      actions: assign({
-        measurements({ context }) {
-          return context.measurements.concat([
-            { size: "", offset: "" },
-          ]);
-        },
-      }),
-    }, {
-      actions: assign({
-        measurements({ context: { measurements, zero, step } }) {
-          let start = zero;
-          if(measurements.length > 0) {
-            const last = measurements[measurements.length - 1];
-            start = last.size;
-          }
+    'add measurement': [
+      {
+        guard: ({ context }) => context.step === '',
+        actions: assign({
+          measurements({ context }) {
+            return context.measurements.concat([{ size: '', offset: '' }]);
+          },
+        }),
+      },
+      {
+        actions: assign({
+          measurements({ context: { measurements, zero, step } }) {
+            let start = zero;
+            if (measurements.length > 0) {
+              const last = measurements[measurements.length - 1];
+              start = last.size;
+            }
 
-          const size = calculate(start, "plus", step);
-          const offset = calculate(zero, "minus", size);
+            const size = calculate(start, 'plus', step);
+            const offset = calculate(zero, 'minus', size);
 
-          return measurements.concat([
-            { size, offset },
-          ]);
-        },
-      }),
-    }],
-    "remove measurement": {
+            return measurements.concat([{ size, offset }]);
+          },
+        }),
+      },
+    ],
+    'remove measurement': {
       actions: assign({
         measurements({ context, event }) {
           const measurements = context.measurements.slice();
@@ -107,34 +109,36 @@ export const levelerMachine = setup({
         },
       }),
     },
-    "change measurement": {
+    'change measurement': {
       actions: assign({
         measurements({ context, event }) {
           const measurements = context.measurements.slice();
           const measurement = measurements[event.index];
           measurement.size = event.value;
-          measurement.offset = calculate(context.zero, "minus", measurement.size);
+          measurement.offset = calculate(
+            context.zero,
+            'minus',
+            measurement.size
+          );
           return measurements;
         },
       }),
     },
-    "copy data": {
-      actions: [{
-        type: "copy data to clipboard",
-        params: ({ context }) => ({
-          table: serializeToTable(context),
-        }),
-      }],
+    'copy data': {
+      actions: [
+        {
+          type: 'copy data to clipboard',
+          params: ({ context }) => ({
+            table: serializeToTable(context),
+          }),
+        },
+      ],
     },
   },
 });
 
-function calculate(
-  left: string,
-  op: 'plus' | 'minus',
-  right: string,
-): string {
-  if(left === "" || right === "") return "";
+function calculate(left: string, op: 'plus' | 'minus', right: string): string {
+  if (left === '' || right === '') return '';
 
   const results = {
     plus: Number(left) + Number(right),
@@ -146,35 +150,24 @@ function calculate(
 }
 
 function prettyNumber(value: number): string {
-  if(isNaN(value)) return "";
+  if (isNaN(value)) return '';
 
-  const result = value.toFixed(2)
-    .replace(".00", "")
-    .replace(/\.(\d)0$/, ".$1");
+  const result = value
+    .toFixed(2)
+    .replace('.00', '')
+    .replace(/\.(\d)0$/, '.$1');
 
   return result;
 }
 
 function serializeToTable(context: Context): string {
-  const headers = [
-    'Шаг',
-    'Нулевая точка',
-    'Проектные значения',
-    'Результат',
-  ];
+  const headers = ['Шаг', 'Нулевая точка', 'Проектные значения', 'Результат'];
 
   const sizes = context.measurements.map((measurement, index) => {
-    return [
-      index,
-      context.zero,
-      measurement.size,
-      measurement.offset,
-    ];
+    return [index, context.zero, measurement.size, measurement.offset];
   });
 
-  const result = [headers, ...sizes]
-    .map(strs => strs.join('	'))
-    .join('\n');
+  const result = [headers, ...sizes].map((strs) => strs.join('	')).join('\n');
 
   return result;
 }

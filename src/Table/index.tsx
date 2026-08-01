@@ -26,15 +26,14 @@ export function Table() {
 }
 
 function DeleteIndicator() {
-  const snapshot = MachineContext.useSelector(
-    snapshot => snapshot,
-  );
+  const snapshot = MachineContext.useSelector((snapshot) => snapshot);
 
   return (
-    snapshot.matches("wait clear data") &&
-    <View style={styles.deleteIndicator}>
-      <Text>Удерживай для удаления всех значений </Text>
-      <ActivityIndicator size="small" />
-    </View>
+    snapshot.matches('wait clear data') && (
+      <View style={styles.deleteIndicator}>
+        <Text>Удерживай для удаления всех значений </Text>
+        <ActivityIndicator size='small' />
+      </View>
+    )
   );
 }

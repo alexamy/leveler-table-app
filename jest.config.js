@@ -1,4 +1,4 @@
-const path = require('path')
+const path = require('path');
 
 /** @type {import('ts-jest').JestConfigWithTsJest} */
 module.exports = {
@@ -8,7 +8,7 @@ module.exports = {
     './setupTests.ts',
   ],
   transformIgnorePatterns: [
-    'node_modules/(?!((jest-)?react-native|@react-native(-community)?)|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|sentry-expo|native-base|react-native-svg|@rneui/.*)'
+    'node_modules/(?!((jest-)?react-native|@react-native(-community)?)|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|sentry-expo|native-base|react-native-svg|@rneui/.*)',
   ],
   clearMocks: true,
-}
+};

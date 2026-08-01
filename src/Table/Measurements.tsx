@@ -7,46 +7,49 @@ import { styles } from './styles';
 export function Measurements() {
   const actor = MachineContext.useActorRef();
   const measurements = MachineContext.useSelector(
-    snapshot => snapshot.context.measurements,
+    (snapshot) => snapshot.context.measurements
   );
 
   return (
     <ScrollView style={styles.table}>
-      {measurements.map((measurement, index) =>
+      {measurements.map((measurement, index) => (
         <Measurement
           key={index}
           index={index}
           measurement={measurement}
-          onChangeText={text => actor.send({
-            type: "change measurement",
-            value: text,
-            index,
-          })}
-          onPressDelete={() => actor.send({
-            type: "remove measurement",
-            index,
-          })}
+          onChangeText={(text) =>
+            actor.send({
+              type: 'change measurement',
+              value: text,
+              index,
+            })
+          }
+          onPressDelete={() =>
+            actor.send({
+              type: 'remove measurement',
+              index,
+            })
+          }
         />
-      )}
+      ))}
     </ScrollView>
   );
 }
 
 function Measurement({
-  measurement, index,
+  measurement,
+  index,
   onChangeText,
   onPressDelete,
 }: {
-  measurement: { size: string; offset: string; },
-  index: number,
-  onChangeText: (text: string) => void,
-  onPressDelete: () => void,
+  measurement: { size: string; offset: string };
+  index: number;
+  onChangeText: (text: string) => void;
+  onPressDelete: () => void;
 }) {
   return (
     <View style={styles.row}>
-      <Text style={styles.position}>
-        {index}
-      </Text>
+      <Text style={styles.position}>{index}</Text>
       <SizeInput
         testID={`input-size-${index}`}
         value={measurement.size}
@@ -56,10 +59,7 @@ function Measurement({
       <Text testID={`text-offset-${index}`} style={styles.result}>
         {measurement.offset}
       </Text>
-      <DeleteChip
-        testID={`delete-size-${index}`}
-        onPress={onPressDelete}
-      />
+      <DeleteChip testID={`delete-size-${index}`} onPress={onPressDelete} />
     </View>
   );
 }
@@ -86,15 +86,9 @@ function SizeInput(props: {
   );
 }
 
-function DeleteChip(props: {
-  testID: string;
-  onPress: () => void;
-}) {
+function DeleteChip(props: { testID: string; onPress: () => void }) {
   return (
-    <Chip
-      testID={props.testID}
-      onPress={props.onPress}
-    >
+    <Chip testID={props.testID} onPress={props.onPress}>
       −
     </Chip>
   );

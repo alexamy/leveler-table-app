@@ -25,15 +25,18 @@ it.each([
   { value: 'xyz4xyz', expected: 'xyz4xyz', kind: 'letter' },
   { value: '-42', expected: '-42', kind: 'negative' },
   { value: '10.5', expected: '10.5', kind: 'float' },
-])('allows entering $kind value in project size input', ({ value, expected }) => {
-  render(<Root />);
+])(
+  'allows entering $kind value in project size input',
+  ({ value, expected }) => {
+    render(<Root />);
 
-  fireEvent.press(screen.getByTestId('add-size'));
-  const input = screen.getByTestId('input-size-0') as TextInput;
-  fireEvent.changeText(input, value);
+    fireEvent.press(screen.getByTestId('add-size'));
+    const input = screen.getByTestId('input-size-0') as TextInput;
+    fireEvent.changeText(input, value);
 
-  expect(input.props.value).toBe(expected);
-});
+    expect(input.props.value).toBe(expected);
+  }
+);
 
 it('highlight project size if it has incorrect format', () => {
   render(<Root />);

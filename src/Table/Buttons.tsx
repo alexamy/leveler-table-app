@@ -13,20 +13,20 @@ export function Buttons() {
         icon={{ name: 'trash', type: 'font-awesome', color: 'white' }}
         containerStyle={styles.bottomIcon}
         color={'warning'}
-        onPressIn={() => actor.send({ type: "hold clear data" })}
-        onPressOut={() => actor.send({ type: "release clear data" })}
+        onPressIn={() => actor.send({ type: 'hold clear data' })}
+        onPressOut={() => actor.send({ type: 'release clear data' })}
       />
       <Chip
         testID={'copy-to-clipboard'}
         icon={{ name: 'copy', type: 'font-awesome', color: 'white' }}
         containerStyle={styles.bottomIcon}
-        onPress={() => actor.send({ type: "copy data" })}
+        onPress={() => actor.send({ type: 'copy data' })}
       />
       <Chip
         testID='add-size'
         icon={{ name: 'plus', type: 'font-awesome', color: 'white' }}
         containerStyle={styles.bottomIcon}
-        onPress={() => actor.send({ type: "add measurement" })}
+        onPress={() => actor.send({ type: 'add measurement' })}
       />
     </View>
   );
