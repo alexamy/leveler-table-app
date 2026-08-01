@@ -164,7 +164,7 @@ function serializeToTable(context: Context): string {
   const headers = ['Шаг', 'Нулевая точка', 'Проектные значения', 'Результат'];
 
   const sizes = context.measurements.map((measurement, index) => {
-    return [index, context.zero, measurement.size, measurement.offset];
+    return [index + 1, context.zero, measurement.size, measurement.offset];
   });
 
   const result = [headers, ...sizes].map((strs) => strs.join('	')).join('\n');

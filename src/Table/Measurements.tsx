@@ -49,7 +49,7 @@ function Measurement({
 }) {
   return (
     <View style={styles.row}>
-      <Text style={styles.position}>{index}</Text>
+      <Text style={styles.position}>{index + 1}</Text>
       <SizeInput
         testID={`input-size-${index}`}
         value={measurement.size}
