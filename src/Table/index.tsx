@@ -15,9 +15,11 @@ export function Table() {
         <DeleteIndicator />
         <Measurements />
       </View>
+
       <View style={styles.buttons}>
         <Buttons />
       </View>
+
       <StatusBar style='auto' />
     </View>
   );

@@ -7,11 +7,17 @@ import { getNumberColor } from './helpers';
 export function Step() {
   const actor = MachineContext.useActorRef();
   const step = MachineContext.useSelector((snapshot) => snapshot.context.step);
+  const color = getNumberColor(step);
 
   return (
     <View style={styles.headRow}>
-      <StepInput
+      <Input
+        testID='input-step'
+        keyboardType='numeric'
+        textAlign='right'
+        placeholder='Шаг'
         value={step}
+        style={{ color }}
         onChangeText={(text) =>
           actor.send({
             type: 'change step',
@@ -23,33 +29,20 @@ export function Step() {
   );
 }
 
-function StepInput(props: {
-  value: string;
-  onChangeText: (text: string) => void;
-}) {
-  const color = getNumberColor(props.value);
-
-  return (
-    <Input
-      testID='input-step'
-      keyboardType='numeric'
-      textAlign='right'
-      placeholder='Шаг'
-      value={props.value}
-      onChangeText={props.onChangeText}
-      style={{ color }}
-    />
-  );
-}
-
 export function Zero() {
   const actor = MachineContext.useActorRef();
   const zero = MachineContext.useSelector((snapshot) => snapshot.context.zero);
+  const color = getNumberColor(zero);
 
   return (
     <View style={styles.headRow}>
-      <ZeroInput
+      <Input
+        testID='input-zero-0'
+        keyboardType='numeric'
+        textAlign='right'
+        placeholder='Нулевая точка'
         value={zero}
+        style={{ color }}
         onChangeText={(text) =>
           actor.send({
             type: 'change zero point',
@@ -58,25 +51,6 @@ export function Zero() {
         }
       />
     </View>
-  );
-}
-
-function ZeroInput(props: {
-  value: string;
-  onChangeText: (text: string) => void;
-}) {
-  const color = getNumberColor(props.value);
-
-  return (
-    <Input
-      testID='input-zero-0'
-      keyboardType='numeric'
-      textAlign='right'
-      placeholder='Нулевая точка'
-      value={props.value}
-      onChangeText={props.onChangeText}
-      style={{ color }}
-    />
   );
 }
 

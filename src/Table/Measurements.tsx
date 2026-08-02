@@ -36,61 +36,44 @@ export function Measurements() {
   );
 }
 
+interface MeasurementProps {
+  measurement: { size: string; offset: string };
+  index: number;
+  onChangeText: (text: string) => void;
+  onPressDelete: () => void;
+}
+
 function Measurement({
   measurement,
   index,
   onChangeText,
   onPressDelete,
-}: {
-  measurement: { size: string; offset: string };
-  index: number;
-  onChangeText: (text: string) => void;
-  onPressDelete: () => void;
-}) {
+}: MeasurementProps) {
+  const color = getNumberColor(measurement.size);
+
   return (
     <View style={styles.row}>
       <Text style={styles.position}>{index + 1}</Text>
-      <SizeInput
+      <Input
         testID={`input-size-${index}`}
         value={measurement.size}
         onChangeText={onChangeText}
+        placeholder='Проектный размер'
+        keyboardType='numeric'
+        textAlign='left'
+        maxLength={6}
+        containerStyle={styles.input}
+        style={{ ...styles.input, color }}
       />
 
       <Text testID={`text-offset-${index}`} style={styles.result}>
         {measurement.offset}
       </Text>
-      <DeleteChip testID={`delete-size-${index}`} onPress={onPressDelete} />
+
+      <Chip testID={`delete-size-${index}`} onPress={onPressDelete}>
+        −
+      </Chip>
     </View>
-  );
-}
-
-function SizeInput(props: {
-  testID: string;
-  value: string;
-  onChangeText: (text: string) => void;
-}) {
-  const color = getNumberColor(props.value);
-
-  return (
-    <Input
-      testID={props.testID}
-      value={props.value}
-      onChangeText={props.onChangeText}
-      placeholder='Проектный размер'
-      keyboardType='numeric'
-      textAlign='left'
-      maxLength={6}
-      containerStyle={styles.input}
-      style={{ ...styles.input, color }}
-    />
-  );
-}
-
-function DeleteChip(props: { testID: string; onPress: () => void }) {
-  return (
-    <Chip testID={props.testID} onPress={props.onPress}>
-      −
-    </Chip>
   );
 }
 
