@@ -1,8 +1,8 @@
+import { StyleSheet } from 'react-native';
 import { Chip, Input, Text } from '@rneui/themed';
 import { ScrollView, View } from 'react-native';
 import { MachineContext } from '../MachineContext';
 import { getNumberColor } from './helpers';
-import { styles } from './styles';
 
 export function Measurements() {
   const actor = MachineContext.useActorRef();
@@ -93,3 +93,32 @@ function DeleteChip(props: { testID: string; onPress: () => void }) {
     </Chip>
   );
 }
+
+const styles = StyleSheet.create({
+  table: {
+    alignSelf: 'stretch',
+    width: '100%',
+    flexGrow: 0,
+    marginTop: 10,
+  },
+  row: {
+    flexDirection: 'row',
+  },
+  position: {
+    width: '8%',
+    fontSize: 18,
+    textAlign: 'center',
+    paddingTop: 7,
+  },
+  result: {
+    width: '20%',
+    fontSize: 18,
+    textAlign: 'right',
+    paddingTop: 7,
+    marginRight: 10,
+  },
+  input: {
+    flex: 0,
+    flexShrink: 1,
+  },
+});

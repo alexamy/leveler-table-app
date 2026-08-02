@@ -1,6 +1,6 @@
+import { StyleSheet } from 'react-native';
 import { Chip } from '@rneui/themed';
 import { View } from 'react-native';
-import { styles } from './styles';
 import { MachineContext } from '../MachineContext';
 
 export function Buttons() {
@@ -31,3 +31,13 @@ export function Buttons() {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  icons: {
+    flexDirection: 'row',
+  },
+  bottomIcon: {
+    width: '25%',
+    marginHorizontal: 10,
+  },
+});
