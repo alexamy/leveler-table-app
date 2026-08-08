@@ -17,13 +17,6 @@ export function Measurements() {
           key={index}
           index={index}
           measurement={measurement}
-          onChangeText={(text) =>
-            actor.send({
-              type: 'change measurement',
-              value: text,
-              index,
-            })
-          }
           onPressDelete={() =>
             actor.send({
               type: 'remove measurement',
@@ -39,8 +32,8 @@ export function Measurements() {
 interface MeasurementProps {
   measurement: { size: string; offset: string };
   index: number;
-  onChangeText: (text: string) => void;
   onPressDelete: () => void;
+  onChangeText?: (text: string) => void;
 }
 
 function Measurement({
@@ -55,6 +48,7 @@ function Measurement({
     <View style={styles.row}>
       <Text style={styles.position}>{index + 1}</Text>
       <Input
+        disabled={true}
         testID={`input-size-${index}`}
         value={measurement.size}
         onChangeText={onChangeText}
@@ -103,5 +97,6 @@ const styles = StyleSheet.create({
   input: {
     flex: 0,
     flexShrink: 1,
+    opacity: 1,
   },
 });
