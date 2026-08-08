@@ -73,20 +73,20 @@ it('updates measurements after step value change', () => {
 it('disables add button on empty zero size or offset', () => {
   render(<Root />);
 
-  expect(app.addSize().props.disabled).toBe(true);
+  expect(app.addSize().props.accessibilityState?.disabled).toBe(true);
 
   // only zero size
   fireEvent.changeText(app.zero(), '50');
   fireEvent.changeText(app.step(), '');
-  expect(app.addSize().props.disabled).toBe(true);
+  expect(app.addSize().props.accessibilityState?.disabled).toBe(true);
 
   // only step
   fireEvent.changeText(app.zero(), '');
   fireEvent.changeText(app.step(), '50');
-  expect(app.addSize().props.disabled).toBe(true);
+  expect(app.addSize().props.accessibilityState?.disabled).toBe(true);
 
   // enabled if both entered
   fireEvent.changeText(app.zero(), '500');
   fireEvent.changeText(app.step(), '50');
-  expect(app.addSize().props.disabled).toBe(false);
+  expect(app.addSize().props.accessibilityState?.disabled).toBe(false);
 });
