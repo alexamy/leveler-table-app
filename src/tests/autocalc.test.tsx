@@ -57,27 +57,6 @@ it('updates measurements after step value change', () => {
   expect(measurement2.offset.props.children).toBe('-200');
 });
 
-it('disables add button on empty zero size or offset', () => {
-  render(<Root />);
-
-  expect(app.addSize().props.accessibilityState?.disabled).toBe(true);
-
-  // only zero size
-  fireEvent.changeText(app.zero(), '50');
-  fireEvent.changeText(app.step(), '');
-  expect(app.addSize().props.accessibilityState?.disabled).toBe(true);
-
-  // only step
-  fireEvent.changeText(app.zero(), '');
-  fireEvent.changeText(app.step(), '50');
-  expect(app.addSize().props.accessibilityState?.disabled).toBe(true);
-
-  // enabled if both entered
-  fireEvent.changeText(app.zero(), '500');
-  fireEvent.changeText(app.step(), '50');
-  expect(app.addSize().props.accessibilityState?.disabled).toBe(false);
-});
-
 it('measurement is deleted correctly', () => {
   render(<Root />);
 

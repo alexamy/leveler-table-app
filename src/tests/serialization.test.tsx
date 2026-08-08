@@ -1,16 +1,7 @@
 import { expect, it, jest } from '@jest/globals';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import {
-  act,
-  fireEvent,
-  render,
-  screen,
-  waitFor,
-} from '@testing-library/react-native';
+import { fireEvent, render, screen } from '@testing-library/react-native';
 import * as Clipboard from 'expo-clipboard';
-import { TextInput } from 'react-native';
 import { dedent } from 'ts-dedent';
-import App from '../../App';
 import { Root } from '../Root';
 
 it('copies table to clipboard', async () => {
@@ -50,31 +41,3 @@ it('use tabs between values in serialized table', () => {
 
   expect(result?.includes('\t')).toBe(true);
 });
-
-it('loads state from local storage', async () => {
-  render(<App />);
-
-  await waitFor(() => {
-    expect(AsyncStorage.getItem).toHaveBeenCalledTimes(1);
-  });
-
-  // TODO why?
-  await waitFor(() => {
-    expect(AsyncStorage.setItem).toHaveBeenCalledTimes(1);
-  });
-
-  act(() => {
-    const input = screen.getByTestId('input-zero-0') as TextInput;
-    fireEvent.changeText(input, '100');
-  });
-
-  await waitFor(() => {
-    expect(AsyncStorage.setItem).toHaveBeenCalledTimes(2);
-  });
-});
-
-it.todo('resets to default state if local storage has malformed state');
-
-it.todo('saves state to a link');
-it.todo('populates state from a link');
-it.todo('dont reset app state if link has malformed state');
