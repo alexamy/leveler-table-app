@@ -52,7 +52,7 @@ const config = setup({
     }),
     'remove last measurement': assign({
       measurements({ context }) {
-        return context.measurements.slice(-1);
+        return context.measurements.slice(0, -1);
       },
     }),
   },

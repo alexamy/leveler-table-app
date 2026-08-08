@@ -12,7 +12,7 @@ const app = {
   measurement: (i: number) => ({
     size: screen.getByTestId(`input-size-${i - 1}`) as TextInput,
     offset: screen.getByTestId(`text-offset-${i - 1}`) as Text,
-    delete: screen.getByTestId(`delete-size-${i - 1}`) as TextInput,
+    delete: screen.getByTestId(`delete-size-${i - 1}`) as Button,
   }),
 };
 
@@ -89,4 +89,27 @@ it('disables add button on empty zero size or offset', () => {
   fireEvent.changeText(app.zero(), '500');
   fireEvent.changeText(app.step(), '50');
   expect(app.addSize().props.accessibilityState?.disabled).toBe(false);
+});
+
+it('measurement is deleted correctly', () => {
+  render(<Root />);
+
+  // setup
+  fireEvent.changeText(app.zero(), '500');
+  fireEvent.changeText(app.step(), '50');
+
+  fireEvent.press(app.addSize());
+  const measurement1 = app.measurement(1);
+  expect(measurement1.size.props.value).toBe('550');
+  expect(measurement1.offset.props.children).toBe('-50');
+
+  fireEvent.press(app.addSize());
+  const measurement2 = app.measurement(2);
+  expect(measurement2.size.props.value).toBe('600');
+  expect(measurement2.offset.props.children).toBe('-100');
+
+  // remove
+  fireEvent.press(measurement1.delete);
+  expect(measurement1.size.props.value).toBe('550');
+  expect(measurement1.offset.props.children).toBe('-50');
 });
