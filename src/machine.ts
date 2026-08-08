@@ -5,40 +5,60 @@ type Events =
   | { type: 'change step'; value: string }
   | { type: 'add measurement' }
   | { type: 'remove measurement'; index: number }
-  | { type: 'change measurement'; index: number; value: string }
   | { type: 'copy data' }
   | { type: 'hold clear data' }
   | { type: 'release clear data' };
 
+interface Measurement {
+  size: string;
+  offset: string;
+}
+
 type Context = {
   zero: string;
   step: string;
-  measurements: Array<{ size: string; offset: string }>;
+  measurements: Measurement[];
 };
 
-const initialContext = {
+const initialContext: Context = {
   zero: '',
   step: '',
   measurements: [],
-} satisfies Context;
+};
 
-export const levelerMachine = setup({
+const config = setup({
   types: {} as {
     events: Events;
     context: Context;
   },
+  guards: {
+    'is filled': ({ context }) =>
+      Boolean(context.zero) && Boolean(context.step),
+  },
   actions: {
     'copy data to clipboard': (_, params: { table: string }) => {},
-    'recalculate offsets': assign({
+    'recalculate measurements': assign({
       measurements({ context }) {
-        return context.measurements.map(({ size }) => {
-          const offset = calculate(context.zero, 'minus', size);
-          return { size, offset };
-        });
+        return context.measurements.reduce<Measurement[]>(
+          (measurements) => calcMeasurements({ ...context, measurements }),
+          []
+        );
+      },
+    }),
+    'add new measurement': assign({
+      measurements({ context }) {
+        return calcMeasurements(context);
+      },
+    }),
+    'remove last measurement': assign({
+      measurements({ context }) {
+        return context.measurements.slice(-1);
       },
     }),
   },
-}).createMachine({
+});
+
+export const levelerMachine = config.createMachine({
   id: 'leveler',
   context: initialContext,
   initial: 'main',
@@ -63,66 +83,22 @@ export const levelerMachine = setup({
   on: {
     'change zero point': {
       actions: [
-        assign({
-          zero: ({ event }) => event.value,
-        }),
-        'recalculate offsets',
+        assign({ zero: ({ event }) => event.value }),
+        'recalculate measurements',
       ],
     },
     'change step': {
-      actions: assign({
-        step: ({ event }) => event.value,
-      }),
+      actions: [
+        assign({ step: ({ event }) => event.value }),
+        'recalculate measurements',
+      ],
     },
-    'add measurement': [
-      {
-        guard: ({ context }) => context.step === '',
-        actions: assign({
-          measurements({ context }) {
-            return context.measurements.concat([{ size: '', offset: '' }]);
-          },
-        }),
-      },
-      {
-        actions: assign({
-          measurements({ context: { measurements, zero, step } }) {
-            let start = zero;
-            if (measurements.length > 0) {
-              const last = measurements[measurements.length - 1];
-              start = last.size;
-            }
-
-            const size = calculate(start, 'plus', step);
-            const offset = calculate(zero, 'minus', size);
-
-            return measurements.concat([{ size, offset }]);
-          },
-        }),
-      },
-    ],
+    'add measurement': {
+      guard: 'is filled',
+      actions: 'add new measurement',
+    },
     'remove measurement': {
-      actions: assign({
-        measurements({ context, event }) {
-          const measurements = context.measurements.slice();
-          measurements.splice(event.index, 1);
-          return measurements;
-        },
-      }),
-    },
-    'change measurement': {
-      actions: assign({
-        measurements({ context, event }) {
-          const measurements = context.measurements.slice();
-          const measurement = measurements[event.index];
-          measurement.size = event.value;
-          measurement.offset = calculate(
-            context.zero,
-            'minus',
-            measurement.size
-          );
-          return measurements;
-        },
-      }),
+      actions: 'remove last measurement',
     },
     'copy data': {
       actions: [
@@ -136,6 +112,18 @@ export const levelerMachine = setup({
     },
   },
 });
+
+function calcMeasurements({ zero, step, measurements }: Context) {
+  const start =
+    measurements.length > 0 ? measurements[measurements.length - 1].size : zero;
+
+  const size = calculate(start, 'plus', step);
+  const offset = calculate(zero, 'minus', size);
+  const measurement = { size, offset };
+
+  const result = measurements.concat([measurement]);
+  return result;
+}
 
 function calculate(left: string, op: 'plus' | 'minus', right: string): string {
   if (left === '' || right === '') return '';
