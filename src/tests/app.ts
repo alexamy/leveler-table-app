@@ -12,4 +12,7 @@ export const app = {
     offset: screen.getByTestId(`text-offset-${i - 1}`) as Text,
     delete: screen.getByTestId(`delete-size-${i - 1}`) as Button,
   }),
+  clearData: () => screen.getByTestId('clear-data') as Button,
+  pendingDeletion: () =>
+    screen.getByText('Удерживай для удаления всех значений') as Text,
 };

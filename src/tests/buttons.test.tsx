@@ -12,25 +12,20 @@ import { app } from './app';
 it('clears the state after clear button press', async () => {
   render(<Root />);
 
-  fireEvent.press(screen.getByTestId('add-size'));
-  fireEvent.press(screen.getByTestId('add-size'));
-  fireEvent.changeText(screen.getByTestId('input-zero-0'), '500');
-  fireEvent.changeText(screen.getByTestId('input-size-0'), '300');
-  fireEvent.changeText(screen.getByTestId('input-size-1'), '300');
+  fireEvent.changeText(app.zero(), '500');
+  fireEvent.changeText(app.step(), '500');
+  fireEvent.press(app.addSize());
+  fireEvent.press(app.addSize());
 
-  fireEvent(screen.getByTestId('clear-data'), 'pressIn');
-  expect(
-    screen.getByText('Удерживай для удаления всех значений')
-  ).toBeVisible();
+  fireEvent(app.clearData(), 'pressIn');
+  expect(app.pendingDeletion()).toBeVisible();
 
-  act(() => {
-    jest.advanceTimersByTime(5000);
-  });
-
-  fireEvent(screen.getByTestId('clear-data'), 'pressOut');
+  act(() => jest.advanceTimersByTime(5000));
+  fireEvent(app.clearData(), 'pressOut');
 
   await waitFor(() => {
-    expect(screen.getByTestId('input-zero-0')).toHaveTextContent('');
+    expect(app.zero().props.value).toBe('');
+    expect(app.step().props.value).toBe('');
     expect(screen.queryByTestId('input-size-0')).toBe(null);
   });
 });

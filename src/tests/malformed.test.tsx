@@ -1,32 +1,33 @@
-import { expect, it, describe } from '@jest/globals';
-import { fireEvent, render, screen } from '@testing-library/react-native';
-import { TextInput } from 'react-native';
+import { expect, it } from '@jest/globals';
+import { fireEvent, render } from '@testing-library/react-native';
 import { Root } from '../Root';
+import { app } from './app';
 
-describe('malformed input', () => {
-  it('shows empty offset if has malformed size', () => {
-    render(<Root />);
+it('shows empty measurement on malformed zero value', () => {
+  render(<Root />);
 
-    fireEvent.press(screen.getByTestId('add-size'));
-    const inputZero = screen.getByTestId('input-zero-0') as TextInput;
-    const input1 = screen.getByTestId('input-size-0') as TextInput;
+  fireEvent.changeText(app.zero(), '500');
+  fireEvent.changeText(app.step(), '50');
+  fireEvent.press(app.addSize());
 
-    fireEvent.changeText(inputZero, '500');
-    fireEvent.changeText(input1, 'x150');
+  fireEvent.changeText(app.zero(), 'x150');
 
-    expect(screen.getByTestId('text-offset-0')).toHaveTextContent('');
-  });
+  const measurement = app.measurement(1);
+  expect(measurement.size).toHaveTextContent('');
+  expect(measurement.offset).toHaveTextContent('');
+});
 
-  it('shows empty offset if has malformed zero point', () => {
-    render(<Root />);
+it('shows empty measurement on malformed step', () => {
+  render(<Root />);
 
-    fireEvent.press(screen.getByTestId('add-size'));
-    const inputZero = screen.getByTestId('input-zero-0') as TextInput;
-    const input1 = screen.getByTestId('input-size-0') as TextInput;
+  fireEvent.changeText(app.zero(), '500');
+  fireEvent.changeText(app.step(), '50');
+  fireEvent.press(app.addSize());
 
-    fireEvent.changeText(inputZero, 'x500');
-    fireEvent.changeText(input1, '150');
+  fireEvent.changeText(app.step(), 'x50');
 
-    expect(screen.getByTestId('text-offset-0')).toHaveTextContent('');
-  });
+  const measurement = app.measurement(1);
+
+  expect(measurement.size).toHaveTextContent('');
+  expect(measurement.offset).toHaveTextContent('');
 });

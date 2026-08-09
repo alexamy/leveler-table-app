@@ -3,24 +3,26 @@ import { fireEvent, render, screen } from '@testing-library/react-native';
 import * as Clipboard from 'expo-clipboard';
 import { dedent } from 'ts-dedent';
 import { Root } from '../Root';
+import { app } from './app';
 
 it('copies table to clipboard', async () => {
   render(<Root />);
 
   jest.spyOn(Clipboard, 'setStringAsync');
 
-  fireEvent.press(screen.getByTestId('add-size'));
-  fireEvent.press(screen.getByTestId('add-size'));
-  fireEvent.changeText(screen.getByTestId('input-zero-0'), '500');
-  fireEvent.changeText(screen.getByTestId('input-size-0'), '300');
-  fireEvent.changeText(screen.getByTestId('input-size-1'), '125');
+  fireEvent.changeText(app.zero(), '500');
+  fireEvent.changeText(app.step(), '200');
+  fireEvent.press(app.addSize());
+  fireEvent.press(app.addSize());
+  fireEvent.press(app.addSize());
 
   fireEvent.press(screen.getByTestId('copy-to-clipboard'));
 
   expect(Clipboard.setStringAsync).toHaveBeenCalledWith(dedent`
     Шаг	Нулевая точка	Проектные значения	Результат
-    1	500	300	200
-    2	500	125	375
+    1	500	700	-200
+    2	500	900	-400
+    3	500	1100	-600
   `);
 });
 
@@ -29,9 +31,9 @@ it('use tabs between values in serialized table', () => {
 
   jest.spyOn(Clipboard, 'setStringAsync');
 
-  fireEvent.press(screen.getByTestId('add-size'));
-  fireEvent.changeText(screen.getByTestId('input-zero-0'), '500');
-  fireEvent.changeText(screen.getByTestId('input-size-0'), '300');
+  fireEvent.changeText(app.zero(), '500');
+  fireEvent.changeText(app.step(), '200');
+  fireEvent.press(app.addSize());
 
   fireEvent.press(screen.getByTestId('copy-to-clipboard'));
 
