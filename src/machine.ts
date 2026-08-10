@@ -14,13 +14,13 @@ interface Measurement {
   offset: string;
 }
 
-type Context = {
+export type AppContext = {
   zero: string;
   step: string;
   measurements: Measurement[];
 };
 
-const initialContext: Context = {
+const initialContext: AppContext = {
   zero: '',
   step: '',
   measurements: [],
@@ -29,14 +29,14 @@ const initialContext: Context = {
 const config = setup({
   types: {} as {
     events: Events;
-    context: Context;
+    context: AppContext;
   },
   guards: {
     'is filled': ({ context }) =>
       Boolean(context.zero) && Boolean(context.step),
   },
   actions: {
-    'copy data to clipboard': (_, params: { table: string }) => {},
+    'copy data to clipboard': (_, params: { context: AppContext }) => {},
     'recalculate measurements': assign({
       measurements({ context }) {
         return context.measurements.reduce<Measurement[]>(
@@ -104,16 +104,14 @@ export const levelerMachine = config.createMachine({
       actions: [
         {
           type: 'copy data to clipboard',
-          params: ({ context }) => ({
-            table: serializeToTable(context),
-          }),
+          params: ({ context }) => ({ context }),
         },
       ],
     },
   },
 });
 
-function calcMeasurements({ zero, step, measurements }: Context) {
+function calcMeasurements({ zero, step, measurements }: AppContext) {
   const start =
     measurements.length > 0 ? measurements[measurements.length - 1].size : zero;
 
@@ -132,18 +130,6 @@ function format(value: number): string {
     .toFixed(2)
     .replace('.00', '')
     .replace(/\.(\d)0$/, '.$1');
-
-  return result;
-}
-
-function serializeToTable(context: Context): string {
-  const headers = ['Шаг', 'Нулевая точка', 'Проектные значения', 'Результат'];
-
-  const sizes = context.measurements.map((measurement, index) => {
-    return [index + 1, context.zero, measurement.size, measurement.offset];
-  });
-
-  const result = [headers, ...sizes].map((strs) => strs.join('	')).join('\n');
 
   return result;
 }
