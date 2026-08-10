@@ -1,17 +1,15 @@
 import { StyleSheet } from 'react-native';
 import { Chip } from '@rneui/themed';
 import { View } from 'react-native';
-import { MachineContext } from '../serialization';
-import { useActorRef, useSelector } from '@xstate/react';
 import { delayMachine } from '../delayMachine';
 import { useMemo } from 'react';
+import { useAppState } from '../context';
+import { useActorRef } from '@xstate/react';
+import { copyTable } from '../serialization';
 
 export function Buttons() {
-  const actor = MachineContext.useActorRef();
-  const canAddMeasurement = useSelector(
-    actor,
-    ({ context }) => Boolean(context.zero) && Boolean(context.step)
-  );
+  const [state, dispatch] = useAppState();
+  const canAddMeasurement = Boolean(state.zero) && Boolean(state.step);
 
   return (
     <View style={styles.icons}>
@@ -20,13 +18,13 @@ export function Buttons() {
         testID={'copy-to-clipboard'}
         icon={{ name: 'copy', type: 'font-awesome', color: 'white' }}
         containerStyle={styles.bottomIcon}
-        onPress={() => actor.send({ type: 'copy data' })}
+        onPress={() => copyTable(state)}
       />
       <Chip
         testID='add-size'
         icon={{ name: 'plus', type: 'font-awesome', color: 'white' }}
         containerStyle={styles.bottomIcon}
-        onPress={() => actor.send({ type: 'add measurement' })}
+        onPress={() => dispatch({ type: 'add measurement' })}
         disabled={!canAddMeasurement}
       />
     </View>
@@ -34,16 +32,16 @@ export function Buttons() {
 }
 
 function ClearData() {
-  const app = MachineContext.useActorRef();
+  const [_, dispatch] = useAppState();
   const actor = useDelayedClear();
 
   const onPressIn = () => {
-    app.send({ type: 'waiting clear', state: true });
+    dispatch({ type: 'change clear flag', value: true });
     actor.send({ type: 'started' });
   };
 
   const onPressOut = () => {
-    app.send({ type: 'waiting clear', state: false });
+    dispatch({ type: 'change clear flag', value: false });
     actor.send({ type: 'stopped' });
   };
 
@@ -60,16 +58,16 @@ function ClearData() {
 }
 
 function useDelayedClear() {
-  const app = MachineContext.useActorRef();
+  const [_, dispatch] = useAppState();
 
   const config = useMemo(() => {
     return delayMachine.provide({
       delays: { 'action delay': 1500 },
       actions: {
-        'delayed action': () => app.send({ type: 'clear data' }),
+        'delayed action': () => dispatch({ type: 'reset state' }),
       },
     });
-  }, [app]);
+  }, [dispatch]);
 
   const actor = useActorRef(config);
 

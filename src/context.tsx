@@ -16,10 +16,10 @@ export function AppContextProvider({
   return <AppContext.Provider value={reducer}>{children}</AppContext.Provider>;
 }
 
-export function useAppContext(): UseReducerResult {
+export function useAppState(): UseReducerResult {
   const reducer = useContext(AppContext);
   if (reducer === null) {
-    throw new Error('useAppContext must be used with AppContextProvider.');
+    throw new Error('useAppState must be used with AppContextProvider.');
   }
 
   return reducer;

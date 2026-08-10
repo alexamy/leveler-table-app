@@ -1,28 +1,20 @@
 import { StyleSheet } from 'react-native';
 import { Chip, Input, Text } from '@rneui/themed';
 import { ScrollView, View } from 'react-native';
-import { MachineContext } from '../serialization';
 import { getNumberColor } from './helpers';
+import { useAppState } from '../context';
 
 export function Measurements() {
-  const actor = MachineContext.useActorRef();
-  const measurements = MachineContext.useSelector(
-    (snapshot) => snapshot.context.measurements
-  );
+  const [state, dispatch] = useAppState();
 
   return (
     <ScrollView style={styles.table}>
-      {measurements.map((measurement, index) => (
+      {state.measurements.map((measurement, index) => (
         <Measurement
           key={index}
           index={index}
           measurement={measurement}
-          onPressDelete={() =>
-            actor.send({
-              type: 'remove measurement',
-              index,
-            })
-          }
+          onPressDelete={() => dispatch({ type: 'remove measurement', index })}
         />
       ))}
     </ScrollView>

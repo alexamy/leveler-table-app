@@ -2,16 +2,13 @@ import { useStatePersistance } from './persistance';
 import { ActivityIndicator, View } from 'react-native';
 import { AppContextProvider } from './context';
 import { Table } from './Table';
+import { State } from './reducer';
 
 export function App() {
   const [state, isLoading] = useStatePersistance();
   if (isLoading) return <Loading />;
 
-  return (
-    <AppContextProvider initialState={state}>
-      <Table />
-    </AppContextProvider>
-  );
+  return <Root state={state} />;
 }
 
 function Loading() {
@@ -19,5 +16,13 @@ function Loading() {
     <View>
       <ActivityIndicator size='large' />
     </View>
+  );
+}
+
+function Root({ state }: { state?: State }) {
+  return (
+    <AppContextProvider initialState={state}>
+      <Table />
+    </AppContextProvider>
   );
 }
