@@ -39,15 +39,12 @@ const config = setup({
     'copy data to clipboard': (_, params: { context: AppContext }) => {},
     'recalculate measurements': assign({
       measurements({ context }) {
-        return context.measurements.reduce<Measurement[]>(
-          (measurements) => calcMeasurements({ ...context, measurements }),
-          []
-        );
+        return calcMeasurements(context, context.measurements.length);
       },
     }),
     'add new measurement': assign({
       measurements({ context }) {
-        return calcMeasurements(context);
+        return calcMeasurements(context, context.measurements.length + 1);
       },
     }),
     'remove last measurement': assign({
@@ -111,15 +108,19 @@ export const levelerMachine = config.createMachine({
   },
 });
 
-function calcMeasurements({ zero, step, measurements }: AppContext) {
-  const start =
-    measurements.length > 0 ? measurements[measurements.length - 1].size : zero;
+function calcMeasurements(ctx: AppContext, amount: number) {
+  const zero = parseFloat(ctx.zero);
+  const step = parseFloat(ctx.step);
 
-  const size = format(+start + +step);
-  const offset = format(+zero - +size);
-  const measurement = { size, offset };
+  const result = Array(amount)
+    .fill(null)
+    .map((_, index) => {
+      const delta = step * (index + 1);
+      const size = format(zero + delta);
+      const offset = format(-delta);
+      return { size, offset };
+    });
 
-  const result = measurements.concat([measurement]);
   return result;
 }
 
