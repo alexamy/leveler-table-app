@@ -117,27 +117,15 @@ function calcMeasurements({ zero, step, measurements }: Context) {
   const start =
     measurements.length > 0 ? measurements[measurements.length - 1].size : zero;
 
-  const size = calculate(start, 'plus', step);
-  const offset = calculate(zero, 'minus', size);
+  const size = format(+start + +step);
+  const offset = format(+zero - +size);
   const measurement = { size, offset };
 
   const result = measurements.concat([measurement]);
   return result;
 }
 
-function calculate(left: string, op: 'plus' | 'minus', right: string): string {
-  if (left === '' || right === '') return '';
-
-  const results = {
-    plus: Number(left) + Number(right),
-    minus: Number(left) - Number(right),
-  };
-
-  const result = prettyNumber(results[op]);
-  return result;
-}
-
-function prettyNumber(value: number): string {
+function format(value: number): string {
   if (isNaN(value)) return '';
 
   const result = value
