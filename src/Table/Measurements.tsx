@@ -1,8 +1,8 @@
+import { StyleSheet } from 'react-native';
 import { Chip, Input, Text } from '@rneui/themed';
 import { ScrollView, View } from 'react-native';
 import { MachineContext } from '../MachineContext';
 import { getNumberColor } from './helpers';
-import { styles } from './styles';
 
 export function Measurements() {
   const actor = MachineContext.useActorRef();
@@ -17,13 +17,6 @@ export function Measurements() {
           key={index}
           index={index}
           measurement={measurement}
-          onChangeText={(text) =>
-            actor.send({
-              type: 'change measurement',
-              value: text,
-              index,
-            })
-          }
           onPressDelete={() =>
             actor.send({
               type: 'remove measurement',
@@ -36,60 +29,74 @@ export function Measurements() {
   );
 }
 
+interface MeasurementProps {
+  measurement: { size: string; offset: string };
+  index: number;
+  onPressDelete: () => void;
+  onChangeText?: (text: string) => void;
+}
+
 function Measurement({
   measurement,
   index,
   onChangeText,
   onPressDelete,
-}: {
-  measurement: { size: string; offset: string };
-  index: number;
-  onChangeText: (text: string) => void;
-  onPressDelete: () => void;
-}) {
+}: MeasurementProps) {
+  const color = getNumberColor(measurement.size);
+
   return (
     <View style={styles.row}>
       <Text style={styles.position}>{index + 1}</Text>
-      <SizeInput
+      <Input
+        disabled={true}
         testID={`input-size-${index}`}
         value={measurement.size}
         onChangeText={onChangeText}
+        placeholder='Проектный размер'
+        keyboardType='numeric'
+        textAlign='left'
+        maxLength={6}
+        containerStyle={styles.input}
+        style={{ ...styles.input, color }}
       />
 
       <Text testID={`text-offset-${index}`} style={styles.result}>
         {measurement.offset}
       </Text>
-      <DeleteChip testID={`delete-size-${index}`} onPress={onPressDelete} />
+
+      <Chip testID={`delete-size-${index}`} onPress={onPressDelete}>
+        −
+      </Chip>
     </View>
   );
 }
 
-function SizeInput(props: {
-  testID: string;
-  value: string;
-  onChangeText: (text: string) => void;
-}) {
-  const color = getNumberColor(props.value);
-
-  return (
-    <Input
-      testID={props.testID}
-      value={props.value}
-      onChangeText={props.onChangeText}
-      placeholder='Проектный размер'
-      keyboardType='numeric'
-      textAlign='left'
-      maxLength={6}
-      containerStyle={styles.input}
-      style={{ ...styles.input, color }}
-    />
-  );
-}
-
-function DeleteChip(props: { testID: string; onPress: () => void }) {
-  return (
-    <Chip testID={props.testID} onPress={props.onPress}>
-      −
-    </Chip>
-  );
-}
+const styles = StyleSheet.create({
+  table: {
+    alignSelf: 'stretch',
+    width: '100%',
+    flexGrow: 0,
+    marginTop: 10,
+  },
+  row: {
+    flexDirection: 'row',
+  },
+  position: {
+    width: '8%',
+    fontSize: 18,
+    textAlign: 'center',
+    paddingTop: 7,
+  },
+  result: {
+    width: '20%',
+    fontSize: 18,
+    textAlign: 'right',
+    paddingTop: 7,
+    marginRight: 10,
+  },
+  input: {
+    flex: 0,
+    flexShrink: 1,
+    opacity: 1,
+  },
+});

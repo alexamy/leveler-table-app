@@ -1,10 +1,15 @@
+import { StyleSheet } from 'react-native';
 import { Chip } from '@rneui/themed';
 import { View } from 'react-native';
-import { styles } from './styles';
 import { MachineContext } from '../MachineContext';
+import { useSelector } from '@xstate/react';
 
 export function Buttons() {
   const actor = MachineContext.useActorRef();
+  const canAddMeasurement = useSelector(
+    actor,
+    ({ context }) => Boolean(context.zero) && Boolean(context.step)
+  );
 
   return (
     <View style={styles.icons}>
@@ -27,7 +32,18 @@ export function Buttons() {
         icon={{ name: 'plus', type: 'font-awesome', color: 'white' }}
         containerStyle={styles.bottomIcon}
         onPress={() => actor.send({ type: 'add measurement' })}
+        disabled={!canAddMeasurement}
       />
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  icons: {
+    flexDirection: 'row',
+  },
+  bottomIcon: {
+    width: '25%',
+    marginHorizontal: 10,
+  },
+});

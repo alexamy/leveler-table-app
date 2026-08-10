@@ -9,142 +9,36 @@ it('shows step label', () => {
   expect(screen.getByPlaceholderText('Шаг')).toBeVisible();
 });
 
-it('calculates new size as zero point + step', () => {
+it('allows to enter step', async () => {
   render(<Root />);
 
-  const inputZero = screen.getByTestId('input-zero-0') as TextInput;
-  const inputStep = screen.getByTestId('input-step') as TextInput;
+  const input = screen.getByTestId('input-step') as TextInput;
+  fireEvent.changeText(input, '100');
 
-  fireEvent.changeText(inputZero, '500');
-  fireEvent.changeText(inputStep, '50');
-  fireEvent.press(screen.getByTestId('add-size'));
-
-  const input1 = screen.getByTestId('input-size-0') as TextInput;
-
-  expect(input1.props.value).toBe('550');
+  expect(input.props.value).toBe('100');
 });
 
-it('calculates new size as zero point + step when step is negative', () => {
+it('highlight step if it has incorrect format', () => {
   render(<Root />);
 
-  const inputZero = screen.getByTestId('input-zero-0') as TextInput;
-  const inputStep = screen.getByTestId('input-step') as TextInput;
+  const input = screen.getByTestId('input-step') as TextInput;
 
-  fireEvent.changeText(inputZero, '500');
-  fireEvent.changeText(inputStep, '-50');
-  fireEvent.press(screen.getByTestId('add-size'));
+  expect(input.props.style).toMatchObject({ color: '#242424' });
 
-  const input1 = screen.getByTestId('input-size-0') as TextInput;
+  fireEvent.changeText(input, 'x');
 
-  expect(input1.props.value).toBe('450');
+  expect(input.props.style).toMatchObject({ color: '#ff190c' });
 });
 
-it('calculates new size as previous size + step when single step is presented', () => {
+it.each([
+  { value: 'xyz4xyz', expected: 'xyz4xyz', kind: 'letter' },
+  { value: '-42', expected: '-42', kind: 'negative' },
+  { value: '10.5', expected: '10.5', kind: 'float' },
+])('allows entering $kind value in step input', ({ value, expected }) => {
   render(<Root />);
 
-  const inputZero = screen.getByTestId('input-zero-0') as TextInput;
-  const inputStep = screen.getByTestId('input-step') as TextInput;
+  const input = screen.getByTestId('input-step') as TextInput;
+  fireEvent.changeText(input, value);
 
-  fireEvent.changeText(inputZero, '500');
-  fireEvent.changeText(inputStep, '50');
-  fireEvent.press(screen.getByTestId('add-size'));
-  fireEvent.press(screen.getByTestId('add-size'));
-
-  const input1 = screen.getByTestId('input-size-0') as TextInput;
-  const input2 = screen.getByTestId('input-size-1') as TextInput;
-
-  expect(input1.props.value).toBe('550');
-  expect(input2.props.value).toBe('600');
-});
-
-it('doesnt calculate new size if previous size is empty', () => {
-  render(<Root />);
-
-  const inputZero = screen.getByTestId('input-zero-0') as TextInput;
-  const inputStep = screen.getByTestId('input-step') as TextInput;
-
-  fireEvent.changeText(inputZero, '500');
-  fireEvent.changeText(inputStep, '50');
-  fireEvent.press(screen.getByTestId('add-size'));
-
-  const input1 = screen.getByTestId('input-size-0') as TextInput;
-  fireEvent.changeText(input1, '');
-  fireEvent.press(screen.getByTestId('add-size'));
-
-  const input2 = screen.getByTestId('input-size-1') as TextInput;
-
-  expect(input2.props.value).toBe('');
-});
-
-it('doesnt calculate new size if step is empty', () => {
-  render(<Root />);
-
-  const inputZero = screen.getByTestId('input-zero-0') as TextInput;
-  const inputStep = screen.getByTestId('input-step') as TextInput;
-
-  fireEvent.changeText(inputZero, '500');
-  fireEvent.changeText(inputStep, '');
-  fireEvent.press(screen.getByTestId('add-size'));
-
-  const input1 = screen.getByTestId('input-size-0') as TextInput;
-
-  expect(input1.props.value).toBe('');
-});
-
-it('doesnt calculate new size if step is malformed', () => {
-  render(<Root />);
-
-  const inputZero = screen.getByTestId('input-zero-0') as TextInput;
-  const inputStep = screen.getByTestId('input-step') as TextInput;
-
-  fireEvent.changeText(inputZero, '500');
-  fireEvent.changeText(inputStep, 'x50');
-  fireEvent.press(screen.getByTestId('add-size'));
-
-  const input1 = screen.getByTestId('input-size-0') as TextInput;
-
-  expect(input1.props.value).toBe('');
-});
-
-it("doesn't calculate new size if zero point is empty", () => {
-  render(<Root />);
-
-  const inputZero = screen.getByTestId('input-zero-0') as TextInput;
-  const inputStep = screen.getByTestId('input-step') as TextInput;
-
-  fireEvent.changeText(inputZero, '');
-  fireEvent.changeText(inputStep, '50');
-  fireEvent.press(screen.getByTestId('add-size'));
-
-  const input1 = screen.getByTestId('input-size-0') as TextInput;
-
-  expect(input1.props.value).toBe('');
-});
-
-it("doesn't calculate new size if zero point is malformed", () => {
-  render(<Root />);
-
-  const inputZero = screen.getByTestId('input-zero-0') as TextInput;
-  const inputStep = screen.getByTestId('input-step') as TextInput;
-
-  fireEvent.changeText(inputZero, 'x500');
-  fireEvent.changeText(inputStep, '50');
-  fireEvent.press(screen.getByTestId('add-size'));
-
-  const input1 = screen.getByTestId('input-size-0') as TextInput;
-
-  expect(input1.props.value).toBe('');
-});
-
-it('recalculates offset when adding stepped value', () => {
-  render(<Root />);
-
-  const inputZero = screen.getByTestId('input-zero-0') as TextInput;
-  const inputStep = screen.getByTestId('input-step') as TextInput;
-
-  fireEvent.changeText(inputZero, '500');
-  fireEvent.changeText(inputStep, '50');
-  fireEvent.press(screen.getByTestId('add-size'));
-
-  expect(screen.getByText('-50')).toBeVisible();
+  expect(input.props.value).toBe(expected);
 });

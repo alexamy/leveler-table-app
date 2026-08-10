@@ -1,35 +1,28 @@
 import { expect, it, jest } from '@jest/globals';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import {
-  act,
-  fireEvent,
-  render,
-  screen,
-  waitFor,
-} from '@testing-library/react-native';
+import { fireEvent, render, screen } from '@testing-library/react-native';
 import * as Clipboard from 'expo-clipboard';
-import { TextInput } from 'react-native';
 import { dedent } from 'ts-dedent';
-import App from '../../App';
 import { Root } from '../Root';
+import { app } from './app';
 
 it('copies table to clipboard', async () => {
   render(<Root />);
 
   jest.spyOn(Clipboard, 'setStringAsync');
 
-  fireEvent.press(screen.getByTestId('add-size'));
-  fireEvent.press(screen.getByTestId('add-size'));
-  fireEvent.changeText(screen.getByTestId('input-zero-0'), '500');
-  fireEvent.changeText(screen.getByTestId('input-size-0'), '300');
-  fireEvent.changeText(screen.getByTestId('input-size-1'), '125');
+  fireEvent.changeText(app.zero(), '500');
+  fireEvent.changeText(app.step(), '200');
+  fireEvent.press(app.addSize());
+  fireEvent.press(app.addSize());
+  fireEvent.press(app.addSize());
 
   fireEvent.press(screen.getByTestId('copy-to-clipboard'));
 
   expect(Clipboard.setStringAsync).toHaveBeenCalledWith(dedent`
     Шаг	Нулевая точка	Проектные значения	Результат
-    1	500	300	200
-    2	500	125	375
+    1	500	700	-200
+    2	500	900	-400
+    3	500	1100	-600
   `);
 });
 
@@ -38,9 +31,9 @@ it('use tabs between values in serialized table', () => {
 
   jest.spyOn(Clipboard, 'setStringAsync');
 
-  fireEvent.press(screen.getByTestId('add-size'));
-  fireEvent.changeText(screen.getByTestId('input-zero-0'), '500');
-  fireEvent.changeText(screen.getByTestId('input-size-0'), '300');
+  fireEvent.changeText(app.zero(), '500');
+  fireEvent.changeText(app.step(), '200');
+  fireEvent.press(app.addSize());
 
   fireEvent.press(screen.getByTestId('copy-to-clipboard'));
 
@@ -50,31 +43,3 @@ it('use tabs between values in serialized table', () => {
 
   expect(result?.includes('\t')).toBe(true);
 });
-
-it('loads state from local storage', async () => {
-  render(<App />);
-
-  await waitFor(() => {
-    expect(AsyncStorage.getItem).toHaveBeenCalledTimes(1);
-  });
-
-  // TODO why?
-  await waitFor(() => {
-    expect(AsyncStorage.setItem).toHaveBeenCalledTimes(1);
-  });
-
-  act(() => {
-    const input = screen.getByTestId('input-zero-0') as TextInput;
-    fireEvent.changeText(input, '100');
-  });
-
-  await waitFor(() => {
-    expect(AsyncStorage.setItem).toHaveBeenCalledTimes(2);
-  });
-});
-
-it.todo('resets to default state if local storage has malformed state');
-
-it.todo('saves state to a link');
-it.todo('populates state from a link');
-it.todo('dont reset app state if link has malformed state');
