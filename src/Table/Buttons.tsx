@@ -1,11 +1,8 @@
-import { StyleSheet } from 'react-native';
 import { Chip } from '@rneui/themed';
-import { View } from 'react-native';
-import { delayMachine } from '../delayMachine';
-import { useMemo } from 'react';
+import { StyleSheet, View } from 'react-native';
 import { useAppState } from '../context';
-import { useActorRef } from '@xstate/react';
 import { copyTable } from '../serialization';
+import { useDelayedAction } from './helpers';
 
 export function Buttons() {
   const [state, dispatch] = useAppState();
@@ -33,16 +30,18 @@ export function Buttons() {
 
 function ClearData() {
   const [_, dispatch] = useAppState();
-  const actor = useDelayedClear();
+  const [start, stop] = useDelayedAction(1500, () =>
+    dispatch({ type: 'reset state' })
+  );
 
   const onPressIn = () => {
-    dispatch({ type: 'change clear flag', value: true });
-    actor.send({ type: 'started' });
+    start();
+    dispatch({ type: 'waiting deletion', value: true });
   };
 
   const onPressOut = () => {
-    dispatch({ type: 'change clear flag', value: false });
-    actor.send({ type: 'stopped' });
+    stop();
+    dispatch({ type: 'waiting deletion', value: false });
   };
 
   return (
@@ -55,23 +54,6 @@ function ClearData() {
       onPressOut={onPressOut}
     />
   );
-}
-
-function useDelayedClear() {
-  const [_, dispatch] = useAppState();
-
-  const config = useMemo(() => {
-    return delayMachine.provide({
-      delays: { 'action delay': 1500 },
-      actions: {
-        'delayed action': () => dispatch({ type: 'reset state' }),
-      },
-    });
-  }, [dispatch]);
-
-  const actor = useActorRef(config);
-
-  return actor;
 }
 
 const styles = StyleSheet.create({

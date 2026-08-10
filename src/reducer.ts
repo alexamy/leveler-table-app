@@ -17,7 +17,7 @@ export type Action =
   | { type: 'remove measurement'; index: number }
   | { type: 'change zero point'; value: string }
   | { type: 'change step'; value: string }
-  | { type: 'change clear flag'; value: boolean }
+  | { type: 'waiting deletion'; value: boolean }
   | { type: 'restore state'; state: State }
   | { type: 'reset state' };
 
@@ -57,7 +57,7 @@ export function appReducer(state: State, action: Action): State {
       return { ...newState, measurements };
     }
 
-    case 'change clear flag':
+    case 'waiting deletion':
       return { ...state, waitingDeletion: action.value };
 
     case 'restore state':
