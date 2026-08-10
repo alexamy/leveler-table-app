@@ -31,27 +31,29 @@ export const defaultState: State = {
 };
 
 export function appReducer(state: State, action: Action): State {
+  const amount = state.measurements.length;
+
   switch (action.type) {
     case 'add measurement': {
-      const amount = state.measurements.length + 1;
-      const measurements = calcMeasurements(state, amount);
+      const measurements = calculateMeasurements(state, amount + 1);
       return { ...state, measurements };
     }
     case 'remove measurement': {
-      const measurements = state.measurements.slice(0, -1);
+      const measurements = calculateMeasurements(
+        state,
+        Math.max(0, amount - 1)
+      );
       return { ...state, measurements };
     }
 
     case 'change step': {
-      const amount = state.measurements.length;
       const newState = { ...state, step: action.value };
-      const measurements = calcMeasurements(newState, amount);
+      const measurements = calculateMeasurements(newState, amount);
       return { ...newState, measurements };
     }
     case 'change zero point': {
-      const amount = state.measurements.length;
       const newState = { ...state, zero: action.value };
-      const measurements = calcMeasurements(newState, amount);
+      const measurements = calculateMeasurements(newState, amount);
       return { ...newState, measurements };
     }
 
@@ -69,7 +71,7 @@ export function appReducer(state: State, action: Action): State {
 }
 
 // logic
-function calcMeasurements(state: State, amount: number) {
+function calculateMeasurements(state: State, amount: number) {
   const zero = parseFloat(state.zero);
   const step = parseFloat(state.step);
 
