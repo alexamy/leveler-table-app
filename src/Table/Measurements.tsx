@@ -1,7 +1,7 @@
 import { StyleSheet } from 'react-native';
 import { Chip, Input, Text } from '@rneui/themed';
 import { ScrollView, View } from 'react-native';
-import { MachineContext } from '../MachineContext';
+import { MachineContext } from '../serialization';
 import { getNumberColor } from './helpers';
 
 export function Measurements() {

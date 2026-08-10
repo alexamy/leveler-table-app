@@ -1,5 +1,5 @@
 import { StyleSheet, View } from 'react-native';
-import { Loader } from './src/Loader';
+import { App } from './src';
 
 const styles = StyleSheet.create({
   app: {
@@ -10,10 +10,10 @@ const styles = StyleSheet.create({
   },
 });
 
-export default function App() {
+export default function LevelerApp() {
   return (
     <View style={styles.app}>
-      <Loader />
+      <App />
     </View>
   );
 }

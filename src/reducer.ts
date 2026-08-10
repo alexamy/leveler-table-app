@@ -1,31 +1,36 @@
+import { Dispatch } from 'react';
+
 interface Measurement {
   size: string;
   offset: string;
 }
 
-interface State {
+export interface State {
   zero: string;
   step: string;
   measurements: Measurement[];
   waitingDeletion: boolean;
 }
 
-type Action =
+export type Action =
   | { type: 'add measurement' }
   | { type: 'remove measurement'; index: number }
   | { type: 'change zero point'; value: string }
   | { type: 'change step'; value: string }
   | { type: 'change clear flag'; value: boolean }
-  | { type: 'clear state'; state?: State };
+  | { type: 'restore state'; state: State }
+  | { type: 'reset state' };
 
-const initialState: State = {
+export type UseReducerResult = [State, Dispatch<Action>];
+
+export const defaultState: State = {
   zero: '',
   step: '',
   measurements: [],
   waitingDeletion: false,
 };
 
-export function reducer(state: State, action: Action): State {
+export function appReducer(state: State, action: Action): State {
   switch (action.type) {
     case 'add measurement': {
       const amount = state.measurements.length + 1;
@@ -53,8 +58,10 @@ export function reducer(state: State, action: Action): State {
     case 'change clear flag':
       return { ...state, waitingDeletion: action.value };
 
-    case 'clear state':
-      return action.state ?? initialState;
+    case 'restore state':
+      return action.state;
+    case 'reset state':
+      return defaultState;
 
     default:
       throw new Error(`Unknown action: ${action satisfies never}.`);

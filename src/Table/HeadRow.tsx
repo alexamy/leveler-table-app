@@ -1,7 +1,7 @@
 import { StyleSheet } from 'react-native';
 import { Input } from '@rneui/themed';
 import { View } from 'react-native';
-import { MachineContext } from '../MachineContext';
+import { MachineContext } from '../serialization';
 import { getNumberColor } from './helpers';
 
 export function Step() {

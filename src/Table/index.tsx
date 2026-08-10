@@ -3,7 +3,7 @@ import { ActivityIndicator, StyleSheet, View } from 'react-native';
 import { Buttons } from './Buttons';
 import { Measurements } from './Measurements';
 import { Text } from '@rneui/themed';
-import { MachineContext } from '../MachineContext';
+import { MachineContext } from '../serialization';
 import { Step, Zero } from './HeadRow';
 
 export function Table() {

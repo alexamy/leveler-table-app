@@ -1,7 +1,7 @@
 import { StyleSheet } from 'react-native';
 import { Chip } from '@rneui/themed';
 import { View } from 'react-native';
-import { MachineContext } from '../MachineContext';
+import { MachineContext } from '../serialization';
 import { useActorRef, useSelector } from '@xstate/react';
 import { delayMachine } from '../delayMachine';
 import { useMemo } from 'react';
