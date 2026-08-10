@@ -2,7 +2,9 @@ import { StyleSheet } from 'react-native';
 import { Chip } from '@rneui/themed';
 import { View } from 'react-native';
 import { MachineContext } from '../MachineContext';
-import { useSelector } from '@xstate/react';
+import { useActorRef, useSelector } from '@xstate/react';
+import { delayMachine } from '../delayMachine';
+import { useMemo } from 'react';
 
 export function Buttons() {
   const actor = MachineContext.useActorRef();
@@ -13,14 +15,7 @@ export function Buttons() {
 
   return (
     <View style={styles.icons}>
-      <Chip
-        testID={'clear-data'}
-        icon={{ name: 'trash', type: 'font-awesome', color: 'white' }}
-        containerStyle={styles.bottomIcon}
-        color={'warning'}
-        onPressIn={() => actor.send({ type: 'hold clear data' })}
-        onPressOut={() => actor.send({ type: 'release clear data' })}
-      />
+      <ClearData />
       <Chip
         testID={'copy-to-clipboard'}
         icon={{ name: 'copy', type: 'font-awesome', color: 'white' }}
@@ -36,6 +31,49 @@ export function Buttons() {
       />
     </View>
   );
+}
+
+function ClearData() {
+  const app = MachineContext.useActorRef();
+  const actor = useDelayedClear();
+
+  const onPressIn = () => {
+    app.send({ type: 'waiting clear', state: true });
+    actor.send({ type: 'started' });
+  };
+
+  const onPressOut = () => {
+    app.send({ type: 'waiting clear', state: false });
+    actor.send({ type: 'stopped' });
+  };
+
+  return (
+    <Chip
+      testID={'clear-data'}
+      icon={{ name: 'trash', type: 'font-awesome', color: 'white' }}
+      containerStyle={styles.bottomIcon}
+      color={'warning'}
+      onPressIn={onPressIn}
+      onPressOut={onPressOut}
+    />
+  );
+}
+
+function useDelayedClear() {
+  const app = MachineContext.useActorRef();
+
+  const config = useMemo(() => {
+    return delayMachine.provide({
+      delays: { 'action delay': 1500 },
+      actions: {
+        'delayed action': () => app.send({ type: 'clear data' }),
+      },
+    });
+  }, [app]);
+
+  const actor = useActorRef(config);
+
+  return actor;
 }
 
 const styles = StyleSheet.create({

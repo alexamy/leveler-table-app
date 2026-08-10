@@ -6,8 +6,8 @@ type Events =
   | { type: 'add measurement' }
   | { type: 'remove measurement'; index: number }
   | { type: 'copy data' }
-  | { type: 'hold clear data' }
-  | { type: 'release clear data' };
+  | { type: 'clear data' }
+  | { type: 'waiting clear'; state: boolean };
 
 interface Measurement {
   size: string;
@@ -18,12 +18,14 @@ export type AppContext = {
   zero: string;
   step: string;
   measurements: Measurement[];
+  waitingDeletion: boolean;
 };
 
 const initialContext: AppContext = {
   zero: '',
   step: '',
   measurements: [],
+  waitingDeletion: false,
 };
 
 const config = setup({
@@ -60,22 +62,7 @@ export const levelerMachine = config.createMachine({
   context: initialContext,
   initial: 'main',
   states: {
-    main: {
-      on: {
-        'hold clear data': 'wait clear data',
-      },
-    },
-    'wait clear data': {
-      on: {
-        'release clear data': 'main',
-      },
-      after: {
-        1500: {
-          target: 'main',
-          actions: assign(() => initialContext),
-        },
-      },
-    },
+    main: {},
   },
   on: {
     'change zero point': {
@@ -97,13 +84,19 @@ export const levelerMachine = config.createMachine({
     'remove measurement': {
       actions: 'remove last measurement',
     },
+    'clear data': {
+      actions: assign(() => initialContext),
+    },
     'copy data': {
-      actions: [
-        {
-          type: 'copy data to clipboard',
-          params: ({ context }) => ({ context }),
-        },
-      ],
+      actions: {
+        type: 'copy data to clipboard',
+        params: ({ context }) => ({ context }),
+      },
+    },
+    'waiting clear': {
+      actions: assign({
+        waitingDeletion: ({ event }) => event.state,
+      }),
     },
   },
 });
