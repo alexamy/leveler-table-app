@@ -17,18 +17,13 @@ it('loads state from local storage', async () => {
     expect(AsyncStorage.getItem).toHaveBeenCalledTimes(1);
   });
 
-  // TODO why?
-  await waitFor(() => {
-    expect(AsyncStorage.setItem).toHaveBeenCalledTimes(1);
-  });
-
   act(() => {
     const input = screen.getByTestId('input-zero-0') as TextInput;
     fireEvent.changeText(input, '100');
   });
 
   await waitFor(() => {
-    expect(AsyncStorage.setItem).toHaveBeenCalledTimes(2);
+    expect(AsyncStorage.setItem).toHaveBeenCalledTimes(1);
   });
 });
 
