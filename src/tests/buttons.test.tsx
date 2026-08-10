@@ -6,7 +6,7 @@ import {
   screen,
   waitFor,
 } from '@testing-library/react-native';
-import { Root } from '../Root';
+import { Root } from '..';
 import { app } from './app';
 
 it('clears the state after clear button press', async () => {

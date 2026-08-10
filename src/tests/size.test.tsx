@@ -1,6 +1,6 @@
 import { expect, it } from '@jest/globals';
 import { fireEvent, render, screen } from '@testing-library/react-native';
-import { Root } from '../Root';
+import { Root } from '..';
 import { app } from './app';
 
 it('shows first size position as 1', () => {

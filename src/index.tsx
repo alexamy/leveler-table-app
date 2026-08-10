@@ -11,18 +11,18 @@ export function App() {
   return <Root state={state} />;
 }
 
+export function Root({ state }: { state?: State }) {
+  return (
+    <AppContextProvider initialState={state}>
+      <Table />
+    </AppContextProvider>
+  );
+}
+
 function Loading() {
   return (
     <View>
       <ActivityIndicator size='large' />
     </View>
-  );
-}
-
-function Root({ state }: { state?: State }) {
-  return (
-    <AppContextProvider initialState={state}>
-      <Table />
-    </AppContextProvider>
   );
 }
