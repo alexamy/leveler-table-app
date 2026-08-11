@@ -39,10 +39,7 @@ export function appReducer(state: State, action: Action): State {
       return { ...state, measurements };
     }
     case 'remove measurement': {
-      const measurements = calculateMeasurements(
-        state,
-        Math.max(0, amount - 1)
-      );
+      const measurements = state.measurements.slice(0, -1);
       return { ...state, measurements };
     }
 
