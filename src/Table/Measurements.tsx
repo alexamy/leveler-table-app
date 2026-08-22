@@ -14,6 +14,10 @@ export function Measurements() {
           key={index}
           index={index}
           measurement={measurement}
+          editable={state.mode === 'entered'}
+          onChangeText={(value) =>
+            dispatch({ type: 'change measurement', index, value })
+          }
           onPressDelete={() => dispatch({ type: 'remove measurement', index })}
         />
       ))}
@@ -24,13 +28,15 @@ export function Measurements() {
 interface MeasurementProps {
   measurement: { size: string; offset: string };
   index: number;
+  editable: boolean;
   onPressDelete: () => void;
-  onChangeText?: (text: string) => void;
+  onChangeText: (text: string) => void;
 }
 
 function Measurement({
   measurement,
   index,
+  editable,
   onChangeText,
   onPressDelete,
 }: MeasurementProps) {
@@ -40,14 +46,13 @@ function Measurement({
     <View style={styles.row}>
       <Text style={styles.position}>{index + 1}</Text>
       <Input
-        disabled={true}
+        disabled={!editable}
         testID={`input-size-${index}`}
         value={measurement.size}
         onChangeText={onChangeText}
         placeholder='Проектный размер'
         keyboardType='numeric'
         textAlign='left'
-        maxLength={6}
         containerStyle={styles.input}
         style={{ ...styles.input, color }}
       />

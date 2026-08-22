@@ -5,7 +5,10 @@ interface Measurement {
   offset: string;
 }
 
+export type Mode = 'generated' | 'entered';
+
 export interface State {
+  mode: Mode;
   zero: string;
   step: string;
   measurements: Measurement[];
@@ -15,6 +18,8 @@ export interface State {
 export type Action =
   | { type: 'add measurement' }
   | { type: 'remove measurement'; index: number }
+  | { type: 'change measurement'; index: number; value: string }
+  | { type: 'change mode'; mode: Mode }
   | { type: 'change zero point'; value: string }
   | { type: 'change step'; value: string }
   | { type: 'waiting deletion'; value: boolean }
@@ -24,6 +29,7 @@ export type Action =
 export type UseReducerResult = [State, Dispatch<Action>];
 
 export const defaultState: State = {
+  mode: 'generated',
   zero: '',
   step: '',
   measurements: [],
@@ -46,7 +52,24 @@ export function appReducer(state: State, action: Action): State {
       const measurements = calculateMeasurements(newState, remaining.length);
       return { ...newState, measurements };
     }
+    case 'change measurement': {
+      if (state.mode !== 'entered') return state;
 
+      const entered = state.measurements.map((measurement, index) =>
+        index === action.index
+          ? { ...measurement, size: action.value }
+          : measurement
+      );
+      const newState = { ...state, measurements: entered };
+      const measurements = calculateMeasurements(newState, amount);
+      return { ...newState, measurements };
+    }
+
+    case 'change mode': {
+      const newState = { ...state, mode: action.mode };
+      const measurements = calculateMeasurements(newState, amount);
+      return { ...newState, measurements };
+    }
     case 'change step': {
       const newState = { ...state, step: action.value };
       const measurements = calculateMeasurements(newState, amount);
@@ -73,18 +96,29 @@ export function appReducer(state: State, action: Action): State {
 
 // logic
 function calculateMeasurements(state: State, amount: number) {
-  const zero = parseFloat(state.zero);
-  const step = parseFloat(state.step);
+  const zero = parse(state.zero);
+  const step = parse(state.step);
 
   const result = Array(amount)
     .fill(null)
     .map((_, index) => {
-      const size = zero + step * (index + 1);
-      const offset = zero - size;
-      return { size: format(size), offset: format(offset) };
+      const generated = zero + step * (index + 1);
+      const typed = state.measurements[index]?.size ?? '';
+
+      const isEntered = state.mode === 'entered';
+      const size = isEntered ? typed : format(generated);
+      const value = isEntered ? parse(typed) : generated;
+      const offset = format(zero - value);
+
+      return { size, offset };
     });
 
   return result;
+}
+
+function parse(value: string): number {
+  if (value.trim() === '') return NaN;
+  return Number(value);
 }
 
 function format(value: number): string {
