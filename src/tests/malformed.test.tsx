@@ -13,8 +13,8 @@ it('shows empty measurement on malformed zero value', () => {
   fireEvent.changeText(app.zero(), 'x150');
 
   const measurement = app.measurement(1);
-  expect(measurement.size).toHaveTextContent('');
-  expect(measurement.offset).toHaveTextContent('');
+  expect(measurement.size.props.value).toBe('');
+  expect(measurement.offset.props.children).toBe('');
 });
 
 it('shows empty measurement on malformed step', () => {
@@ -28,6 +28,6 @@ it('shows empty measurement on malformed step', () => {
 
   const measurement = app.measurement(1);
 
-  expect(measurement.size).toHaveTextContent('');
-  expect(measurement.offset).toHaveTextContent('');
+  expect(measurement.size.props.value).toBe('');
+  expect(measurement.offset.props.children).toBe('');
 });

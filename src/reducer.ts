@@ -79,10 +79,9 @@ function calculateMeasurements(state: State, amount: number) {
   const result = Array(amount)
     .fill(null)
     .map((_, index) => {
-      const delta = step * (index + 1);
-      const size = format(zero + delta);
-      const offset = format(-delta);
-      return { size, offset };
+      const size = zero + step * (index + 1);
+      const offset = zero - size;
+      return { size: format(size), offset: format(offset) };
     });
 
   return result;
