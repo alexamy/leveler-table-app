@@ -39,8 +39,12 @@ export function appReducer(state: State, action: Action): State {
       return { ...state, measurements };
     }
     case 'remove measurement': {
-      const measurements = state.measurements.slice(0, -1);
-      return { ...state, measurements };
+      const remaining = state.measurements.filter(
+        (_, index) => index !== action.index
+      );
+      const newState = { ...state, measurements: remaining };
+      const measurements = calculateMeasurements(newState, remaining.length);
+      return { ...newState, measurements };
     }
 
     case 'change step': {
