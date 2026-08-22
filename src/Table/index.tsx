@@ -3,8 +3,8 @@ import { ActivityIndicator, StyleSheet, View } from 'react-native';
 import { Buttons } from './Buttons';
 import { Measurements } from './Measurements';
 import { Text } from '@rneui/themed';
-import { MachineContext } from '../MachineContext';
 import { Step, Zero } from './HeadRow';
+import { useAppState } from '../context';
 
 export function Table() {
   return (
@@ -26,15 +26,14 @@ export function Table() {
 }
 
 function DeleteIndicator() {
-  const snapshot = MachineContext.useSelector((snapshot) => snapshot);
+  const [state] = useAppState();
+  if (!state.waitingDeletion) return null;
 
   return (
-    snapshot.matches('wait clear data') && (
-      <View style={styles.deleteIndicator}>
-        <Text>Удерживай для удаления всех значений </Text>
-        <ActivityIndicator size='small' />
-      </View>
-    )
+    <View style={styles.deleteIndicator}>
+      <Text>Удерживай для удаления всех значений </Text>
+      <ActivityIndicator size='small' />
+    </View>
   );
 }
 

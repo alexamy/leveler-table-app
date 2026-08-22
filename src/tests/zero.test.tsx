@@ -1,7 +1,7 @@
 import { expect, it } from '@jest/globals';
 import { fireEvent, render, screen } from '@testing-library/react-native';
 import { TextInput } from 'react-native';
-import { Root } from '../Root';
+import { Root } from '..';
 
 it('shows zero point label', () => {
   render(<Root />);

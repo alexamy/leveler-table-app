@@ -1,13 +1,12 @@
 import { StyleSheet } from 'react-native';
 import { Input } from '@rneui/themed';
 import { View } from 'react-native';
-import { MachineContext } from '../MachineContext';
 import { getNumberColor } from './helpers';
+import { useAppState } from '../context';
 
 export function Step() {
-  const actor = MachineContext.useActorRef();
-  const step = MachineContext.useSelector((snapshot) => snapshot.context.step);
-  const color = getNumberColor(step);
+  const [state, dispatch] = useAppState();
+  const value = state.step;
 
   return (
     <View style={styles.headRow}>
@@ -16,23 +15,17 @@ export function Step() {
         keyboardType='numeric'
         textAlign='right'
         placeholder='Шаг'
-        value={step}
-        style={{ color }}
-        onChangeText={(text) =>
-          actor.send({
-            type: 'change step',
-            value: text,
-          })
-        }
+        value={value}
+        style={{ color: getNumberColor(value) }}
+        onChangeText={(text) => dispatch({ type: 'change step', value: text })}
       />
     </View>
   );
 }
 
 export function Zero() {
-  const actor = MachineContext.useActorRef();
-  const zero = MachineContext.useSelector((snapshot) => snapshot.context.zero);
-  const color = getNumberColor(zero);
+  const [state, dispatch] = useAppState();
+  const value = state.zero;
 
   return (
     <View style={styles.headRow}>
@@ -41,13 +34,10 @@ export function Zero() {
         keyboardType='numeric'
         textAlign='right'
         placeholder='Нулевая точка'
-        value={zero}
-        style={{ color }}
+        value={value}
+        style={{ color: getNumberColor(value) }}
         onChangeText={(text) =>
-          actor.send({
-            type: 'change zero point',
-            value: text,
-          })
+          dispatch({ type: 'change zero point', value: text })
         }
       />
     </View>

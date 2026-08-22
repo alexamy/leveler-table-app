@@ -1,6 +1,6 @@
 import { expect, it } from '@jest/globals';
 import { fireEvent, render } from '@testing-library/react-native';
-import { Root } from '../Root';
+import { Root } from '..';
 import { app } from './app';
 
 it('rounds offset to 2 decimal places', () => {

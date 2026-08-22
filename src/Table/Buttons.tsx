@@ -1,40 +1,58 @@
-import { StyleSheet } from 'react-native';
 import { Chip } from '@rneui/themed';
-import { View } from 'react-native';
-import { MachineContext } from '../MachineContext';
-import { useSelector } from '@xstate/react';
+import { StyleSheet, View } from 'react-native';
+import { useAppState } from '../context';
+import { copyTable } from '../serialization';
+import { useDelayedAction } from './helpers';
 
 export function Buttons() {
-  const actor = MachineContext.useActorRef();
-  const canAddMeasurement = useSelector(
-    actor,
-    ({ context }) => Boolean(context.zero) && Boolean(context.step)
-  );
+  const [state, dispatch] = useAppState();
+  const canAddMeasurement = Boolean(state.zero) && Boolean(state.step);
 
   return (
     <View style={styles.icons}>
-      <Chip
-        testID={'clear-data'}
-        icon={{ name: 'trash', type: 'font-awesome', color: 'white' }}
-        containerStyle={styles.bottomIcon}
-        color={'warning'}
-        onPressIn={() => actor.send({ type: 'hold clear data' })}
-        onPressOut={() => actor.send({ type: 'release clear data' })}
-      />
+      <ClearData />
       <Chip
         testID={'copy-to-clipboard'}
         icon={{ name: 'copy', type: 'font-awesome', color: 'white' }}
         containerStyle={styles.bottomIcon}
-        onPress={() => actor.send({ type: 'copy data' })}
+        onPress={() => copyTable(state)}
       />
       <Chip
         testID='add-size'
         icon={{ name: 'plus', type: 'font-awesome', color: 'white' }}
         containerStyle={styles.bottomIcon}
-        onPress={() => actor.send({ type: 'add measurement' })}
+        onPress={() => dispatch({ type: 'add measurement' })}
         disabled={!canAddMeasurement}
       />
     </View>
+  );
+}
+
+function ClearData() {
+  const [_, dispatch] = useAppState();
+  const [start, stop] = useDelayedAction(1500, () =>
+    dispatch({ type: 'reset state' })
+  );
+
+  const onPressIn = () => {
+    start();
+    dispatch({ type: 'waiting deletion', value: true });
+  };
+
+  const onPressOut = () => {
+    stop();
+    dispatch({ type: 'waiting deletion', value: false });
+  };
+
+  return (
+    <Chip
+      testID={'clear-data'}
+      icon={{ name: 'trash', type: 'font-awesome', color: 'white' }}
+      containerStyle={styles.bottomIcon}
+      color={'warning'}
+      onPressIn={onPressIn}
+      onPressOut={onPressOut}
+    />
   );
 }
 

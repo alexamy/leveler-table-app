@@ -2,7 +2,7 @@ import { expect, it, jest } from '@jest/globals';
 import { fireEvent, render, screen } from '@testing-library/react-native';
 import * as Clipboard from 'expo-clipboard';
 import { dedent } from 'ts-dedent';
-import { Root } from '../Root';
+import { Root } from '..';
 import { app } from './app';
 
 it('copies table to clipboard', async () => {
