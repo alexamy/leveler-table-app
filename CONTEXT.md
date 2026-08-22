@@ -16,12 +16,12 @@ _Avoid_: increment, interval, delta
 A generated target value — the staff reading that means the point sits at its design elevation. Produced by the app, never typed by the worker.
 _Avoid_: size, design size, measurement
 
-**Measurement**:
-A staff reading the worker takes at a point and enters by hand. Belongs to Entered mode only; a Mark is not a Measurement.
+**Measurement** (UI: Проектный размер, Проектные значения):
+A staff reading the worker takes at a point and enters by hand. Belongs to Entered mode only; a Mark is not a Measurement. The interface deliberately labels both with the Mark wording — a row and the copied table read the same in either mode — so the distinction lives in the model, not on screen.
 _Avoid_: reading, sample, actual
 
 **Offset** (UI: Результат):
-The elevation difference between a Mark and the Zero point. Negative means the point sits below the zero point.
+The elevation difference between the Zero point and the value in the row — a Mark in Generated mode, a Measurement in Entered mode. Negative means the point sits below the zero point.
 _Avoid_: deviation, correction, result
 
 **Position** (UI: Шаг, in the copied table):
@@ -34,4 +34,4 @@ _Avoid_: index, row number
 Values come from the app — every Mark in the series is derived from the Zero point and the Step, and cannot be edited.
 
 **Entered mode**:
-Values come from the worker — each row holds a Measurement typed in on site.
+Values come from the worker — each row holds a Measurement typed in on site. Step does not apply, since each Offset is taken from the Zero point to the Measurement directly.
