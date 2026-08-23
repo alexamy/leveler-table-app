@@ -57,7 +57,7 @@ it('updates measurements after step value change', () => {
   expect(measurement2.offset.props.children).toBe('-200');
 });
 
-it('measurement is deleted correctly', () => {
+it('renumbers and recomputes the series after a removal', () => {
   render(<Root />);
 
   // setup
@@ -65,17 +65,36 @@ it('measurement is deleted correctly', () => {
   fireEvent.changeText(app.step(), '50');
 
   fireEvent.press(app.addSize());
+  fireEvent.press(app.addSize());
+  fireEvent.press(app.addSize());
+  expect(app.measurements()).toHaveLength(3);
+
+  // remove
+  fireEvent.press(app.measurement(2).delete);
+
+  expect(app.measurements()).toHaveLength(2);
+
   const measurement1 = app.measurement(1);
   expect(measurement1.size.props.value).toBe('550');
   expect(measurement1.offset.props.children).toBe('-50');
 
-  fireEvent.press(app.addSize());
   const measurement2 = app.measurement(2);
   expect(measurement2.size.props.value).toBe('600');
   expect(measurement2.offset.props.children).toBe('-100');
+});
+
+it('leaves an empty table after the last measurement is removed', () => {
+  render(<Root />);
+
+  // setup
+  fireEvent.changeText(app.zero(), '500');
+  fireEvent.changeText(app.step(), '50');
+
+  fireEvent.press(app.addSize());
+  expect(app.measurements()).toHaveLength(1);
 
   // remove
-  fireEvent.press(measurement1.delete);
-  expect(measurement1.size.props.value).toBe('550');
-  expect(measurement1.offset.props.children).toBe('-50');
+  fireEvent.press(app.measurement(1).delete);
+
+  expect(app.measurements()).toHaveLength(0);
 });

@@ -90,7 +90,8 @@ Note this generalises the existing behaviour rather than branching from it: in G
 
 ### Confirmation
 
-- Opens only when the target mode is Generated **and** at least one row holds a non-empty value. Every other transition is silent.
+- Opens only when the target mode is Generated **and** at least one row holds a value that regenerating would replace with a different one. Every other transition is silent.
+- A row is only at risk if it holds something *and* the Generated rule would produce something else for it, so the app compares the two. Rows share one array (ADR 0001) and carry no record of who wrote them, so "was this typed?" cannot be asked directly — and "is it non-empty?" is the wrong question: after flipping into Entered mode the rows still hold the Marks that were generated, and flipping straight back would regenerate the same values. Asking there would make the toggle demand confirmation for a no-op, against story 25.
 - Rendered with the dialog component from the existing UI library. No title; one line of body text; two buttons.
 - Body: `Введённые значения будут пересчитаны.` Buttons: `Отмена` and `Продолжить`.
 - The mode changes only on confirm. Cancelling leaves the mode and every row untouched.

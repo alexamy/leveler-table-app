@@ -53,6 +53,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
   },
   buttons: {
+    alignSelf: 'stretch',
     marginTop: 20,
     marginBottom: 40,
   },

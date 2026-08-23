@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
 import { Chip, Input, Text } from '@rneui/themed';
-import { ScrollView, View } from 'react-native';
+import { Keyboard, ScrollView, View } from 'react-native';
 import { getNumberColor } from './helpers';
 import { useAppState } from '../context';
 
@@ -14,7 +14,14 @@ export function Measurements() {
           key={index}
           index={index}
           measurement={measurement}
-          onPressDelete={() => dispatch({ type: 'remove measurement', index })}
+          editable={state.mode === 'entered'}
+          onChangeText={(value) =>
+            dispatch({ type: 'change measurement', index, value })
+          }
+          onPressDelete={() => {
+            Keyboard.dismiss();
+            dispatch({ type: 'remove measurement', index });
+          }}
         />
       ))}
     </ScrollView>
@@ -24,13 +31,15 @@ export function Measurements() {
 interface MeasurementProps {
   measurement: { size: string; offset: string };
   index: number;
+  editable: boolean;
   onPressDelete: () => void;
-  onChangeText?: (text: string) => void;
+  onChangeText: (text: string) => void;
 }
 
 function Measurement({
   measurement,
   index,
+  editable,
   onChangeText,
   onPressDelete,
 }: MeasurementProps) {
@@ -40,14 +49,14 @@ function Measurement({
     <View style={styles.row}>
       <Text style={styles.position}>{index + 1}</Text>
       <Input
-        disabled={true}
+        disabled={!editable}
         testID={`input-size-${index}`}
         value={measurement.size}
         onChangeText={onChangeText}
         placeholder='Проектный размер'
         keyboardType='numeric'
         textAlign='left'
-        maxLength={6}
+        maxLength={editable ? 8 : undefined}
         containerStyle={styles.input}
         style={{ ...styles.input, color }}
       />

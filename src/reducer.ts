@@ -1,11 +1,15 @@
 import { Dispatch } from 'react';
+import { parse } from './number';
 
 interface Measurement {
   size: string;
   offset: string;
 }
 
+export type Mode = 'generated' | 'entered';
+
 export interface State {
+  mode: Mode;
   zero: string;
   step: string;
   measurements: Measurement[];
@@ -15,15 +19,17 @@ export interface State {
 export type Action =
   | { type: 'add measurement' }
   | { type: 'remove measurement'; index: number }
+  | { type: 'change measurement'; index: number; value: string }
+  | { type: 'change mode'; mode: Mode }
   | { type: 'change zero point'; value: string }
   | { type: 'change step'; value: string }
   | { type: 'waiting deletion'; value: boolean }
-  | { type: 'restore state'; state: State }
   | { type: 'reset state' };
 
 export type UseReducerResult = [State, Dispatch<Action>];
 
 export const defaultState: State = {
+  mode: 'generated',
   zero: '',
   step: '',
   measurements: [],
@@ -39,10 +45,31 @@ export function appReducer(state: State, action: Action): State {
       return { ...state, measurements };
     }
     case 'remove measurement': {
-      const measurements = state.measurements.slice(0, -1);
-      return { ...state, measurements };
+      const remaining = state.measurements.filter(
+        (_, index) => index !== action.index
+      );
+      const newState = { ...state, measurements: remaining };
+      const measurements = calculateMeasurements(newState, remaining.length);
+      return { ...newState, measurements };
+    }
+    case 'change measurement': {
+      if (state.mode !== 'entered') return state;
+
+      const entered = state.measurements.map((measurement, index) =>
+        index === action.index
+          ? { ...measurement, size: action.value }
+          : measurement
+      );
+      const newState = { ...state, measurements: entered };
+      const measurements = calculateMeasurements(newState, amount);
+      return { ...newState, measurements };
     }
 
+    case 'change mode': {
+      const newState = { ...state, mode: action.mode };
+      const measurements = calculateMeasurements(newState, amount);
+      return { ...newState, measurements };
+    }
     case 'change step': {
       const newState = { ...state, step: action.value };
       const measurements = calculateMeasurements(newState, amount);
@@ -57,27 +84,35 @@ export function appReducer(state: State, action: Action): State {
     case 'waiting deletion':
       return { ...state, waitingDeletion: action.value };
 
-    case 'restore state':
-      return action.state;
     case 'reset state':
-      return defaultState;
+      return { ...defaultState, mode: state.mode };
 
     default:
       throw new Error(`Unknown action: ${action satisfies never}.`);
   }
 }
 
+export function recompute(state: State): State {
+  const measurements = calculateMeasurements(state, state.measurements.length);
+  return { ...state, measurements };
+}
+
 // logic
 function calculateMeasurements(state: State, amount: number) {
-  const zero = parseFloat(state.zero);
-  const step = parseFloat(state.step);
+  const zero = parse(state.zero);
+  const step = parse(state.step);
 
   const result = Array(amount)
     .fill(null)
     .map((_, index) => {
-      const delta = step * (index + 1);
-      const size = format(zero + delta);
-      const offset = format(-delta);
+      const generated = zero + step * (index + 1);
+      const typed = state.measurements[index]?.size ?? '';
+
+      const isEntered = state.mode === 'entered';
+      const size = isEntered ? typed : format(generated);
+      const value = isEntered ? parse(typed) : generated;
+      const offset = format(zero - value);
+
       return { size, offset };
     });
 
@@ -87,7 +122,8 @@ function calculateMeasurements(state: State, amount: number) {
 function format(value: number): string {
   if (isNaN(value)) return '';
 
-  const result = value
+  const rounded = Number(value.toFixed(2)) || 0;
+  const result = rounded
     .toFixed(2)
     .replace('.00', '')
     .replace(/\.(\d)0$/, '.$1');

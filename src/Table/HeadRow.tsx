@@ -8,14 +8,24 @@ export function Step() {
   const [state, dispatch] = useAppState();
   const value = state.step;
 
+  // kept mounted in entered mode so the rows below do not shift
+  const applies = state.mode !== 'entered';
+
   return (
-    <View style={styles.headRow}>
+    <View
+      testID='slot-step'
+      style={[styles.headRow, applies ? null : styles.hidden]}
+      pointerEvents={applies ? 'auto' : 'none'}
+      accessibilityElementsHidden={!applies}
+      importantForAccessibility={applies ? 'auto' : 'no-hide-descendants'}
+    >
       <Input
         testID='input-step'
         keyboardType='numeric'
         textAlign='right'
         placeholder='Шаг'
         value={value}
+        disabled={!applies}
         style={{ color: getNumberColor(value) }}
         onChangeText={(text) => dispatch({ type: 'change step', value: text })}
       />
@@ -48,5 +58,8 @@ const styles = StyleSheet.create({
   headRow: {
     flexDirection: 'row',
     maxHeight: 50,
+  },
+  hidden: {
+    opacity: 0,
   },
 });
