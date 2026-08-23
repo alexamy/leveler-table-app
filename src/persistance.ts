@@ -21,16 +21,13 @@ export function useLoadState(machineId = STATE_ID) {
 
 export function useSaveState(state: State, machineId = STATE_ID) {
   const saved = useRef(JSON.stringify(persisted(state)));
-  const writes = useRef<Promise<unknown>>(Promise.resolve());
 
   useEffect(() => {
     // compared by payload, so transient state churn writes nothing
     const payload = JSON.stringify(persisted(state));
     if (saved.current === payload) return;
 
-    // chained so two quick edits cannot land out of order
-    writes.current = writes.current
-      .then(() => AsyncStorage.setItem(machineId, payload))
+    AsyncStorage.setItem(machineId, payload)
       .then(() => {
         saved.current = payload;
       })

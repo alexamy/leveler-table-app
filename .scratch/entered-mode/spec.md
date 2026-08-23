@@ -89,6 +89,7 @@ Note this generalises the existing behaviour rather than branching from it: in G
 - Nothing is salvaged from a rejected payload. Partial repair was rejected on purpose: the table is a Zero point, a Step and a short column — small enough to retype — and piecing a half-readable payload back together guesses at what the worker measured.
 - This changes behaviour rather than restating it. State saved before `mode` existed carries no `mode` field, so it is rejected and that worker opens on an empty table. Nothing is written on load, so the payload stays in storage and is rejected again on every launch until the worker's first edit overwrites it. Accepted as the cost of the update that lands this.
 - A rejected payload counts as empty, and so does a read that fails at the storage layer: both open the app on defaults and let the next edit overwrite whatever is in storage. A read failure is not a separate case, because a storage layer that cannot be read almost certainly cannot be written either.
+- Writes are not ordered in app code. Both storage modules are serial below us — Android queues every operation through `SerialExecutor`, iOS through a `DISPATCH_QUEUE_SERIAL` method queue — and bridge calls arrive in call order, so two quick edits cannot land out of order. Noted because the absence looks like an oversight otherwise.
 - Storage trouble is never reported to the worker. A failed read is silent, and a failed write is swallowed. There is nothing the worker could do with either, and the app has no error surface to put it on.
 
 ### Toolbar

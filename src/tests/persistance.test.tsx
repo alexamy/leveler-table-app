@@ -197,47 +197,6 @@ it('recomputes the offsets of restored rows', async () => {
   expect(app.measurement(1).offset.props.children).toBe('-20');
 });
 
-it('does not start a write before the previous one has finished', async () => {
-  const written: string[] = [];
-  const pending: Array<() => void> = [];
-
-  jest.mocked(AsyncStorage.setItem).mockImplementation(
-    (_key, value) =>
-      new Promise<void>((resolve) => {
-        pending.push(() => {
-          written.push(value);
-          resolve();
-        });
-      })
-  );
-
-  render(<App />);
-
-  await waitFor(() => {
-    expect(AsyncStorage.getItem).toHaveBeenCalledTimes(1);
-  });
-
-  await act(async () => {
-    fireEvent.changeText(app.zero(), '100');
-  });
-  await act(async () => {
-    fireEvent.changeText(app.zero(), '200');
-  });
-
-  expect(AsyncStorage.setItem).toHaveBeenCalledTimes(1);
-
-  await act(async () => pending[0]());
-  await waitFor(() => {
-    expect(AsyncStorage.setItem).toHaveBeenCalledTimes(2);
-  });
-  await act(async () => pending[1]());
-
-  expect(written).toEqual([
-    expect.stringContaining('"zero":"100"'),
-    expect.stringContaining('"zero":"200"'),
-  ]);
-});
-
 it('keeps saving after a failed read', async () => {
   jest.mocked(AsyncStorage.getItem).mockRejectedValue(new Error('io error'));
 
