@@ -56,3 +56,65 @@ it('marks the generated side with a robot and the entered side with a person', (
   expect(app.modeIcon('generated')).toBeVisible();
   expect(app.modeIcon('entered')).toBeVisible();
 });
+
+it('hides the step input in entered mode but keeps its place', () => {
+  render(<Root />);
+
+  fireEvent.changeText(app.step(), '50');
+  expect(app.step()).toBeVisible();
+
+  fireEvent(app.mode(), 'valueChange', true);
+
+  expect(app.step()).not.toBeVisible();
+  expect(app.step().props.editable).toBe(false);
+  expect(app.stepSlot().props.pointerEvents).toBe('none');
+});
+
+it('keeps the step value across a round trip through entered mode', () => {
+  render(<Root />);
+
+  fireEvent.changeText(app.zero(), '500');
+  fireEvent.changeText(app.step(), '50');
+
+  fireEvent(app.mode(), 'valueChange', true);
+  fireEvent(app.mode(), 'valueChange', false);
+
+  expect(app.step().props.value).toBe('50');
+  expect(app.step()).toBeVisible();
+
+  fireEvent.press(app.addSize());
+  expect(app.measurement(1).size.props.value).toBe('550');
+});
+
+it('adds a row on the zero point alone in entered mode', () => {
+  render(<Root state={{ ...defaultState, mode: 'entered' }} />);
+
+  expect(app.addSize().props.accessibilityState?.disabled).toBe(true);
+
+  fireEvent.changeText(app.zero(), '500');
+
+  expect(app.addSize().props.accessibilityState?.disabled).toBe(false);
+});
+
+it('still requires both the zero point and the step in generated mode', () => {
+  render(<Root />);
+
+  fireEvent.changeText(app.zero(), '500');
+  expect(app.addSize().props.accessibilityState?.disabled).toBe(true);
+
+  fireEvent.changeText(app.step(), '50');
+  expect(app.addSize().props.accessibilityState?.disabled).toBe(false);
+});
+
+it('keeps the hidden step input out of the accessibility tree', () => {
+  render(<Root />);
+
+  expect(app.stepSlot().props.accessibilityElementsHidden).toBe(false);
+
+  fireEvent(app.mode(), 'valueChange', true);
+
+  expect(app.stepSlot().props.accessibilityElementsHidden).toBe(true);
+  expect(app.stepSlot().props.importantForAccessibility).toBe(
+    'no-hide-descendants'
+  );
+});

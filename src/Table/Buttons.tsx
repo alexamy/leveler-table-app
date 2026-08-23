@@ -6,7 +6,9 @@ import { useDelayedAction } from './helpers';
 
 export function Buttons() {
   const [state, dispatch] = useAppState();
-  const canAddMeasurement = Boolean(state.zero) && Boolean(state.step);
+  const needsStep = state.mode !== 'entered';
+  const canAddMeasurement =
+    Boolean(state.zero) && (!needsStep || Boolean(state.step));
 
   return (
     <View style={styles.icons}>

@@ -5,7 +5,13 @@ import { Text } from 'react-native';
 
 export const app = {
   zero: () => screen.getByTestId('input-zero-0') as TextInput,
-  step: () => screen.getByTestId('input-step') as TextInput,
+  // hidden in entered mode, so queries must reach past the accessibility tree
+  step: () =>
+    screen.getByTestId('input-step', {
+      includeHiddenElements: true,
+    }) as TextInput,
+  stepSlot: () =>
+    screen.getByTestId('slot-step', { includeHiddenElements: true }),
   addSize: () => screen.getByTestId('add-size') as Button,
   measurements: () =>
     screen.queryAllByTestId(/^input-size-\d+$/) as TextInput[],

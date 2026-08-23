@@ -26,22 +26,26 @@ export function useSaveState(state: State, machineId = STATE_ID) {
 
   useEffect(() => {
     if (saved.current === state) return;
-    saved.current = state;
 
     async function save() {
-      await AsyncStorage.setItem(machineId, JSON.stringify(persisted(state)));
+      try {
+        await AsyncStorage.setItem(machineId, JSON.stringify(persisted(state)));
+        saved.current = state;
+      } catch {
+        // leave it unsaved so the next change writes again
+      }
     }
     save();
   }, [machineId, state]);
 }
 
 async function read(machineId: string): Promise<State | undefined> {
-  const data = await AsyncStorage.getItem(machineId);
-  if (!data) return undefined;
-
   try {
+    const data = await AsyncStorage.getItem(machineId);
+    if (!data) return undefined;
+
     const saved = JSON.parse(data) as Partial<State>;
-    return { ...defaultState, ...saved };
+    return { ...defaultState, ...saved, waitingDeletion: false };
   } catch {
     return undefined;
   }

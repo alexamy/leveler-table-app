@@ -117,3 +117,27 @@ describe('links', () => {
   it.todo('populates state from a link');
   it.todo('dont reset app state if link has malformed state');
 });
+
+it('starts on defaults when local storage itself fails', async () => {
+  jest.mocked(AsyncStorage.getItem).mockRejectedValue(new Error('disk full'));
+
+  render(<App />);
+
+  await waitFor(() => {
+    expect(app.zero().props.value).toBe('');
+  });
+});
+
+it('does not restore the delete-hold indicator saved by an older build', async () => {
+  jest
+    .mocked(AsyncStorage.getItem)
+    .mockResolvedValue('{"zero":"500","waitingDeletion":true}');
+
+  render(<App />);
+
+  await waitFor(() => {
+    expect(app.zero().props.value).toBe('500');
+  });
+
+  expect(screen.queryByText('Удерживай для удаления всех значений')).toBeNull();
+});
