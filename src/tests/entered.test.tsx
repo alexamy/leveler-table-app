@@ -102,14 +102,17 @@ it.each([
   { measurement: '0.6', offset: '-0.25', zero: '0.35', kind: 'two decimals' },
   { measurement: '0.5', offset: '-0.2', zero: '0.3', kind: 'one decimal' },
   { measurement: '3', offset: '-1', zero: '2', kind: 'whole numbers' },
-])('rounds the offset to $kind as generated mode does', ({ zero, measurement, offset }) => {
-  render(<Root state={entered({ zero, step: '50' })} />);
+])(
+  'rounds the offset to $kind as generated mode does',
+  ({ zero, measurement, offset }) => {
+    render(<Root state={entered({ zero, step: '50' })} />);
 
-  fireEvent.press(app.addSize());
-  fireEvent.changeText(app.measurement(1).size, measurement);
+    fireEvent.press(app.addSize());
+    fireEvent.changeText(app.measurement(1).size, measurement);
 
-  expect(app.measurement(1).offset.props.children).toBe(offset);
-});
+    expect(app.measurement(1).offset.props.children).toBe(offset);
+  }
+);
 
 it('does not let the worker type into a row in generated mode', () => {
   render(<Root state={{ ...defaultState, zero: '500', step: '50' }} />);
@@ -143,4 +146,13 @@ it('reads state saved without a mode as generated', () => {
   expect(app.measurement(1).size.props.value).toBe('550');
   expect(app.measurement(1).offset.props.children).toBe('-50');
   expect(app.measurement(1).size.props.editable).toBe(false);
+});
+
+it('shows a zero offset for a measurement that rounds onto the zero point', () => {
+  render(<Root state={entered({ zero: '0.35', step: '50' })} />);
+
+  fireEvent.press(app.addSize());
+  fireEvent.changeText(app.measurement(1).size, '0.354');
+
+  expect(app.measurement(1).offset.props.children).toBe('0');
 });

@@ -124,7 +124,8 @@ function parse(value: string): number {
 function format(value: number): string {
   if (isNaN(value)) return '';
 
-  const result = value
+  const rounded = Number(value.toFixed(2)) || 0;
+  const result = rounded
     .toFixed(2)
     .replace('.00', '')
     .replace(/\.(\d)0$/, '.$1');

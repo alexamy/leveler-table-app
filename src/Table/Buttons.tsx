@@ -1,4 +1,4 @@
-import { Chip } from '@rneui/themed';
+import { Chip, Icon, Switch } from '@rneui/themed';
 import { StyleSheet, View } from 'react-native';
 import { useAppState } from '../context';
 import { copyTable } from '../serialization';
@@ -10,6 +10,7 @@ export function Buttons() {
 
   return (
     <View style={styles.icons}>
+      <ModeSwitch />
       <ClearData />
       <Chip
         testID={'copy-to-clipboard'}
@@ -24,6 +25,33 @@ export function Buttons() {
         onPress={() => dispatch({ type: 'add measurement' })}
         disabled={!canAddMeasurement}
       />
+    </View>
+  );
+}
+
+function ModeSwitch() {
+  const [state, dispatch] = useAppState();
+
+  return (
+    <View style={styles.mode}>
+      <View testID='mode-icon-generated'>
+        <Icon name='android' type='font-awesome' size={20} />
+      </View>
+
+      <Switch
+        testID='mode-switch'
+        value={state.mode === 'entered'}
+        onValueChange={(entered) =>
+          dispatch({
+            type: 'change mode',
+            mode: entered ? 'entered' : 'generated',
+          })
+        }
+      />
+
+      <View testID='mode-icon-entered'>
+        <Icon name='user' type='font-awesome' size={20} />
+      </View>
     </View>
   );
 }
@@ -59,9 +87,17 @@ function ClearData() {
 const styles = StyleSheet.create({
   icons: {
     flexDirection: 'row',
+    alignItems: 'center',
+  },
+  mode: {
+    flex: 1.6,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginHorizontal: 6,
   },
   bottomIcon: {
-    width: '25%',
-    marginHorizontal: 10,
+    flex: 1,
+    marginHorizontal: 6,
   },
 });
