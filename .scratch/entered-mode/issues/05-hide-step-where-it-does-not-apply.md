@@ -10,10 +10,10 @@ With Step gone, the add button cannot keep demanding it: in Entered mode the Zer
 
 **Blocked by:** 04.
 
-**Status:** ready-for-agent
+**Status:** done
 
-- [ ] The Step input is not visible in Entered mode
-- [ ] It still occupies its space — nothing on screen moves when the mode changes
-- [ ] While hidden it cannot be focused, edited, or tapped
-- [ ] A Step typed before switching is still there after switching back
-- [ ] The add button requires the Zero point and the Step in Generated mode, the Zero point alone in Entered mode
+- [x] The Step input is not visible in Entered mode
+- [ ] It still occupies its space — nothing on screen moves when the mode changes — unverified, never run in a simulator
+- [x] While hidden it cannot be focused, edited, or tapped
+- [x] A Step typed before switching is still there after switching back
+- [x] The add button requires the Zero point and the Step in Generated mode, the Zero point alone in Entered mode

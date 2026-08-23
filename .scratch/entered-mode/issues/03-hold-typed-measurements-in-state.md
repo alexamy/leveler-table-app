@@ -10,16 +10,16 @@ Per ADR 0001, both modes share one list of rows. Switching to Generated regenera
 
 **Blocked by:** 01, 02.
 
-**Status:** ready-for-agent
+**Status:** done
 
-- [ ] The app has a mode, Generated or Entered, and starts in Generated
-- [ ] In Entered mode a row's value is editable; in Generated mode it is not
-- [ ] Typing a Measurement shows its Offset from the Zero point, negative when the point sits below it
-- [ ] Changing the Zero point recomputes every Offset
-- [ ] The Offset is blank while the Measurement is empty, and blank when the Measurement or the Zero point is malformed
-- [ ] A malformed Measurement is highlighted, as a malformed Zero point already is
-- [ ] Offsets round the same way in both modes
-- [ ] Adding a row in Entered mode appends an empty one
-- [ ] Switching to Entered keeps the existing rows; switching to Generated regenerates them from the Zero point and the Step
-- [ ] Entered-mode behaviour is covered in its own test file, driven through the existing render-and-fire-events seam
-- [ ] The row placeholder is unchanged in both modes — per the glossary, Measurement deliberately shares Mark's label
+- [x] The app has a mode, Generated or Entered, and starts in Generated
+- [x] In Entered mode a row's value is editable; in Generated mode it is not
+- [x] Typing a Measurement shows its Offset from the Zero point, negative when the point sits below it
+- [x] Changing the Zero point recomputes every Offset
+- [x] The Offset is blank while the Measurement is empty, and blank when the Measurement or the Zero point is malformed
+- [x] A malformed Measurement is highlighted, as a malformed Zero point already is
+- [x] Offsets round the same way in both modes
+- [x] Adding a row in Entered mode appends an empty one
+- [x] Switching to Entered keeps the existing rows; switching to Generated regenerates them from the Zero point and the Step
+- [x] Entered-mode behaviour is covered in its own test file, driven through the existing render-and-fire-events seam
+- [x] The row placeholder is unchanged in both modes — per the glossary, Measurement deliberately shares Mark's label

@@ -8,10 +8,10 @@ It matters because it is the rule that holds in both modes. Once the Offset is d
 
 **Blocked by:** None — can start immediately.
 
-**Status:** ready-for-agent
+**Status:** done
 
-- [ ] The Offset is computed from the Zero point and the value in the row, not from the Step and the Position
-- [ ] Marks are still generated from the Zero point and the Step — only the Offset rule changes
-- [ ] The Offset is blank when the Zero point or the row's value is empty or malformed
-- [ ] Rounding and formatting are unchanged
-- [ ] No new tests. The existing suite passing unchanged is the proof — if it needs edits, the change was not behaviour-preserving
+- [x] The Offset is computed from the Zero point and the value in the row, not from the Step and the Position
+- [x] Marks are still generated from the Zero point and the Step — only the Offset rule changes
+- [x] The Offset is blank when the Zero point or the row's value is empty or malformed
+- [x] Rounding and formatting are unchanged
+- [x] No new tests. The existing suite passing unchanged is the proof — if it needs edits, the change was not behaviour-preserving

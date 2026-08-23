@@ -1,15 +1,19 @@
 import { ReactNode } from 'react';
-import { useLoadState, useSaveState } from './persistance';
+import { useLoadState, useSaveState } from './persistence';
 import { ActivityIndicator, View } from 'react-native';
 import { AppContextProvider, useAppState } from './context';
 import { Table } from './Table';
 import { State } from './reducer';
 
 export function App() {
-  const { state, isLoading, failed } = useLoadState();
+  const { state, isLoading } = useLoadState();
   if (isLoading) return <Loading />;
 
-  return <Root state={state}>{failed ? null : <StatePersistence />}</Root>;
+  return (
+    <Root state={state}>
+      <StatePersistence />
+    </Root>
+  );
 }
 
 interface RootProps {

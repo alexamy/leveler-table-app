@@ -8,11 +8,11 @@ After the removal the remaining rows renumber from 1 and the series recomputes, 
 
 **Blocked by:** None — can start immediately.
 
-**Status:** ready-for-agent
+**Status:** done
 
-- [ ] Pressing minus on a row removes that row and no other
-- [ ] Rows below the removed one shift up and renumber from 1
-- [ ] The series recomputes after a removal, so the remaining Marks still form a correct series from the Zero point and the Step
-- [ ] Removing the only row leaves an empty table
-- [ ] ⚠️ The existing delete case in the autocalculation tests is rewritten — it currently asserts the drop-the-last-row behaviour and will fail. This is a deliberate change to an existing test.
-- [ ] The rest of the existing suite passes untouched
+- [x] Pressing minus on a row removes that row and no other
+- [x] Rows below the removed one shift up and renumber from 1
+- [x] The series recomputes after a removal, so the remaining Marks still form a correct series from the Zero point and the Step
+- [x] Removing the only row leaves an empty table
+- [x] ⚠️ The existing delete case in the autocalculation tests is rewritten — it currently asserts the drop-the-last-row behaviour and will fail. This is a deliberate change to an existing test.
+- [x] The rest of the existing suite passes untouched
