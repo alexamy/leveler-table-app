@@ -88,7 +88,8 @@ Note this generalises the existing behaviour rather than branching from it: in G
 - Fields the app does not name are ignored. Nothing reads them, so they cannot fail a load, and dropping a field in a later build does not wipe the table.
 - Nothing is salvaged from a rejected payload. Partial repair was rejected on purpose: the table is a Zero point, a Step and a short column — small enough to retype — and piecing a half-readable payload back together guesses at what the worker measured.
 - This changes behaviour rather than restating it. State saved before `mode` existed carries no `mode` field, so it is rejected and that worker opens once on an empty table. Accepted as a one-time cost of the update that lands this.
-- A rejected payload counts as empty: the next edit overwrites it. A read that fails at the storage layer is the other case — nothing is written until the worker changes something, so a table that is still there is never overwritten by an I/O error.
+- A rejected payload counts as empty, and so does a read that fails at the storage layer: both open the app on defaults and let the next edit overwrite whatever is in storage. A read failure is not a separate case, because a storage layer that cannot be read almost certainly cannot be written either.
+- Storage trouble is never reported to the worker. A failed read is silent, and a failed write is swallowed. There is nothing the worker could do with either, and the app has no error surface to put it on.
 
 ### Toolbar
 

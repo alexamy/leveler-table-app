@@ -4,23 +4,14 @@ import { State, defaultState, recompute } from './reducer';
 
 const STATE_ID = 'leveler-app';
 
-interface Loaded {
-  state?: State;
-  isLoading: boolean;
-  // a read that failed leaves the stored table intact, so nothing may overwrite it
-  failed: boolean;
-}
-
-export function useLoadState(machineId = STATE_ID): Loaded {
-  const [loaded, setLoaded] = useState<Loaded>({
+export function useLoadState(machineId = STATE_ID) {
+  const [loaded, setLoaded] = useState<{ state?: State; isLoading: boolean }>({
     isLoading: true,
-    failed: false,
   });
 
   useEffect(() => {
     async function load() {
-      const result = await read(machineId);
-      setLoaded({ ...result, isLoading: false });
+      setLoaded({ state: await read(machineId), isLoading: false });
     }
     load();
   }, [machineId]);
@@ -49,22 +40,14 @@ export function useSaveState(state: State, machineId = STATE_ID) {
   }, [machineId, state]);
 }
 
-async function read(machineId: string): Promise<Omit<Loaded, 'isLoading'>> {
-  let data: string | null;
-
+// a read that throws is no different from an empty one: the app opens on
+// defaults and saves over whatever is there
+async function read(machineId: string): Promise<State | undefined> {
   try {
-    data = await AsyncStorage.getItem(machineId);
+    const data = await AsyncStorage.getItem(machineId);
+    return data ? restore(JSON.parse(data)) : undefined;
   } catch {
-    return { failed: true };
-  }
-
-  if (!data) return { failed: false };
-
-  try {
-    return { state: restore(JSON.parse(data)), failed: false };
-  } catch {
-    // unusable, so overwriting it loses nothing
-    return { failed: false };
+    return undefined;
   }
 }
 

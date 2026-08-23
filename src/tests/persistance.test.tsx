@@ -238,7 +238,7 @@ it('does not start a write before the previous one has finished', async () => {
   ]);
 });
 
-it('does not overwrite saved state after a failed read', async () => {
+it('keeps saving after a failed read', async () => {
   jest.mocked(AsyncStorage.getItem).mockRejectedValue(new Error('io error'));
 
   render(<App />);
@@ -251,7 +251,12 @@ it('does not overwrite saved state after a failed read', async () => {
     fireEvent.changeText(app.zero(), '100');
   });
 
-  expect(AsyncStorage.setItem).not.toHaveBeenCalled();
+  await waitFor(() => {
+    expect(AsyncStorage.setItem).toHaveBeenCalledWith(
+      'leveler-app',
+      expect.stringContaining('"zero":"100"')
+    );
+  });
 });
 
 it('does not write when the delete hold changes nothing', async () => {
