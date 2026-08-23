@@ -23,6 +23,10 @@ export const app = {
   mode: () => screen.getByTestId('mode-switch'),
   modeIcon: (mode: 'generated' | 'entered') =>
     screen.getByTestId(`mode-icon-${mode}`),
+  regenerateWarning: () =>
+    screen.queryByText('Введённые значения будут пересчитаны.') as Text,
+  cancelRegenerate: () => screen.getByTestId('cancel-regenerate') as Button,
+  confirmRegenerate: () => screen.getByTestId('confirm-regenerate') as Button,
   clearData: () => screen.getByTestId('clear-data') as Button,
   pendingDeletion: () =>
     screen.getByText('Удерживай для удаления всех значений') as Text,

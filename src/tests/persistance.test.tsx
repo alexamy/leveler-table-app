@@ -141,3 +141,40 @@ it('does not restore the delete-hold indicator saved by an older build', async (
 
   expect(screen.queryByText('Удерживай для удаления всех значений')).toBeNull();
 });
+
+it.each([
+  { kind: 'a null measurement list', data: '{"measurements":null}' },
+  {
+    kind: 'a measurement list that is not a list',
+    data: '{"measurements":"x"}',
+  },
+  { kind: 'a zero point that is not text', data: '{"zero":500}' },
+  { kind: 'an unknown mode', data: '{"mode":"typed"}' },
+  { kind: 'a payload that is not an object', data: '"leveler"' },
+])('starts on defaults when local storage holds $kind', async ({ data }) => {
+  jest.mocked(AsyncStorage.getItem).mockResolvedValue(data);
+
+  render(<App />);
+
+  await waitFor(() => {
+    expect(app.zero().props.value).toBe('');
+  });
+
+  expect(app.mode().props.value).toBe(false);
+  expect(app.measurements()).toHaveLength(0);
+});
+
+it('blanks a saved row that lost its value', async () => {
+  jest
+    .mocked(AsyncStorage.getItem)
+    .mockResolvedValue('{"zero":"500","measurements":[{"offset":"-20"}]}');
+
+  render(<App />);
+
+  await waitFor(() => {
+    expect(app.zero().props.value).toBe('500');
+  });
+
+  expect(app.measurements()).toHaveLength(1);
+  expect(app.measurement(1).size.props.value).toBe('');
+});

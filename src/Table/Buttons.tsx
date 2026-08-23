@@ -1,6 +1,8 @@
-import { Chip, Icon, Switch } from '@rneui/themed';
+import { Chip, Dialog, Icon, Switch, Text } from '@rneui/themed';
+import { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useAppState } from '../context';
+import { Mode } from '../reducer';
 import { copyTable } from '../serialization';
 import { useDelayedAction } from './helpers';
 
@@ -33,6 +35,18 @@ export function Buttons() {
 
 function ModeSwitch() {
   const [state, dispatch] = useAppState();
+  // transient, so it never reaches persisted state
+  const [asking, setAsking] = useState(false);
+
+  const changeMode = (mode: Mode) => dispatch({ type: 'change mode', mode });
+  const wouldOverwrite = state.measurements.some(
+    (measurement) => measurement.size.trim() !== ''
+  );
+
+  const onValueChange = (entered: boolean) => {
+    if (!entered && wouldOverwrite) return setAsking(true);
+    changeMode(entered ? 'entered' : 'generated');
+  };
 
   return (
     <View style={styles.mode}>
@@ -43,17 +57,32 @@ function ModeSwitch() {
       <Switch
         testID='mode-switch'
         value={state.mode === 'entered'}
-        onValueChange={(entered) =>
-          dispatch({
-            type: 'change mode',
-            mode: entered ? 'entered' : 'generated',
-          })
-        }
+        onValueChange={onValueChange}
       />
 
       <View testID='mode-icon-entered'>
         <Icon name='user' type='font-awesome' size={20} />
       </View>
+
+      <Dialog isVisible={asking} onBackdropPress={() => setAsking(false)}>
+        <Text>Введённые значения будут пересчитаны.</Text>
+
+        <Dialog.Actions>
+          <Dialog.Button
+            testID='cancel-regenerate'
+            title='Отмена'
+            onPress={() => setAsking(false)}
+          />
+          <Dialog.Button
+            testID='confirm-regenerate'
+            title='Продолжить'
+            onPress={() => {
+              setAsking(false);
+              changeMode('generated');
+            }}
+          />
+        </Dialog.Actions>
+      </Dialog>
     </View>
   );
 }

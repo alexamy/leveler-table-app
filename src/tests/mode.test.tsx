@@ -43,6 +43,7 @@ it('regenerates the rows when flipped back to generated mode', () => {
   fireEvent.changeText(app.measurement(1).size, '520');
 
   fireEvent(app.mode(), 'valueChange', false);
+  fireEvent.press(app.confirmRegenerate());
 
   expect(app.mode().props.value).toBe(false);
   expect(app.measurement(1).size.props.value).toBe('550');
@@ -117,4 +118,106 @@ it('keeps the hidden step input out of the accessibility tree', () => {
   expect(app.stepSlot().props.importantForAccessibility).toBe(
     'no-hide-descendants'
   );
+});
+
+function withTypedRow() {
+  render(
+    <Root
+      state={{ ...defaultState, mode: 'entered', zero: '500', step: '50' }}
+    />
+  );
+
+  fireEvent.press(app.addSize());
+  fireEvent.changeText(app.measurement(1).size, '520');
+}
+
+it('asks before regenerating typed measurements', () => {
+  withTypedRow();
+
+  fireEvent(app.mode(), 'valueChange', false);
+
+  expect(app.regenerateWarning()).toBeVisible();
+  expect(app.mode().props.value).toBe(true);
+  expect(app.measurement(1).size.props.value).toBe('520');
+});
+
+it('regenerates the rows on продолжить', () => {
+  withTypedRow();
+
+  fireEvent(app.mode(), 'valueChange', false);
+  fireEvent.press(app.confirmRegenerate());
+
+  expect(app.regenerateWarning()).toBeNull();
+  expect(app.mode().props.value).toBe(false);
+  expect(app.measurement(1).size.props.value).toBe('550');
+});
+
+it('leaves the mode and the rows alone on отмена', () => {
+  withTypedRow();
+
+  fireEvent(app.mode(), 'valueChange', false);
+  fireEvent.press(app.cancelRegenerate());
+
+  expect(app.regenerateWarning()).toBeNull();
+  expect(app.mode().props.value).toBe(true);
+  expect(app.measurement(1).size.props.value).toBe('520');
+  expect(app.measurement(1).offset.props.children).toBe('-20');
+});
+
+it('blanks the rows on продолжить with an empty step', () => {
+  render(<Root state={{ ...defaultState, mode: 'entered', zero: '500' }} />);
+
+  fireEvent.press(app.addSize());
+  fireEvent.changeText(app.measurement(1).size, '520');
+
+  fireEvent(app.mode(), 'valueChange', false);
+  fireEvent.press(app.confirmRegenerate());
+
+  expect(app.mode().props.value).toBe(false);
+  expect(app.measurement(1).size.props.value).toBe('');
+  expect(app.measurement(1).offset.props.children).toBe('');
+});
+
+it('asks nothing when there is no typed value to lose', () => {
+  render(
+    <Root
+      state={{ ...defaultState, mode: 'entered', zero: '500', step: '50' }}
+    />
+  );
+
+  fireEvent(app.mode(), 'valueChange', false);
+  expect(app.regenerateWarning()).toBeNull();
+  expect(app.mode().props.value).toBe(false);
+
+  fireEvent(app.mode(), 'valueChange', true);
+  fireEvent.press(app.addSize());
+
+  fireEvent(app.mode(), 'valueChange', false);
+  expect(app.regenerateWarning()).toBeNull();
+  expect(app.mode().props.value).toBe(false);
+});
+
+it('asks nothing when switching into entered mode', () => {
+  render(<Root state={{ ...defaultState, zero: '500', step: '50' }} />);
+
+  fireEvent.press(app.addSize());
+  fireEvent(app.mode(), 'valueChange', true);
+
+  expect(app.regenerateWarning()).toBeNull();
+  expect(app.mode().props.value).toBe(true);
+});
+
+it('does not reopen the warning when the app starts with typed rows', () => {
+  render(
+    <Root
+      state={{
+        ...defaultState,
+        mode: 'entered',
+        zero: '500',
+        measurements: [{ size: '520', offset: '-20' }],
+      }}
+    />
+  );
+
+  expect(app.regenerateWarning()).toBeNull();
 });

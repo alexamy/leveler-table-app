@@ -44,8 +44,7 @@ async function read(machineId: string): Promise<State | undefined> {
     const data = await AsyncStorage.getItem(machineId);
     if (!data) return undefined;
 
-    const saved = JSON.parse(data) as Partial<State>;
-    return { ...defaultState, ...saved, waitingDeletion: false };
+    return restore(JSON.parse(data));
   } catch {
     return undefined;
   }
@@ -59,4 +58,32 @@ function persisted(state: State): Omit<State, 'waitingDeletion'> {
     step: state.step,
     measurements: state.measurements,
   };
+}
+
+// storage is untrusted: an older build, a partial write, a hand-edited file
+function restore(saved: unknown): State {
+  if (typeof saved !== 'object' || saved === null) return defaultState;
+
+  const fields = saved as Record<string, unknown>;
+
+  return {
+    mode: fields.mode === 'entered' ? 'entered' : 'generated',
+    zero: text(fields.zero),
+    step: text(fields.step),
+    measurements: rows(fields.measurements),
+    waitingDeletion: false,
+  };
+}
+
+function rows(value: unknown): State['measurements'] {
+  if (!Array.isArray(value)) return [];
+
+  return value.map((row) => {
+    const fields = (row ?? {}) as Record<string, unknown>;
+    return { size: text(fields.size), offset: text(fields.offset) };
+  });
+}
+
+function text(value: unknown): string {
+  return typeof value === 'string' ? value : '';
 }
