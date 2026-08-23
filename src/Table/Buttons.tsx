@@ -2,7 +2,7 @@ import { Chip, Dialog, Icon, Switch, Text } from '@rneui/themed';
 import { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useAppState } from '../context';
-import { Mode } from '../reducer';
+import { Mode, recompute } from '../reducer';
 import { copyTable } from '../serialization';
 import { useDelayedAction } from './helpers';
 
@@ -39,8 +39,12 @@ function ModeSwitch() {
   const [asking, setAsking] = useState(false);
 
   const changeMode = (mode: Mode) => dispatch({ type: 'change mode', mode });
+  // only a row that holds something and would come back different is at risk
+  const regenerated = recompute({ ...state, mode: 'generated' }).measurements;
   const wouldOverwrite = state.measurements.some(
-    (measurement) => measurement.size.trim() !== ''
+    (measurement, index) =>
+      measurement.size.trim() !== '' &&
+      measurement.size !== regenerated[index].size
   );
 
   const onValueChange = (entered: boolean) => {

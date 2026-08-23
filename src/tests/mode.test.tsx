@@ -238,3 +238,43 @@ it('leaves the mode alone when the worker clears the data', () => {
   expect(app.measurements()).toHaveLength(0);
   expect(app.step()).not.toBeVisible();
 });
+
+it('asks nothing when flipping back would regenerate the same rows', () => {
+  render(<Root state={{ ...defaultState, zero: '500', step: '50' }} />);
+
+  fireEvent.press(app.addSize());
+  fireEvent.press(app.addSize());
+
+  fireEvent(app.mode(), 'valueChange', true);
+  fireEvent(app.mode(), 'valueChange', false);
+
+  expect(app.regenerateWarning()).toBeNull();
+  expect(app.mode().props.value).toBe(false);
+  expect(app.measurement(1).size.props.value).toBe('550');
+  expect(app.measurement(2).size.props.value).toBe('600');
+});
+
+it('asks when a typed value would be overwritten by a different one', () => {
+  render(<Root state={{ ...defaultState, zero: '500', step: '50' }} />);
+
+  fireEvent.press(app.addSize());
+  fireEvent(app.mode(), 'valueChange', true);
+  fireEvent.changeText(app.measurement(1).size, '520');
+
+  fireEvent(app.mode(), 'valueChange', false);
+
+  expect(app.regenerateWarning()).toBeVisible();
+});
+
+it('asks nothing when a typed value matches what would be generated', () => {
+  render(<Root state={{ ...defaultState, zero: '500', step: '50' }} />);
+
+  fireEvent.press(app.addSize());
+  fireEvent(app.mode(), 'valueChange', true);
+  fireEvent.changeText(app.measurement(1).size, '550');
+
+  fireEvent(app.mode(), 'valueChange', false);
+
+  expect(app.regenerateWarning()).toBeNull();
+  expect(app.mode().props.value).toBe(false);
+});
