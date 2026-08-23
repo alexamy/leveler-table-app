@@ -11,4 +11,12 @@ The mode also has to survive closing the app, and load sensibly for someone who 
 - [ ] Long-press clear empties the Zero point, the Step and all rows
 - [ ] The mode is unchanged by a clear
 - [ ] The mode is saved and restored across a restart
-- [ ] Saved state recorded before the mode existed loads in Generated mode
+- [ ] ~~Saved state recorded before the mode existed loads in Generated mode~~ — superseded, see Comments
+
+## Comments
+
+Superseded in `99f9fb8`. Saved state is now read all or nothing: a payload missing a field it names is rejected whole and the app opens on defaults. A payload written before `mode` existed has no `mode` field, so that worker opens on an empty table rather than on their Zero point, Step and rows. Only the mode they land in still matches this ticket.
+
+The trade was taken knowingly — the table is a Zero point, a Step and a short column, small enough to retype, and piecing a half-readable payload back together guesses at what the worker measured. See `spec.md`, section Persisted state.
+
+The ticket's other criteria are unaffected: a clear still leaves the mode alone, and the mode still survives a restart.
