@@ -2,7 +2,6 @@ import { Dispatch } from 'react';
 import { parse } from './number';
 
 export interface Measurement {
-  // identity, not Position: a row keeps it while rows above are removed
   id: number;
   size: string;
   offset: string;
@@ -17,6 +16,12 @@ export interface State {
   measurements: Measurement[];
   waitingDeletion: boolean;
 }
+
+export type PersistedMeasurement = Omit<Measurement, 'id'>;
+
+export type PersistedState = Omit<State, 'waitingDeletion' | 'measurements'> & {
+  measurements: PersistedMeasurement[];
+};
 
 export type Action =
   | { type: 'add measurement' }

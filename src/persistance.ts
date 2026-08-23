@@ -1,6 +1,12 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useState, useEffect, useRef } from 'react';
-import { Measurement, State, defaultState, recompute } from './reducer';
+import {
+  PersistedMeasurement,
+  PersistedState,
+  State,
+  defaultState,
+  recompute,
+} from './reducer';
 
 const STATE_ID = 'leveler-app';
 
@@ -48,25 +54,19 @@ async function read(machineId: string): Promise<State | undefined> {
   }
 }
 
-type Persisted = Omit<State, 'waitingDeletion' | 'measurements'> & {
-  measurements: Row[];
-};
-type Row = Omit<Measurement, 'id'>;
-
-// waitingDeletion is transient UI state, and a row's identity means nothing
-// once the app closes; neither reaches storage
-function persisted({ mode, zero, step, measurements }: State): Persisted {
-  return { mode, zero, step, measurements: measurements.map(row) };
-}
-
-function row({ size, offset }: Measurement): Row {
-  return { size, offset };
+function persisted({ mode, zero, step, measurements }: State): PersistedState {
+  return {
+    mode,
+    zero,
+    step,
+    measurements: measurements.map(({ size, offset }) => ({ size, offset })),
+  };
 }
 
 // storage is untrusted, and a payload we cannot read whole is not pieced back
 // together: the table is small enough to retype
 function restore(saved: unknown): State {
-  if (!isPersisted(saved)) return defaultState;
+  if (!isPersistedState(saved)) return defaultState;
 
   const { mode, zero, step, measurements } = saved;
 
@@ -84,20 +84,20 @@ function restore(saved: unknown): State {
 }
 
 // fields we do not name are ignored, since nothing reads them
-function isPersisted(value: unknown): value is Persisted {
-  const { mode, zero, step, measurements } = (value ?? {}) as Persisted;
+function isPersistedState(value: unknown): value is PersistedState {
+  const { mode, zero, step, measurements } = (value ?? {}) as PersistedState;
 
   return (
     (mode === 'generated' || mode === 'entered') &&
     typeof zero === 'string' &&
     typeof step === 'string' &&
     Array.isArray(measurements) &&
-    measurements.every(isRow)
+    measurements.every(isPersistedMeasurement)
   );
 }
 
-function isRow(value: unknown): value is Row {
-  const { size, offset } = (value ?? {}) as Row;
+function isPersistedMeasurement(value: unknown): value is PersistedMeasurement {
+  const { size, offset } = (value ?? {}) as PersistedMeasurement;
 
   return typeof size === 'string' && typeof offset === 'string';
 }
