@@ -22,4 +22,4 @@ Storage trouble is never reported to the worker. A failed read is silent and a f
 
 Writes are not ordered in app code. Both storage modules are serial below us — Android queues every operation through `SerialExecutor`, iOS through a `DISPATCH_QUEUE_SERIAL` method queue — and bridge calls arrive in call order, so two quick edits cannot land out of order. Noted because the absence looks like an oversight otherwise.
 
-Three tests in `persistance.test.tsx` went with the old rule, all deliberately: `fills in fields missing from the saved state` and `blanks a saved row that lost its value` asserted the field-by-field repair and now sit in the reject list instead, and `does not overwrite saved state after a failed read` inverted into `keeps saving after a failed read`.
+Three tests in `persistence.test.tsx` went with the old rule, all deliberately: `fills in fields missing from the saved state` and `blanks a saved row that lost its value` asserted the field-by-field repair and now sit in the reject list instead, and `does not overwrite saved state after a failed read` inverted into `keeps saving after a failed read`.

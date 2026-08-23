@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { useLoadState, useSaveState } from './persistance';
+import { useLoadState, useSaveState } from './persistence';
 import { ActivityIndicator, View } from 'react-native';
 import { AppContextProvider, useAppState } from './context';
 import { Table } from './Table';
