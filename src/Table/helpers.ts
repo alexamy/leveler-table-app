@@ -1,9 +1,9 @@
 import { lightColors } from '@rneui/themed';
 import { useEffect, useRef, useState } from 'react';
+import { isBlankOrNumber } from '../number';
 
 export function getNumberColor(value: string): string {
-  const isNumber = !isNaN(Number(value));
-  const color = isNumber ? lightColors.black : lightColors.error;
+  const color = isBlankOrNumber(value) ? lightColors.black : lightColors.error;
   return color;
 }
 

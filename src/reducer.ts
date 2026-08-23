@@ -1,4 +1,5 @@
 import { Dispatch } from 'react';
+import { parse } from './number';
 
 interface Measurement {
   size: string;
@@ -114,11 +115,6 @@ function calculateMeasurements(state: State, amount: number) {
     });
 
   return result;
-}
-
-function parse(value: string): number {
-  if (value.trim() === '') return NaN;
-  return Number(value);
 }
 
 function format(value: number): string {
