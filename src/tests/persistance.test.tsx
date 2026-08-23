@@ -78,19 +78,6 @@ it('resets to default state if local storage has malformed state', async () => {
   });
 });
 
-it('fills in fields missing from the saved state', async () => {
-  jest.mocked(AsyncStorage.getItem).mockResolvedValue('{"zero":"500"}');
-
-  render(<App />);
-
-  await waitFor(() => {
-    expect(app.zero().props.value).toBe('500');
-  });
-
-  expect(app.mode().props.value).toBe(false);
-  expect(app.measurements()).toHaveLength(0);
-});
-
 it('does not save the delete-hold indicator', async () => {
   render(<App />);
 
@@ -128,7 +115,9 @@ it('starts on defaults when local storage itself fails', async () => {
 it('does not restore the delete-hold indicator saved by an older build', async () => {
   jest
     .mocked(AsyncStorage.getItem)
-    .mockResolvedValue('{"zero":"500","waitingDeletion":true}');
+    .mockResolvedValue(
+      '{"mode":"generated","zero":"500","step":"10","measurements":[],"waitingDeletion":true}'
+    );
 
   render(<App />);
 
@@ -139,15 +128,32 @@ it('does not restore the delete-hold indicator saved by an older build', async (
   expect(screen.queryByText('Удерживай для удаления всех значений')).toBeNull();
 });
 
+const complete = {
+  mode: 'generated',
+  zero: '500',
+  step: '10',
+  measurements: [{ size: '510', offset: '-10' }],
+};
+
+function saved(changes: object): string {
+  return JSON.stringify({ ...complete, ...changes });
+}
+
 it.each([
-  { kind: 'a null measurement list', data: '{"measurements":null}' },
+  { kind: 'a null measurement list', data: saved({ measurements: null }) },
   {
     kind: 'a measurement list that is not a list',
-    data: '{"measurements":"x"}',
+    data: saved({ measurements: 'x' }),
   },
-  { kind: 'a zero point that is not text', data: '{"zero":500}' },
-  { kind: 'an unknown mode', data: '{"mode":"typed"}' },
+  { kind: 'a zero point that is not text', data: saved({ zero: 500 }) },
+  { kind: 'an unknown mode', data: saved({ mode: 'typed' }) },
   { kind: 'a payload that is not an object', data: '"leveler"' },
+  { kind: 'a payload missing a field', data: '{"zero":"500"}' },
+  {
+    kind: 'a row without its value',
+    data: saved({ measurements: [{ offset: '-10' }] }),
+  },
+  { kind: 'a row that is not an object', data: saved({ measurements: [null] }) },
 ])('starts on defaults when local storage holds $kind', async ({ data }) => {
   jest.mocked(AsyncStorage.getItem).mockResolvedValue(data);
 
@@ -161,24 +167,12 @@ it.each([
   expect(app.measurements()).toHaveLength(0);
 });
 
-it('blanks a saved row that lost its value', async () => {
+it('restores the mode across a restart', async () => {
   jest
     .mocked(AsyncStorage.getItem)
-    .mockResolvedValue('{"zero":"500","measurements":[{"offset":"-20"}]}');
-
-  render(<App />);
-
-  await waitFor(() => {
-    expect(app.zero().props.value).toBe('500');
-  });
-
-  expect(app.measurements()).toHaveLength(1);
-  expect(app.measurement(1).size.props.value).toBe('');
-  expect(app.measurement(1).offset.props.children).toBe('');
-});
-
-it('restores the mode across a restart', async () => {
-  jest.mocked(AsyncStorage.getItem).mockResolvedValue('{"mode":"entered"}');
+    .mockResolvedValue(
+      '{"mode":"entered","zero":"","step":"","measurements":[]}'
+    );
 
   render(<App />);
 
@@ -191,7 +185,7 @@ it('recomputes the offsets of restored rows', async () => {
   jest
     .mocked(AsyncStorage.getItem)
     .mockResolvedValue(
-      '{"mode":"entered","zero":"500","measurements":[{"size":"520","offset":"999"}]}'
+      '{"mode":"entered","zero":"500","step":"","measurements":[{"size":"520","offset":"999"}]}'
     );
 
   render(<App />);

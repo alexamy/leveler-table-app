@@ -68,41 +68,40 @@ async function read(machineId: string): Promise<Omit<Loaded, 'isLoading'>> {
   }
 }
 
+type Persisted = Omit<State, 'waitingDeletion'>;
+type Row = State['measurements'][number];
+
 // waitingDeletion is transient UI state and never reaches storage
-function persisted(state: State): Omit<State, 'waitingDeletion'> {
-  return {
-    mode: state.mode,
-    zero: state.zero,
-    step: state.step,
-    measurements: state.measurements,
-  };
+function persisted({ mode, zero, step, measurements }: State): Persisted {
+  return { mode, zero, step, measurements };
 }
 
-// storage is untrusted: an older build, a partial write, a hand-edited file
+// storage is untrusted, and a payload we cannot read whole is not pieced back
+// together: the table is small enough to retype
 function restore(saved: unknown): State {
-  if (typeof saved !== 'object' || saved === null) return defaultState;
+  if (!isPersisted(saved)) return defaultState;
 
-  const fields = saved as Record<string, unknown>;
+  const { mode, zero, step, measurements } = saved;
 
   // a stored offset can be stale, so derive every row again
-  return recompute({
-    mode: fields.mode === 'entered' ? 'entered' : 'generated',
-    zero: text(fields.zero),
-    step: text(fields.step),
-    measurements: rows(fields.measurements),
-    waitingDeletion: false,
-  });
+  return recompute({ mode, zero, step, measurements, waitingDeletion: false });
 }
 
-function rows(value: unknown): State['measurements'] {
-  if (!Array.isArray(value)) return [];
+// fields we do not name are ignored, since nothing reads them
+function isPersisted(value: unknown): value is Persisted {
+  const { mode, zero, step, measurements } = (value ?? {}) as Persisted;
 
-  return value.map((row) => {
-    const fields = (row ?? {}) as Record<string, unknown>;
-    return { size: text(fields.size), offset: text(fields.offset) };
-  });
+  return (
+    (mode === 'generated' || mode === 'entered') &&
+    typeof zero === 'string' &&
+    typeof step === 'string' &&
+    Array.isArray(measurements) &&
+    measurements.every(isRow)
+  );
 }
 
-function text(value: unknown): string {
-  return typeof value === 'string' ? value : '';
+function isRow(value: unknown): value is Row {
+  const { size, offset } = (value ?? {}) as Row;
+
+  return typeof size === 'string' && typeof offset === 'string';
 }

@@ -50,7 +50,7 @@ Switching back to Generated mode regenerates every row from Zero point and Step 
 28. As a worker, I want the copied table to have the same columns in both modes, so that everything I paste lands in one consistent sheet.
 29. As a worker, I want the long-press clear to work in Entered mode, so that I can start a fresh set of readings at the next location.
 30. As a worker, I want clearing to leave me in the mode I was in, so that I am not thrown back to Generated mode mid-shift.
-31. As a returning worker, I want state saved before this feature existed to load in Generated mode, so that an app update does not put me somewhere unexpected.
+31. As a returning worker, I want the app to open in Generated mode whenever it cannot read what was saved, so that an app update does not put me somewhere unexpected.
 
 ## Implementation Decisions
 
@@ -80,7 +80,15 @@ Note this generalises the existing behaviour rather than branching from it: in G
 - Add measurement — Generated: recompute the whole series as today. Entered: append an empty row.
 - Remove measurement — removes the row at the given position in both modes, then recomputes. **This is a fix, not just an extension**: the current reducer ignores the position it is handed and always drops the last row. Indistinguishable in Generated mode, where rows are derived and interchangeable; in Entered mode it would delete a different reading than the one the worker pressed.
 - Reset state — clears Zero point, Step and rows, but preserves the current mode.
-- Restore state — merges saved state over the defaults, so state persisted before `mode` existed loads as Generated.
+
+### Persisted state
+
+- The payload is the whole state minus `waitingDeletion`. Rows keep their `offset` even though every offset is recomputed on load, so storage and state stay one type.
+- A saved payload loads only if every field the app names is there and the right shape: `mode` one of the two values, `zero` and `step` text, `measurements` a list of rows each holding text `size` and text `offset`. A missing field, a wrong type, or a payload that is not an object rejects the **whole** payload and the app opens on defaults.
+- Fields the app does not name are ignored. Nothing reads them, so they cannot fail a load, and dropping a field in a later build does not wipe the table.
+- Nothing is salvaged from a rejected payload. Partial repair was rejected on purpose: the table is a Zero point, a Step and a short column — small enough to retype — and piecing a half-readable payload back together guesses at what the worker measured.
+- This changes behaviour rather than restating it. State saved before `mode` existed carries no `mode` field, so it is rejected and that worker opens once on an empty table. Accepted as a one-time cost of the update that lands this.
+- A rejected payload counts as empty: the next edit overwrites it. A read that fails at the storage layer is the other case — nothing is written until the worker changes something, so a table that is still there is never overwritten by an I/O error.
 
 ### Toolbar
 
@@ -109,7 +117,7 @@ Note this generalises the existing behaviour rather than branching from it: in G
 
 ### Unchanged
 
-Clipboard serialisation, persistence, the Offset sign convention, and number formatting are untouched. The copied table keeps the same four columns and the same headers in both modes.
+Clipboard serialisation, the Offset sign convention, and number formatting are untouched. The copied table keeps the same four columns and the same headers in both modes.
 
 ## Testing Decisions
 
