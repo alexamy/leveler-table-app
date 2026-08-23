@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useState, useEffect, useRef } from 'react';
-import { State, defaultState, recompute } from './reducer';
+import { Measurement, State, defaultState, recompute } from './reducer';
 
 const STATE_ID = 'leveler-app';
 
@@ -48,12 +48,19 @@ async function read(machineId: string): Promise<State | undefined> {
   }
 }
 
-type Persisted = Omit<State, 'waitingDeletion'>;
-type Row = State['measurements'][number];
+type Persisted = Omit<State, 'waitingDeletion' | 'measurements'> & {
+  measurements: Row[];
+};
+type Row = Omit<Measurement, 'id'>;
 
-// waitingDeletion is transient UI state and never reaches storage
+// waitingDeletion is transient UI state, and a row's identity means nothing
+// once the app closes; neither reaches storage
 function persisted({ mode, zero, step, measurements }: State): Persisted {
-  return { mode, zero, step, measurements };
+  return { mode, zero, step, measurements: measurements.map(row) };
+}
+
+function row({ size, offset }: Measurement): Row {
+  return { size, offset };
 }
 
 // storage is untrusted, and a payload we cannot read whole is not pieced back
@@ -64,7 +71,16 @@ function restore(saved: unknown): State {
   const { mode, zero, step, measurements } = saved;
 
   // a stored offset can be stale, so derive every row again
-  return recompute({ mode, zero, step, measurements, waitingDeletion: false });
+  return recompute({
+    mode,
+    zero,
+    step,
+    measurements: measurements.map((stored, index) => ({
+      ...stored,
+      id: index + 1,
+    })),
+    waitingDeletion: false,
+  });
 }
 
 // fields we do not name are ignored, since nothing reads them

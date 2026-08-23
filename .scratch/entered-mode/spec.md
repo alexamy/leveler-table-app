@@ -83,14 +83,7 @@ Note this generalises the existing behaviour rather than branching from it: in G
 
 ### Persisted state
 
-- The payload is the whole state minus `waitingDeletion`. Rows keep their `offset` even though every offset is recomputed on load, so storage and state stay one type.
-- A saved payload loads only if every field the app names is there and the right shape: `mode` one of the two values, `zero` and `step` text, `measurements` a list of rows each holding text `size` and text `offset`. A missing field, a wrong type, or a payload that is not an object rejects the **whole** payload and the app opens on defaults.
-- Fields the app does not name are ignored. Nothing reads them, so they cannot fail a load, and dropping a field in a later build does not wipe the table.
-- Nothing is salvaged from a rejected payload. Partial repair was rejected on purpose: the table is a Zero point, a Step and a short column — small enough to retype — and piecing a half-readable payload back together guesses at what the worker measured.
-- This changes behaviour rather than restating it. State saved before `mode` existed carries no `mode` field, so it is rejected and that worker opens on an empty table. Nothing is written on load, so the payload stays in storage and is rejected again on every launch until the worker's first edit overwrites it. Accepted as the cost of the update that lands this.
-- A rejected payload counts as empty, and so does a read that fails at the storage layer: both open the app on defaults and let the next edit overwrite whatever is in storage. A read failure is not a separate case, because a storage layer that cannot be read almost certainly cannot be written either.
-- Writes are not ordered in app code. Both storage modules are serial below us — Android queues every operation through `SerialExecutor`, iOS through a `DISPATCH_QUEUE_SERIAL` method queue — and bridge calls arrive in call order, so two quick edits cannot land out of order. Noted because the absence looks like an oversight otherwise.
-- Storage trouble is never reported to the worker. A failed read is silent, and a failed write is swallowed. There is nothing the worker could do with either, and the app has no error surface to put it on.
+See ADR 0002 — a saved payload is read whole or not at all, and storage trouble is never shown to the worker. Rows carry an identity that does not reach storage; see ADR 0003.
 
 ### Toolbar
 
@@ -160,8 +153,6 @@ Mode behaviour, as its own file:
 ### Existing test to change
 
 `autocalc.test.tsx` has a delete case written against the current drop-the-last-row behaviour. Removing the row at the pressed position makes that assertion wrong, so it has to be rewritten. This is a deliberate change to an existing test, not an incidental one.
-
-`persistance.test.tsx` changes with the persisted-state rule above, and all three changes are deliberate. `fills in fields missing from the saved state` and `blanks a saved row that lost its value` assert the field-by-field repair being removed, so both go; their payloads join the reject list instead, alongside new cases for a missing field and a row that is not an object. `does not overwrite saved state after a failed read` inverts into `keeps saving after a failed read`.
 
 ## Out of Scope
 

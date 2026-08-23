@@ -9,17 +9,18 @@ afterEach(() => {
   jest.restoreAllMocks();
 });
 
-it('closes the keyboard when a row is removed', () => {
+// rows are keyed by identity, so a removal cannot move a reading under the
+// worker's cursor and the keyboard has no reason to close
+it('does not close the keyboard when a row is removed', () => {
   const dismiss = jest.spyOn(Keyboard, 'dismiss');
   render(<Root state={{ ...defaultState, mode: 'entered', zero: '500' }} />);
 
   fireEvent.press(app.addSize());
   fireEvent.changeText(app.measurement(1).size, '520');
-  expect(dismiss).not.toHaveBeenCalled();
 
   fireEvent.press(app.measurement(1).delete);
 
-  expect(dismiss).toHaveBeenCalled();
+  expect(dismiss).not.toHaveBeenCalled();
 });
 
 it('closes the keyboard when the data is cleared', () => {

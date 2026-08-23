@@ -1,7 +1,9 @@
 import { Dispatch } from 'react';
 import { parse } from './number';
 
-interface Measurement {
+export interface Measurement {
+  // identity, not Position: a row keeps it while rows above are removed
+  id: number;
   size: string;
   offset: string;
 }
@@ -18,8 +20,8 @@ export interface State {
 
 export type Action =
   | { type: 'add measurement' }
-  | { type: 'remove measurement'; index: number }
-  | { type: 'change measurement'; index: number; value: string }
+  | { type: 'remove measurement'; id: number }
+  | { type: 'change measurement'; id: number; value: string }
   | { type: 'change mode'; mode: Mode }
   | { type: 'change zero point'; value: string }
   | { type: 'change step'; value: string }
@@ -37,49 +39,35 @@ export const defaultState: State = {
 };
 
 export function appReducer(state: State, action: Action): State {
-  const amount = state.measurements.length;
-
   switch (action.type) {
     case 'add measurement': {
-      const measurements = calculateMeasurements(state, amount + 1);
-      return { ...state, measurements };
+      const added = { id: nextId(state.measurements), size: '', offset: '' };
+      return recompute({
+        ...state,
+        measurements: [...state.measurements, added],
+      });
     }
     case 'remove measurement': {
-      const remaining = state.measurements.filter(
-        (_, index) => index !== action.index
-      );
-      const newState = { ...state, measurements: remaining };
-      const measurements = calculateMeasurements(newState, remaining.length);
-      return { ...newState, measurements };
+      const remaining = state.measurements.filter(({ id }) => id !== action.id);
+      return recompute({ ...state, measurements: remaining });
     }
     case 'change measurement': {
       if (state.mode !== 'entered') return state;
 
-      const entered = state.measurements.map((measurement, index) =>
-        index === action.index
+      const entered = state.measurements.map((measurement) =>
+        measurement.id === action.id
           ? { ...measurement, size: action.value }
           : measurement
       );
-      const newState = { ...state, measurements: entered };
-      const measurements = calculateMeasurements(newState, amount);
-      return { ...newState, measurements };
+      return recompute({ ...state, measurements: entered });
     }
 
-    case 'change mode': {
-      const newState = { ...state, mode: action.mode };
-      const measurements = calculateMeasurements(newState, amount);
-      return { ...newState, measurements };
-    }
-    case 'change step': {
-      const newState = { ...state, step: action.value };
-      const measurements = calculateMeasurements(newState, amount);
-      return { ...newState, measurements };
-    }
-    case 'change zero point': {
-      const newState = { ...state, zero: action.value };
-      const measurements = calculateMeasurements(newState, amount);
-      return { ...newState, measurements };
-    }
+    case 'change mode':
+      return recompute({ ...state, mode: action.mode });
+    case 'change step':
+      return recompute({ ...state, step: action.value });
+    case 'change zero point':
+      return recompute({ ...state, zero: action.value });
 
     case 'waiting deletion':
       return { ...state, waitingDeletion: action.value };
@@ -93,30 +81,29 @@ export function appReducer(state: State, action: Action): State {
 }
 
 export function recompute(state: State): State {
-  const measurements = calculateMeasurements(state, state.measurements.length);
-  return { ...state, measurements };
+  return { ...state, measurements: calculateMeasurements(state) };
+}
+
+// unique within the array, and rising, so a removal cannot free an id
+function nextId(measurements: Measurement[]): number {
+  return Math.max(0, ...measurements.map(({ id }) => id)) + 1;
 }
 
 // logic
-function calculateMeasurements(state: State, amount: number) {
+function calculateMeasurements(state: State): Measurement[] {
   const zero = parse(state.zero);
   const step = parse(state.step);
 
-  const result = Array(amount)
-    .fill(null)
-    .map((_, index) => {
-      const generated = zero + step * (index + 1);
-      const typed = state.measurements[index]?.size ?? '';
+  return state.measurements.map((measurement, index) => {
+    const generated = zero + step * (index + 1);
 
-      const isEntered = state.mode === 'entered';
-      const size = isEntered ? typed : format(generated);
-      const value = isEntered ? parse(typed) : generated;
-      const offset = format(zero - value);
+    const isEntered = state.mode === 'entered';
+    const size = isEntered ? measurement.size : format(generated);
+    const value = isEntered ? parse(measurement.size) : generated;
+    const offset = format(zero - value);
 
-      return { size, offset };
-    });
-
-  return result;
+    return { ...measurement, size, offset };
+  });
 }
 
 function format(value: number): string {

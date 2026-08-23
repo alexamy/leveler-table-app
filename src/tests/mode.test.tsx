@@ -214,7 +214,7 @@ it('does not reopen the warning when the app starts with typed rows', () => {
         ...defaultState,
         mode: 'entered',
         zero: '500',
-        measurements: [{ size: '520', offset: '-20' }],
+        measurements: [{ id: 1, size: '520', offset: '-20' }],
       }}
     />
   );

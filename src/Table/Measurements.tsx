@@ -1,8 +1,9 @@
 import { StyleSheet } from 'react-native';
 import { Chip, Input, Text } from '@rneui/themed';
-import { Keyboard, ScrollView, View } from 'react-native';
+import { ScrollView, View } from 'react-native';
 import { getNumberColor } from './helpers';
 import { useAppState } from '../context';
+import { Measurement } from '../reducer';
 
 export function Measurements() {
   const [state, dispatch] = useAppState();
@@ -10,39 +11,38 @@ export function Measurements() {
   return (
     <ScrollView style={styles.table}>
       {state.measurements.map((measurement, index) => (
-        <Measurement
-          key={index}
+        <Row
+          key={measurement.id}
           index={index}
           measurement={measurement}
           editable={state.mode === 'entered'}
           onChangeText={(value) =>
-            dispatch({ type: 'change measurement', index, value })
+            dispatch({ type: 'change measurement', id: measurement.id, value })
           }
-          onPressDelete={() => {
-            Keyboard.dismiss();
-            dispatch({ type: 'remove measurement', index });
-          }}
+          onPressDelete={() =>
+            dispatch({ type: 'remove measurement', id: measurement.id })
+          }
         />
       ))}
     </ScrollView>
   );
 }
 
-interface MeasurementProps {
-  measurement: { size: string; offset: string };
+interface RowProps {
+  measurement: Measurement;
   index: number;
   editable: boolean;
   onPressDelete: () => void;
   onChangeText: (text: string) => void;
 }
 
-function Measurement({
+function Row({
   measurement,
   index,
   editable,
   onChangeText,
   onPressDelete,
-}: MeasurementProps) {
+}: RowProps) {
   const color = getNumberColor(measurement.size);
 
   return (
