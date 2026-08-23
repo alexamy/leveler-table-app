@@ -8,11 +8,11 @@ The icons come from the icon set the toolbar's existing buttons already use, so 
 
 **Blocked by:** 03.
 
-**Status:** ready-for-agent
+**Status:** done
 
-- [ ] A switch in the bottom toolbar flips between the two modes
-- [ ] A robot icon marks the Generated side, a person icon marks the Entered side
-- [ ] Both icons come from the same icon set as the existing toolbar buttons
-- [ ] The toolbar fits four controls without overflowing or crowding the existing three
-- [ ] Flipping the switch has the effect on the rows built in ticket 03
-- [ ] The switch's position reflects the current mode, including when the app starts from saved state
+- [x] A switch in the bottom toolbar flips between the two modes
+- [x] A robot icon marks the Generated side, a person icon marks the Entered side
+- [x] Both icons come from the same icon set as the existing toolbar buttons
+- [ ] The toolbar fits four controls without overflowing or crowding the existing three — unverified, never run in a simulator
+- [x] Flipping the switch has the effect on the rows built in ticket 03
+- [x] The switch's position reflects the current mode, including when the app starts from saved state

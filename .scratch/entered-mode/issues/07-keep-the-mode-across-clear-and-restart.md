@@ -6,11 +6,11 @@ The mode also has to survive closing the app, and load sensibly for someone who 
 
 **Blocked by:** 04.
 
-**Status:** ready-for-agent
+**Status:** done
 
-- [ ] Long-press clear empties the Zero point, the Step and all rows
-- [ ] The mode is unchanged by a clear
-- [ ] The mode is saved and restored across a restart
+- [x] Long-press clear empties the Zero point, the Step and all rows
+- [x] The mode is unchanged by a clear
+- [x] The mode is saved and restored across a restart
 - [ ] ~~Saved state recorded before the mode existed loads in Generated mode~~ — superseded, see Comments
 
 ## Comments

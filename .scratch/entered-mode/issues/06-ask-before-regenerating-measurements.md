@@ -10,12 +10,12 @@ Note this is the app's second confirmation idiom — the clear button confirms b
 
 **Blocked by:** 04.
 
-**Status:** ready-for-agent
+**Status:** done
 
-- [ ] Switching to Generated with at least one non-empty row raises the confirmation
-- [ ] `Продолжить` performs the switch and regenerates the rows
-- [ ] `Отмена` dismisses it, leaving the mode and every row untouched
-- [ ] Switching to Generated with no rows, or only empty ones, raises nothing
-- [ ] Switching into Entered never raises anything
-- [ ] Confirming with an empty Step blanks the rows, as designed
-- [ ] The dialog's open state is not persisted — a restarted app never reopens it
+- [x] Switching to Generated with at least one non-empty row raises the confirmation — narrowed to rows regeneration would actually change, see `spec.md` section Confirmation
+- [x] `Продолжить` performs the switch and regenerates the rows
+- [x] `Отмена` dismisses it, leaving the mode and every row untouched
+- [x] Switching to Generated with no rows, or only empty ones, raises nothing
+- [x] Switching into Entered never raises anything
+- [x] Confirming with an empty Step blanks the rows, as designed
+- [x] The dialog's open state is not persisted — a restarted app never reopens it
