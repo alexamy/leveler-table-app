@@ -1,5 +1,5 @@
-import { expect, it } from '@jest/globals';
-import { fireEvent, render } from '@testing-library/react-native';
+import { expect, it, jest } from '@jest/globals';
+import { act, fireEvent, render } from '@testing-library/react-native';
 import { Root } from '..';
 import { app } from './app';
 import { defaultState } from '../reducer';
@@ -220,4 +220,21 @@ it('does not reopen the warning when the app starts with typed rows', () => {
   );
 
   expect(app.regenerateWarning()).toBeNull();
+});
+
+it('leaves the mode alone when the worker clears the data', () => {
+  render(<Root state={{ ...defaultState, mode: 'entered', zero: '500' }} />);
+
+  fireEvent.press(app.addSize());
+  fireEvent.changeText(app.measurement(1).size, '520');
+
+  fireEvent(app.clearData(), 'pressIn');
+  act(() => jest.advanceTimersByTime(2000));
+  fireEvent(app.clearData(), 'pressOut');
+
+  expect(app.mode().props.value).toBe(true);
+  expect(app.zero().props.value).toBe('');
+  expect(app.step().props.value).toBe('');
+  expect(app.measurements()).toHaveLength(0);
+  expect(app.step()).not.toBeVisible();
 });

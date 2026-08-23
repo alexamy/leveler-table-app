@@ -177,4 +177,31 @@ it('blanks a saved row that lost its value', async () => {
 
   expect(app.measurements()).toHaveLength(1);
   expect(app.measurement(1).size.props.value).toBe('');
+  expect(app.measurement(1).offset.props.children).toBe('');
+});
+
+it('restores the mode across a restart', async () => {
+  jest.mocked(AsyncStorage.getItem).mockResolvedValue('{"mode":"entered"}');
+
+  render(<App />);
+
+  await waitFor(() => {
+    expect(app.mode().props.value).toBe(true);
+  });
+});
+
+it('recomputes the offsets of restored rows', async () => {
+  jest
+    .mocked(AsyncStorage.getItem)
+    .mockResolvedValue(
+      '{"mode":"entered","zero":"500","measurements":[{"size":"520","offset":"999"}]}'
+    );
+
+  render(<App />);
+
+  await waitFor(() => {
+    expect(app.measurement(1).size.props.value).toBe('520');
+  });
+
+  expect(app.measurement(1).offset.props.children).toBe('-20');
 });

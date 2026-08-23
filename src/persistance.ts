@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useState, useEffect, useRef } from 'react';
-import { State, defaultState } from './reducer';
+import { State, defaultState, recompute } from './reducer';
 
 const STATE_ID = 'leveler-app';
 
@@ -23,19 +23,22 @@ export function useLoadState(
 
 export function useSaveState(state: State, machineId = STATE_ID) {
   const saved = useRef(state);
+  const writes = useRef<Promise<unknown>>(Promise.resolve());
 
   useEffect(() => {
     if (saved.current === state) return;
 
-    async function save() {
-      try {
-        await AsyncStorage.setItem(machineId, JSON.stringify(persisted(state)));
+    // chained so two quick edits cannot land out of order
+    writes.current = writes.current
+      .then(() =>
+        AsyncStorage.setItem(machineId, JSON.stringify(persisted(state)))
+      )
+      .then(() => {
         saved.current = state;
-      } catch {
+      })
+      .catch(() => {
         // leave it unsaved so the next change writes again
-      }
-    }
-    save();
+      });
   }, [machineId, state]);
 }
 
@@ -66,13 +69,14 @@ function restore(saved: unknown): State {
 
   const fields = saved as Record<string, unknown>;
 
-  return {
+  // a stored offset can be stale, so derive every row again
+  return recompute({
     mode: fields.mode === 'entered' ? 'entered' : 'generated',
     zero: text(fields.zero),
     step: text(fields.step),
     measurements: rows(fields.measurements),
     waitingDeletion: false,
-  };
+  });
 }
 
 function rows(value: unknown): State['measurements'] {

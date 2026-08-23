@@ -24,7 +24,6 @@ export type Action =
   | { type: 'change zero point'; value: string }
   | { type: 'change step'; value: string }
   | { type: 'waiting deletion'; value: boolean }
-  | { type: 'restore state'; state: State }
   | { type: 'reset state' };
 
 export type UseReducerResult = [State, Dispatch<Action>];
@@ -85,14 +84,17 @@ export function appReducer(state: State, action: Action): State {
     case 'waiting deletion':
       return { ...state, waitingDeletion: action.value };
 
-    case 'restore state':
-      return action.state;
     case 'reset state':
-      return defaultState;
+      return { ...defaultState, mode: state.mode };
 
     default:
       throw new Error(`Unknown action: ${action satisfies never}.`);
   }
+}
+
+export function recompute(state: State): State {
+  const measurements = calculateMeasurements(state, state.measurements.length);
+  return { ...state, measurements };
 }
 
 // logic

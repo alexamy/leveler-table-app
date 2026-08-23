@@ -156,3 +156,11 @@ it('shows a zero offset for a measurement that rounds onto the zero point', () =
 
   expect(app.measurement(1).offset.props.children).toBe('0');
 });
+
+it('shows a generated value that is longer than a typed one fits', () => {
+  render(<Root state={{ ...defaultState, zero: '1000000', step: '0.11' }} />);
+
+  fireEvent.press(app.addSize());
+
+  expect(app.measurement(1).size.props.value).toBe('1000000.11');
+});

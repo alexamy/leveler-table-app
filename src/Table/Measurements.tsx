@@ -53,7 +53,7 @@ function Measurement({
         placeholder='Проектный размер'
         keyboardType='numeric'
         textAlign='left'
-        maxLength={8}
+        maxLength={editable ? 8 : undefined}
         containerStyle={styles.input}
         style={{ ...styles.input, color }}
       />
