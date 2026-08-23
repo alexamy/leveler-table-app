@@ -6,14 +6,10 @@ import { Table } from './Table';
 import { State } from './reducer';
 
 export function App() {
-  const [state, isLoading] = useLoadState();
+  const { state, isLoading, failed } = useLoadState();
   if (isLoading) return <Loading />;
 
-  return (
-    <Root state={state}>
-      <StatePersistence />
-    </Root>
-  );
+  return <Root state={state}>{failed ? null : <StatePersistence />}</Root>;
 }
 
 interface RootProps {

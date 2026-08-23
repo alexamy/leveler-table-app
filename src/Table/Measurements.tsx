@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
 import { Chip, Input, Text } from '@rneui/themed';
-import { ScrollView, View } from 'react-native';
+import { Keyboard, ScrollView, View } from 'react-native';
 import { getNumberColor } from './helpers';
 import { useAppState } from '../context';
 
@@ -18,7 +18,10 @@ export function Measurements() {
           onChangeText={(value) =>
             dispatch({ type: 'change measurement', index, value })
           }
-          onPressDelete={() => dispatch({ type: 'remove measurement', index })}
+          onPressDelete={() => {
+            Keyboard.dismiss();
+            dispatch({ type: 'remove measurement', index });
+          }}
         />
       ))}
     </ScrollView>

@@ -13,7 +13,10 @@ export function useDelayedAction(delayMs: number, action: () => void) {
 
   useEffect(() => {
     if (!waiting) return;
-    timeoutId.current = setTimeout(action, delayMs);
+    timeoutId.current = setTimeout(() => {
+      setWaiting(false);
+      action();
+    }, delayMs);
     return () => clearTimeout(timeoutId.current);
   }, [action, waiting, delayMs]);
 

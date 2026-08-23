@@ -1,6 +1,6 @@
 import { Chip, Dialog, Icon, Switch, Text } from '@rneui/themed';
 import { useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { Keyboard, StyleSheet, View } from 'react-native';
 import { useAppState } from '../context';
 import { Mode, recompute } from '../reducer';
 import { copyTable } from '../serialization';
@@ -38,7 +38,10 @@ function ModeSwitch() {
   // transient, so it never reaches persisted state
   const [asking, setAsking] = useState(false);
 
-  const changeMode = (mode: Mode) => dispatch({ type: 'change mode', mode });
+  const changeMode = (mode: Mode) => {
+    Keyboard.dismiss();
+    dispatch({ type: 'change mode', mode });
+  };
   // only a row that holds something and would come back different is at risk
   const regenerated = recompute({ ...state, mode: 'generated' }).measurements;
   const wouldOverwrite = state.measurements.some(
@@ -93,9 +96,10 @@ function ModeSwitch() {
 
 function ClearData() {
   const [_, dispatch] = useAppState();
-  const [start, stop] = useDelayedAction(1500, () =>
-    dispatch({ type: 'reset state' })
-  );
+  const [start, stop] = useDelayedAction(1500, () => {
+    Keyboard.dismiss();
+    dispatch({ type: 'reset state' });
+  });
 
   const onPressIn = () => {
     start();

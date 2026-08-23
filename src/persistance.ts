@@ -4,37 +4,44 @@ import { State, defaultState, recompute } from './reducer';
 
 const STATE_ID = 'leveler-app';
 
-export function useLoadState(
-  machineId = STATE_ID
-): [State | undefined, boolean] {
-  const [state, setState] = useState<State>();
-  const [isLoading, setIsLoading] = useState(true);
+interface Loaded {
+  state?: State;
+  isLoading: boolean;
+  // a read that failed leaves the stored table intact, so nothing may overwrite it
+  failed: boolean;
+}
+
+export function useLoadState(machineId = STATE_ID): Loaded {
+  const [loaded, setLoaded] = useState<Loaded>({
+    isLoading: true,
+    failed: false,
+  });
 
   useEffect(() => {
     async function load() {
-      setState(await read(machineId));
-      setIsLoading(false);
+      const result = await read(machineId);
+      setLoaded({ ...result, isLoading: false });
     }
     load();
   }, [machineId]);
 
-  return [state, isLoading];
+  return loaded;
 }
 
 export function useSaveState(state: State, machineId = STATE_ID) {
-  const saved = useRef(state);
+  const saved = useRef(JSON.stringify(persisted(state)));
   const writes = useRef<Promise<unknown>>(Promise.resolve());
 
   useEffect(() => {
-    if (saved.current === state) return;
+    // compared by payload, so transient state churn writes nothing
+    const payload = JSON.stringify(persisted(state));
+    if (saved.current === payload) return;
 
     // chained so two quick edits cannot land out of order
     writes.current = writes.current
-      .then(() =>
-        AsyncStorage.setItem(machineId, JSON.stringify(persisted(state)))
-      )
+      .then(() => AsyncStorage.setItem(machineId, payload))
       .then(() => {
-        saved.current = state;
+        saved.current = payload;
       })
       .catch(() => {
         // leave it unsaved so the next change writes again
@@ -42,14 +49,22 @@ export function useSaveState(state: State, machineId = STATE_ID) {
   }, [machineId, state]);
 }
 
-async function read(machineId: string): Promise<State | undefined> {
-  try {
-    const data = await AsyncStorage.getItem(machineId);
-    if (!data) return undefined;
+async function read(machineId: string): Promise<Omit<Loaded, 'isLoading'>> {
+  let data: string | null;
 
-    return restore(JSON.parse(data));
+  try {
+    data = await AsyncStorage.getItem(machineId);
   } catch {
-    return undefined;
+    return { failed: true };
+  }
+
+  if (!data) return { failed: false };
+
+  try {
+    return { state: restore(JSON.parse(data)), failed: false };
+  } catch {
+    // unusable, so overwriting it loses nothing
+    return { failed: false };
   }
 }
 

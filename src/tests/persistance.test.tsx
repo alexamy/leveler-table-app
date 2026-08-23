@@ -101,21 +101,18 @@ it('does not save the delete-hold indicator', async () => {
   act(() => {
     fireEvent(app.clearData(), 'pressIn');
   });
-
-  await waitFor(() => {
-    expect(AsyncStorage.setItem).toHaveBeenCalled();
+  await act(async () => {
+    fireEvent.changeText(app.zero(), '100');
   });
 
+  expect(AsyncStorage.setItem).toHaveBeenCalledWith(
+    'leveler-app',
+    expect.stringContaining('"zero":"100"')
+  );
   expect(AsyncStorage.setItem).not.toHaveBeenCalledWith(
     'leveler-app',
     expect.stringContaining('waitingDeletion')
   );
-});
-
-describe('links', () => {
-  it.todo('saves state to a link');
-  it.todo('populates state from a link');
-  it.todo('dont reset app state if link has malformed state');
 });
 
 it('starts on defaults when local storage itself fails', async () => {
@@ -245,4 +242,43 @@ it('does not start a write before the previous one has finished', async () => {
     expect.stringContaining('"zero":"100"'),
     expect.stringContaining('"zero":"200"'),
   ]);
+});
+
+it('does not overwrite saved state after a failed read', async () => {
+  jest.mocked(AsyncStorage.getItem).mockRejectedValue(new Error('io error'));
+
+  render(<App />);
+
+  await waitFor(() => {
+    expect(app.zero().props.value).toBe('');
+  });
+
+  await act(async () => {
+    fireEvent.changeText(app.zero(), '100');
+  });
+
+  expect(AsyncStorage.setItem).not.toHaveBeenCalled();
+});
+
+it('does not write when the delete hold changes nothing', async () => {
+  render(<App />);
+
+  await waitFor(() => {
+    expect(AsyncStorage.getItem).toHaveBeenCalledTimes(1);
+  });
+
+  await act(async () => {
+    fireEvent(app.clearData(), 'pressIn');
+  });
+  await act(async () => {
+    fireEvent(app.clearData(), 'pressOut');
+  });
+
+  expect(AsyncStorage.setItem).not.toHaveBeenCalled();
+});
+
+describe('links', () => {
+  it.todo('saves state to a link');
+  it.todo('populates state from a link');
+  it.todo('dont reset app state if link has malformed state');
 });
