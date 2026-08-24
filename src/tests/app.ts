@@ -28,6 +28,8 @@ export const app = {
   cancelRegenerate: () => screen.getByTestId('cancel-regenerate') as Button,
   confirmRegenerate: () => screen.getByTestId('confirm-regenerate') as Button,
   clearData: () => screen.getByTestId('clear-data') as Button,
+  radar: () => screen.queryByTestId('radar'),
+  radarScreen: () => screen.getByTestId('radar-screen'),
   pendingDeletion: () =>
     screen.getByText('Удерживай для удаления всех значений') as Text,
 };

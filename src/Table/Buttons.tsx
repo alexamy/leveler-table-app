@@ -4,7 +4,7 @@ import { Keyboard, StyleSheet, View } from 'react-native';
 import { useAppState } from '../context';
 import { Mode, recompute } from '../reducer';
 import { copyTable } from '../serialization';
-import { useDelayedAction } from './helpers';
+import { useDelayedAction, useTapStreak } from './helpers';
 
 export function Buttons() {
   const [state, dispatch] = useAppState();
@@ -100,6 +100,10 @@ function ClearData() {
     Keyboard.dismiss();
     dispatch({ type: 'reset state' });
   });
+  const [tap, resetTaps] = useTapStreak(5, 500, () => {
+    Keyboard.dismiss();
+    dispatch({ type: 'radar', value: true });
+  });
 
   const onPressIn = () => {
     start();
@@ -107,8 +111,11 @@ function ClearData() {
   };
 
   const onPressOut = () => {
-    stop();
+    const short = stop();
     dispatch({ type: 'waiting deletion', value: false });
+
+    if (short) tap();
+    else resetTaps();
   };
 
   return (

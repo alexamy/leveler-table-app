@@ -7,13 +7,21 @@ export function getNumberColor(value: string): string {
   return color;
 }
 
-export function useDelayedAction(delayMs: number, action: () => void) {
+// stop reports whether it got there first, so a caller can tell a short press
+// from one that ran the action
+export function useDelayedAction(
+  delayMs: number,
+  action: () => void
+): [() => void, () => boolean] {
   const timeoutId = useRef<NodeJS.Timeout>();
+  const acted = useRef(false);
   const [waiting, setWaiting] = useState(false);
 
   useEffect(() => {
     if (!waiting) return;
+    acted.current = false;
     timeoutId.current = setTimeout(() => {
+      acted.current = true;
       setWaiting(false);
       action();
     }, delayMs);
@@ -21,7 +29,41 @@ export function useDelayedAction(delayMs: number, action: () => void) {
   }, [action, waiting, delayMs]);
 
   const start = () => setWaiting(true);
-  const stop = () => setWaiting(false);
+  const stop = () => {
+    setWaiting(false);
+    return !acted.current;
+  };
 
   return [start, stop];
+}
+
+// a streak of presses, each within gapMs of the one before
+export function useTapStreak(
+  taps: number,
+  gapMs: number,
+  onStreak: () => void
+): [() => void, () => void] {
+  const counted = useRef(0);
+  const timeoutId = useRef<NodeJS.Timeout>();
+
+  useEffect(() => () => clearTimeout(timeoutId.current), []);
+
+  const reset = () => {
+    clearTimeout(timeoutId.current);
+    counted.current = 0;
+  };
+
+  const tap = () => {
+    clearTimeout(timeoutId.current);
+    counted.current += 1;
+
+    if (counted.current >= taps) {
+      counted.current = 0;
+      return onStreak();
+    }
+
+    timeoutId.current = setTimeout(reset, gapMs);
+  };
+
+  return [tap, reset];
 }

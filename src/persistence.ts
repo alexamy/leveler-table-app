@@ -80,6 +80,7 @@ function restore(saved: unknown): State {
       id: index + 1,
     })),
     waitingDeletion: false,
+    radar: false,
   });
 }
 

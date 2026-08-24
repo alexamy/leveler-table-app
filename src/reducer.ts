@@ -15,11 +15,15 @@ export interface State {
   step: string;
   measurements: Measurement[];
   waitingDeletion: boolean;
+  radar: boolean;
 }
 
 export type PersistedMeasurement = Omit<Measurement, 'id'>;
 
-export type PersistedState = Omit<State, 'waitingDeletion' | 'measurements'> & {
+export type PersistedState = Omit<
+  State,
+  'waitingDeletion' | 'radar' | 'measurements'
+> & {
   measurements: PersistedMeasurement[];
 };
 
@@ -31,6 +35,7 @@ export type Action =
   | { type: 'change zero point'; value: string }
   | { type: 'change step'; value: string }
   | { type: 'waiting deletion'; value: boolean }
+  | { type: 'radar'; value: boolean }
   | { type: 'reset state' };
 
 export type UseReducerResult = [State, Dispatch<Action>];
@@ -41,6 +46,7 @@ export const defaultState: State = {
   step: '',
   measurements: [],
   waitingDeletion: false,
+  radar: false,
 };
 
 export function appReducer(state: State, action: Action): State {
@@ -76,6 +82,9 @@ export function appReducer(state: State, action: Action): State {
 
     case 'waiting deletion':
       return { ...state, waitingDeletion: action.value };
+
+    case 'radar':
+      return { ...state, radar: action.value };
 
     case 'reset state':
       return { ...defaultState, mode: state.mode };
