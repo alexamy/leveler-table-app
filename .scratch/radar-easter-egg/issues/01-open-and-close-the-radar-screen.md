@@ -10,20 +10,20 @@ Two pieces of groundwork belong here. The clear button needs to tell a short tap
 
 **Blocked by:** None (can start immediately).
 
-**Status:** ready-for-agent
+**Status:** done
 
-- [ ] Five taps within 500 ms of each other open a full-screen black overlay
-- [ ] Four taps leave the table on screen
-- [ ] Five taps with a gap longer than 500 ms between any two leave the table on screen
-- [ ] Holding the clear button clears the table after 1500 ms and does not open the radar
-- [ ] The hold indicator still appears while the clear button is held
-- [ ] Tapping the radar closes it
-- [ ] Android back closes it
-- [ ] The Zero point, Step, Measurements and mode are unchanged across open and close
-- [ ] The keyboard is dismissed when the radar opens
-- [ ] The status bar is hidden while the radar is open and back when it closes
-- [ ] The radar flag never appears in the payload written to storage
-- [ ] A restored saved state opens on the table
-- [ ] Tap counting lives in a reusable hook next to the existing delayed-action helper
-- [ ] New tests drive the real app through its root, as the existing clear-button tests do; the radar screen gets an entry in the shared test accessors
-- [ ] The existing suite, the Jest configuration and the shared test setup are untouched and pass
+- [x] Five taps within 500 ms of each other open a full-screen black overlay
+- [x] Four taps leave the table on screen
+- [x] Five taps with a gap longer than 500 ms between any two leave the table on screen
+- [x] Holding the clear button clears the table after 1500 ms and does not open the radar
+- [x] The hold indicator still appears while the clear button is held
+- [x] Tapping the radar closes it
+- [x] Android back closes it
+- [x] The Zero point, Step, Measurements and mode are unchanged across open and close
+- [x] The keyboard is dismissed when the radar opens
+- [x] The status bar is hidden while the radar is open and back when it closes
+- [x] The radar flag never appears in the payload written to storage
+- [x] A restored saved state opens on the table
+- [x] Tap counting lives in a reusable hook next to the existing delayed-action helper
+- [x] New tests drive the real app through its root, as the existing clear-button tests do; the radar screen gets an entry in the shared test accessors
+- [x] The existing suite, the Jest configuration and the shared test setup are untouched and pass

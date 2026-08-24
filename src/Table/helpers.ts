@@ -1,5 +1,5 @@
 import { lightColors } from '@rneui/themed';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { isBlankOrNumber } from '../number';
 
 export function getNumberColor(value: string): string {
@@ -14,24 +14,21 @@ export function useDelayedAction(
   action: () => void
 ): [() => void, () => boolean] {
   const timeoutId = useRef<NodeJS.Timeout>();
-  const acted = useRef(false);
-  const [waiting, setWaiting] = useState(false);
 
-  useEffect(() => {
-    if (!waiting) return;
-    acted.current = false;
+  useEffect(() => () => clearTimeout(timeoutId.current), []);
+
+  const start = () => {
     timeoutId.current = setTimeout(() => {
-      acted.current = true;
-      setWaiting(false);
+      timeoutId.current = undefined;
       action();
     }, delayMs);
-    return () => clearTimeout(timeoutId.current);
-  }, [action, waiting, delayMs]);
+  };
 
-  const start = () => setWaiting(true);
   const stop = () => {
-    setWaiting(false);
-    return !acted.current;
+    const pending = timeoutId.current !== undefined;
+    clearTimeout(timeoutId.current);
+    timeoutId.current = undefined;
+    return pending;
   };
 
   return [start, stop];
