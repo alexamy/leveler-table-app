@@ -8,17 +8,17 @@ In Entered mode the columns and their values stay exactly as they are today, and
 
 Both tables keep four tab-separated columns and the same number formatting. The position and Нулевая точка columns are untouched in both.
 
-**Status:** ready-for-agent
+**Status:** done
 
-- [ ] Copying in Generated mode produces the header row `Шаг`, `Нулевая точка`, `Проектные значения`, `Результат`
-- [ ] In Generated mode each value row is position, Zero point, Offset, Mark — the last two in the opposite order to what ships today
-- [ ] Copying in Entered mode produces the header row `№`, `Нулевая точка`, `Проектные значения`, `Результат`
-- [ ] In Entered mode each value row is position, Zero point, Measurement, Offset — unchanged from what ships today
-- [ ] Number formatting and the tab separator are unchanged in both modes
-- [ ] Flipping mode and copying again produces the table for the mode now selected
-- [ ] Nothing on screen changes — the Zero point and Step placeholders are untouched
+- [x] Copying in Generated mode produces the header row `Шаг`, `Нулевая точка`, `Проектные значения`, `Результат`
+- [x] In Generated mode each value row is position, Zero point, Offset, Mark — the last two in the opposite order to what ships today
+- [x] Copying in Entered mode produces the header row `№`, `Нулевая точка`, `Проектные значения`, `Результат`
+- [x] In Entered mode each value row is position, Zero point, Measurement, Offset — unchanged from what ships today
+- [x] Number formatting and the tab separator are unchanged in both modes
+- [x] Flipping mode and copying again produces the table for the mode now selected
+- [x] Nothing on screen changes — the Zero point and Step placeholders are untouched
 
-**Note on tests:** ⚠️ the existing serialization test asserts today's value order and will fail until it is updated to the Generated mode order. Add coverage for the Entered mode table alongside it.
+**Note on tests:** the serialization and comma tests that asserted the old value order were updated; the Entered mode table and both directions of the mode flip are covered alongside them.
 
 **Out of scope:**
 

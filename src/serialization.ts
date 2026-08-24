@@ -8,18 +8,25 @@ export function copyTable(state: State) {
 }
 
 function serializeToTable(context: State): string {
-  const headers = ['Шаг', 'Нулевая точка', 'Проектные значения', 'Результат'];
+  const entered = context.mode === 'entered';
 
-  const sizes = context.measurements.map((measurement, index) => {
-    return [
-      index + 1,
-      decimal(context.zero),
-      decimal(measurement.size),
-      measurement.offset,
-    ];
+  const headers = [
+    entered ? '№' : 'Шаг',
+    'Нулевая точка',
+    'Проектные значения',
+    'Результат',
+  ];
+
+  const rows = context.measurements.map((measurement, index) => {
+    const value = decimal(measurement.size);
+    const [designValue, outcome] = entered
+      ? [value, measurement.offset]
+      : [measurement.offset, value];
+
+    return [index + 1, decimal(context.zero), designValue, outcome];
   });
 
-  const result = [headers, ...sizes].map((strs) => strs.join('	')).join('\n');
+  const result = [headers, ...rows].map((strs) => strs.join('	')).join('\n');
 
   return result;
 }
