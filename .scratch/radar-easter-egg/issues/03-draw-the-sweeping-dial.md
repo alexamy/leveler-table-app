@@ -10,15 +10,15 @@ This adds an SVG renderer to the project, pinned to the version bundled with the
 
 **Blocked by:** 02.
 
-**Status:** ready-for-agent
+**Status:** done
 
-- [ ] Three concentric rings, a crosshair and 45° spokes are drawn in green on black
-- [ ] The dial has a glow around it
-- [ ] A wedge sweeps clockwise, starting from the top, one revolution every 4 seconds
-- [ ] The wedge trails a fading edge rather than being a plain line
-- [ ] Nothing is ever rendered as a target
-- [ ] The dial fills a sensible share of the screen in portrait and in landscape, on a small phone and a large one, without cropping
-- [ ] The label still blinks below the dial
-- [ ] The SVG dependency is pinned to the version bundled with the project's Expo SDK
-- [ ] No native-driver warning on the web build
-- [ ] The existing suite passes; the radar tests still open and close the radar
+- [x] Three concentric rings, a crosshair and 45° spokes are drawn in green on black
+- [x] The dial has a glow around it
+- [x] A wedge sweeps clockwise, starting from the top, one revolution every 4 seconds
+- [x] The wedge trails a fading edge rather than being a plain line
+- [x] Nothing is ever rendered as a target
+- [x] The dial fills a sensible share of the screen in portrait and in landscape, on a small phone and a large one, without cropping
+- [x] The label still blinks below the dial
+- [x] The SVG dependency is pinned to the version bundled with the project's Expo SDK
+- [x] No native-driver warning on the web build
+- [x] The existing suite passes; the radar tests still open and close the radar

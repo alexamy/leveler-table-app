@@ -81,6 +81,14 @@ it('takes the label away with the radar', () => {
   expect(app.radarLabel()).toBeNull();
 });
 
+it('draws the dial', () => {
+  render(<Root />);
+
+  tap(5);
+
+  expect(app.radarDial()).not.toBeNull();
+});
+
 it('closes the radar on a tap', () => {
   render(<Root />);
 

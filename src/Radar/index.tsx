@@ -6,9 +6,11 @@ import {
   Platform,
   Pressable,
   StyleSheet,
+  useWindowDimensions,
   View,
 } from 'react-native';
 import { useAppState } from '../context';
+import { Dial } from './Dial';
 
 const GREEN = '#00ff66';
 const BLINK_MS = 800;
@@ -17,7 +19,11 @@ const NATIVE_DRIVER = Platform.OS !== 'web';
 
 export function Radar() {
   const [state, dispatch] = useAppState();
+  const { width, height } = useWindowDimensions();
   const close = () => dispatch({ type: 'radar', value: false });
+
+  // the shorter side, so the dial fits in either orientation
+  const size = Math.min(width, height) * 0.7;
 
   return (
     <Modal
@@ -29,6 +35,8 @@ export function Radar() {
     >
       <StatusBar hidden />
       <Pressable testID='radar' style={styles.screen} onPress={close}>
+        <Dial size={size} />
+
         <View style={styles.footer}>
           <Label />
         </View>
