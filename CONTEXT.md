@@ -24,8 +24,10 @@ _Avoid_: reading, sample, actual
 The elevation difference between the Zero point and the value in the row — a Mark in Generated mode, a Measurement in Entered mode. Negative means the point sits below the zero point.
 _Avoid_: deviation, correction, result
 
-**Position** (UI: Шаг, in the copied table):
-The ordinal of a Mark in the series, counted from 1. Note that Шаг names two different things in the UI: the Step value in the input, and the Position column in the copied table.
+**Note on Проектные значения and Результат in the copied table**: these two labels flip by audience. The Entered mode table reads for a person and labels the Measurement column Проектные значения and the Offset column Результат, as the entries above say. The Generated mode table reads for a machine, for which the design value is the offset and the staff reading is what results, so its Проектные значения column holds the Offset and its Результат column holds the Mark. The header row is the same in both modes; it is the values under those two columns that are in opposite order.
+
+**Position** (UI: Шаг in the Generated mode copied table, № in the Entered mode one):
+The ordinal of a Mark in the series, counted from 1. Note that Шаг names two different things in Generated mode: the Step value in the input, and the Position column in the copied table. The Entered mode table avoids the collision by calling the column №.
 _Avoid_: index, row number
 
 ## Modes

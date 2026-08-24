@@ -13,6 +13,7 @@ export const app = {
   stepSlot: () =>
     screen.getByTestId('slot-step', { includeHiddenElements: true }),
   addSize: () => screen.getByTestId('add-size') as Button,
+  copy: () => screen.getByTestId('copy-to-clipboard') as Button,
   measurements: () =>
     screen.queryAllByTestId(/^input-size-\d+$/) as TextInput[],
   measurement: (i: number) => ({

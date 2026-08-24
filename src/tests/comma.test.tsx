@@ -1,5 +1,5 @@
 import { expect, it, jest } from '@jest/globals';
-import { fireEvent, render, screen } from '@testing-library/react-native';
+import { fireEvent, render } from '@testing-library/react-native';
 import * as Clipboard from 'expo-clipboard';
 import { dedent } from 'ts-dedent';
 import { Root } from '..';
@@ -73,10 +73,10 @@ it('copies one decimal separator into the table', () => {
   fireEvent.changeText(app.step(), '1');
   fireEvent.press(app.addSize());
 
-  fireEvent.press(screen.getByTestId('copy-to-clipboard'));
+  fireEvent.press(app.copy());
 
   expect(Clipboard.setStringAsync).toHaveBeenCalledWith(dedent`
     Шаг	Нулевая точка	Проектные значения	Результат
-    1	1.5	2.5	-1
+    1	1.5	-1	2.5
   `);
 });
