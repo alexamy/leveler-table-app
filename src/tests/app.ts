@@ -29,6 +29,10 @@ export const app = {
   cancelRegenerate: () => screen.getByTestId('cancel-regenerate') as Button,
   confirmRegenerate: () => screen.getByTestId('confirm-regenerate') as Button,
   clearData: () => screen.getByTestId('clear-data') as Button,
+  radar: () => screen.queryByTestId('radar'),
+  radarLabel: () => screen.queryByText('Определяем Петрушкина') as Text,
+  radarDial: () => screen.queryByTestId('radar-dial'),
+  radarScreen: () => screen.getByTestId('radar-screen'),
   pendingDeletion: () =>
     screen.getByText('Удерживай для удаления всех значений') as Text,
 };

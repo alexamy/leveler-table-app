@@ -5,6 +5,7 @@ import { Measurements } from './Measurements';
 import { Text } from '@rneui/themed';
 import { Step, Zero } from './HeadRow';
 import { useAppState } from '../context';
+import { Radar } from '../Radar';
 
 export function Table() {
   return (
@@ -19,6 +20,8 @@ export function Table() {
       <View style={styles.buttons}>
         <Buttons />
       </View>
+
+      <Radar />
 
       <StatusBar style='auto' />
     </View>
