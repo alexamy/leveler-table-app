@@ -10,13 +10,13 @@ This adds the Expo audio library, pinned to the version bundled with the Expo SD
 
 **Blocked by:** 03.
 
-**Status:** ready-for-agent
+**Status:** done
 
-- [ ] A beep plays as soon as the radar opens
-- [ ] A beep plays once per revolution, as the sweep passes the top
-- [ ] Beeping stops when the radar closes and when the app goes to the background
-- [ ] The beep is silent when the iOS silent switch is on
-- [ ] The tone is a committed asset and does not click on playback
-- [ ] The audio library is pinned to the version bundled with the project's Expo SDK, and is imported from exactly one module
-- [ ] The radar tests mock that one module and nothing else new
-- [ ] The existing suite, the Jest configuration and the shared test setup are untouched and pass
+- [x] A beep plays as soon as the radar opens
+- [x] A beep plays once per revolution, as the sweep passes the top
+- [x] Beeping stops when the radar closes and when the app goes to the background
+- [x] The beep is silent when the iOS silent switch is on
+- [x] The tone is a committed asset and does not click on playback
+- [x] The audio library is pinned to the version bundled with the project's Expo SDK, and is imported from exactly one module
+- [x] The radar tests mock that one module and nothing else new
+- [x] The existing suite, the Jest configuration and the shared test setup are untouched and pass

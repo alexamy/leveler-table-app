@@ -9,8 +9,9 @@ import {
   useWindowDimensions,
   View,
 } from 'react-native';
+import { useBeep } from '../beep';
 import { useAppState } from '../context';
-import { Dial } from './Dial';
+import { Dial, SWEEP_MS } from './Dial';
 
 const GREEN = '#00ff66';
 const BLINK_MS = 800;
@@ -19,11 +20,7 @@ const NATIVE_DRIVER = Platform.OS !== 'web';
 
 export function Radar() {
   const [state, dispatch] = useAppState();
-  const { width, height } = useWindowDimensions();
   const close = () => dispatch({ type: 'radar', value: false });
-
-  // the shorter side, so the dial fits in either orientation
-  const size = Math.min(width, height) * 0.7;
 
   return (
     <Modal
@@ -33,15 +30,31 @@ export function Radar() {
       statusBarTranslucent
       onRequestClose={close}
     >
+      <Screen onClose={close} />
+    </Modal>
+  );
+}
+
+// only mounted while the radar is up, so the sweep and the beep start and
+// stop with it
+function Screen({ onClose }: { onClose: () => void }) {
+  const { width, height } = useWindowDimensions();
+  useBeep(SWEEP_MS);
+
+  // the shorter side, so the dial fits in either orientation
+  const size = Math.min(width, height) * 0.7;
+
+  return (
+    <>
       <StatusBar hidden />
-      <Pressable testID='radar' style={styles.screen} onPress={close}>
+      <Pressable testID='radar' style={styles.screen} onPress={onClose}>
         <Dial size={size} />
 
         <View style={styles.footer}>
           <Label />
         </View>
       </Pressable>
-    </Modal>
+    </>
   );
 }
 

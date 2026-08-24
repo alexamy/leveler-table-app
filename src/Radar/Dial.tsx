@@ -6,7 +6,7 @@ const GREEN = '#00ff66';
 // the native driver is not available on web, and warns when asked for
 const NATIVE_DRIVER = Platform.OS !== 'web';
 
-const SWEEP_MS = 4000;
+export const SWEEP_MS = 4000;
 const CENTER = 50;
 const RADIUS = 45;
 const RINGS = [15, 30, RADIUS];

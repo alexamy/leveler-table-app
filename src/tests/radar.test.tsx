@@ -5,6 +5,9 @@ import App from '../../App';
 import { Root } from '..';
 import { app } from './app';
 
+// audio has no place in a test run, and the module is the only door to it
+jest.mock('../beep', () => ({ useBeep: () => undefined }));
+
 // short enough that the 1500 ms clear hold never fires
 function tap(times: number, gapMs = 100) {
   for (let index = 0; index < times; index++) {
