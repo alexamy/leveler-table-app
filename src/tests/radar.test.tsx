@@ -64,6 +64,23 @@ it('does not count a completed hold towards the streak', () => {
   expect(app.radar()).toBeNull();
 });
 
+it('names what it is looking for', () => {
+  render(<Root />);
+
+  tap(5);
+
+  expect(app.radarLabel()).not.toBeNull();
+});
+
+it('takes the label away with the radar', () => {
+  render(<Root />);
+
+  tap(5);
+  fireEvent.press(app.radar());
+
+  expect(app.radarLabel()).toBeNull();
+});
+
 it('closes the radar on a tap', () => {
   render(<Root />);
 

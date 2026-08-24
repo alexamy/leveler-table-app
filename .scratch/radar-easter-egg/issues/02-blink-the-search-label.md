@@ -8,12 +8,12 @@ The fade runs on the native driver on device, and off it on web, where the nativ
 
 **Blocked by:** 01.
 
-**Status:** ready-for-agent
+**Status:** done
 
-- [ ] The label reads "Определяем Петрушкина", exactly
-- [ ] It sits at the bottom of the radar, inside the safe area
-- [ ] It fades between visible and nearly invisible and keeps going while the radar is open
-- [ ] It is green, monospace, and not uppercased
-- [ ] The animation stops when the radar closes
-- [ ] No native-driver warning on the web build
-- [ ] Closing the radar still restores the table unchanged
+- [x] The label reads "Определяем Петрушкина", exactly
+- [x] It sits at the bottom of the radar, inside the safe area
+- [x] It fades between visible and nearly invisible and keeps going while the radar is open
+- [x] It is green, monospace, and not uppercased
+- [x] The animation stops when the radar closes
+- [x] No native-driver warning on the web build
+- [x] Closing the radar still restores the table unchanged
