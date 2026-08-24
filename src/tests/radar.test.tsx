@@ -79,6 +79,7 @@ it('takes the label away with the radar', () => {
   render(<Root />);
 
   tap(5);
+  act(() => jest.advanceTimersByTime(1000));
   fireEvent.press(app.radar());
 
   expect(app.radarLabel()).toBeNull();
@@ -96,9 +97,19 @@ it('closes the radar on a tap', () => {
   render(<Root />);
 
   tap(5);
+  act(() => jest.advanceTimersByTime(1000));
   fireEvent.press(app.radar());
 
   expect(app.radar()).toBeNull();
+});
+
+it('ignores a tap that overruns the streak', () => {
+  render(<Root />);
+
+  tap(5);
+  fireEvent.press(app.radar());
+
+  expect(app.radar()).not.toBeNull();
 });
 
 it('closes the radar on the android back button', () => {
@@ -118,6 +129,7 @@ it('leaves the table as it was after the radar closes', () => {
   fireEvent.press(app.addSize());
 
   tap(5);
+  act(() => jest.advanceTimersByTime(1000));
   fireEvent.press(app.radar());
 
   expect(app.zero().props.value).toBe('500');

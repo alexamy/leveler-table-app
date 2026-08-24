@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
   Animated,
   Modal,
@@ -15,6 +15,8 @@ import { Dial, SWEEP_MS } from './Dial';
 
 const GREEN = '#00ff66';
 const BLINK_MS = 800;
+// long enough to swallow the taps that overrun the streak that opened it
+const ARM_MS = 800;
 // the native driver is not available on web, and warns when asked for
 const NATIVE_DRIVER = Platform.OS !== 'web';
 
@@ -39,15 +41,19 @@ export function Radar() {
 // stop with it
 function Screen({ onClose }: { onClose: () => void }) {
   const { width, height } = useWindowDimensions();
+  const armed = useArmed();
   useBeep(SWEEP_MS);
 
   // the shorter side, so the dial fits in either orientation
   const size = Math.min(width, height) * 0.7;
+  const onPress = () => {
+    if (armed) onClose();
+  };
 
   return (
     <>
       <StatusBar hidden />
-      <Pressable testID='radar' style={styles.screen} onPress={onClose}>
+      <Pressable testID='radar' style={styles.screen} onPress={onPress}>
         <Dial size={size} />
 
         <View style={styles.footer}>
@@ -56,6 +62,19 @@ function Screen({ onClose }: { onClose: () => void }) {
       </Pressable>
     </>
   );
+}
+
+// the finger that opened the radar is still on the screen, so a tap only
+// closes it once the streak has had time to run out
+function useArmed(): boolean {
+  const [armed, setArmed] = useState(false);
+
+  useEffect(() => {
+    const timeoutId = setTimeout(() => setArmed(true), ARM_MS);
+    return () => clearTimeout(timeoutId);
+  }, []);
+
+  return armed;
 }
 
 function Label() {
